@@ -1,6 +1,7 @@
 node_modules
 npm-debug.log
 public/js
+app/gen
 spec/gen
 server/gen
 *.swp

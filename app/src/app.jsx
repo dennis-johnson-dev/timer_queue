@@ -4,7 +4,10 @@
 var App = React.createClass({
   render: function() {
     return (
-      <CheckboxWithLabel labelOn="On" labelOff="Off" />
+      <div>
+        <CountDown total="10" />
+        <Dummy />
+      </div>
     );
   }
 });

@@ -2,16 +2,25 @@ config =
   react:
     bundle:
       files:
-        'public/js/bundle.js': [
+        'app/gen/bundle.js': [
           'app/src/components.jsx',
           'app/src/app.jsx'
         ]
     components:
       files:
-        'public/js/components.js': 'app/src/components.jsx'
+        'app/gen/components.js': 'app/src/components.jsx'
     spec:
       files:
         'spec/gen/server-spec.js': 'spec/server/server-spec.jsx'
+
+  browserify:
+    app:
+      expand: true
+      cwd: './'
+      src: ['./app/gen/*.js']
+      dest: './public/js'
+      ext: '.js'
+      watch: true
 
   clean:
     public: ['public/js']
@@ -43,8 +52,8 @@ config =
       files: ['server/**/*.coffee'],
       tasks: ['coffee']
     react:
-      files: ['app/react/src/*.jsx'],
-      tasks: ['react:bundle', 'react:components']
+      files: ['app/src/*.jsx'],
+      tasks: ['react:bundle', 'react:components', 'browserify']
     test:
       files: ['spec/server/*.jsx'],
       tasks: ['react:spec']
@@ -55,6 +64,6 @@ module.exports = (grunt) ->
 
   grunt.initConfig(config)
 
-  grunt.registerTask('default', ['coffee', 'clean', 'react'])
+  grunt.registerTask('default', ['coffee', 'clean', 'react', 'browserify'])
   grunt.registerTask('start', ['default', 'concurrent'])
   grunt.registerTask('test', ['react', 'watch'])

@@ -45,11 +45,11 @@
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-sinon-chai": "^0.2.0",
-    "pubsub-js": "^1.5.0",
     "react": "^0.11.1",
     "react-test-utils": "0.0.1",
     "reactify": "^0.14.0",
     "sinon": "^1.10.3",
-    "sinon-chai": "^2.5.0"
+    "sinon-chai": "^2.5.0",
+    "watchify": "^1.0.2"
   }
 }
