@@ -1,6 +1,6 @@
-# React Boilerplate
+# Timer Queue 
 
-This repo provides the setup for a basic web app using React.js, Node.js, Express.js, Browserify, and Grunt.js.
+Simplify working with consecutive timed tasks by adding them to a queue of timers.
 
 ### Installation
 
