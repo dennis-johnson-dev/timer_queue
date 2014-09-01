@@ -1,0 +1,55 @@
+{
+  "name": "Timer Queue",
+  "version": "0.0.0",
+  "description": "Simplify consecutive tasks",
+  "main": "server.js",
+  "scripts": {
+    "start": "grunt start",
+    "test": "karma start"
+  },
+  "dependencies": {
+    "nodemon": "^1.2.0",
+    "grunt": "~0.4.0",
+    "grunt-cli": "~0.1.8",
+    "express": "4.x",
+    "body-parser": "^1.2.0",
+    "load-grunt-tasks": "^0.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/songawee/timer_queue.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/songawee/timer_queue/issues"
+  },
+  "homepage": "https://github.com/songawee/timer_queue",
+  "devDependencies": {
+    "body-parser": "^1.6.5",
+    "browserify": "^5.10.0",
+    "chai": "^1.9.1",
+    "grunt-browserify": "^2.1.4",
+    "grunt-concurrent": "^0.5.0",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-coffee": "^0.11.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-jsx": "^0.1.8",
+    "grunt-karma": "^0.8.3",
+    "grunt-nodemon": "^0.3.0",
+    "grunt-react": "^0.9.0",
+    "karma": "^0.12.23",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-coffee-preprocessor": "^0.2.1",
+    "karma-htmlfile-reporter": "^0.1.2",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon-chai": "^0.2.0",
+    "pubsub-js": "^1.5.0",
+    "react": "^0.11.1",
+    "react-test-utils": "0.0.1",
+    "reactify": "^0.14.0",
+    "sinon": "^1.10.3",
+    "sinon-chai": "^2.5.0"
+  }
+}
