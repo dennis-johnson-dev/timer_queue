@@ -6,7 +6,6 @@ var App = React.createClass({
     return (
       <div>
         <CountDown total="10" />
-        <Dummy />
       </div>
     );
   }

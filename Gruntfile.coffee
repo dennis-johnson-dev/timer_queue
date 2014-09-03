@@ -3,12 +3,13 @@ config =
     bundle:
       files:
         'app/gen/bundle.js': [
-          'app/src/components.jsx',
+          'app/src/checkbox.jsx',
+          'app/src/countdown.jsx',
           'app/src/app.jsx'
         ]
     components:
       files:
-        'app/gen/components.js': 'app/src/components.jsx'
+        'app/gen/checkbox.js': 'app/src/checkbox.jsx'
     spec:
       files:
         'spec/gen/server-spec.js': 'spec/server/server-spec.jsx'
@@ -17,7 +18,7 @@ config =
     app:
       expand: true
       cwd: './'
-      src: ['./app/gen/*.js']
+      src: ['./app/gen/*.js', './spec/gen/*.js']
       dest: './public/js'
       ext: '.js'
       watch: true
@@ -56,7 +57,7 @@ config =
       tasks: ['react:bundle', 'react:components', 'browserify']
     test:
       files: ['spec/server/*.jsx'],
-      tasks: ['react:spec']
+      tasks: ['react:spec', 'browserify']
 
 module.exports = (grunt) ->
 
