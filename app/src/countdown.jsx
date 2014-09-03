@@ -1,8 +1,5 @@
 /** @jsx React.DOM */
 
-var React = require('react');
-var EventEmitter = require('events').EventEmitter;
-
 var CountDown = React.createClass({
   getInitialState: function() {
     return { total: this.props.total };
@@ -27,22 +24,32 @@ var CountDown = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>Timer Queue</h1>
-        <p ref="total" >Total: { this.state.total }</p>
-        <button onClick={ this.start }>Start</button>
-        <button onClick={ this.stop }>Stop</button>
+      <h1>Timer Queue</h1>
+      <p ref="total" >Total: { this.state.total }</p>
+      <button onClick={ this.start }>Start</button>
+      <button onClick={ this.stop }>Stop</button>
       </div>
     );
   }
 });
 
-var Dummy = React.createClass({
+var CheckboxWithLabel = React.createClass({
   getInitialState: function() {
-    return { status: 12 };
+    return { isChecked: false };
+  },
+  onChange: function() {
+    this.setState({isChecked: !this.state.isChecked});
   },
   render: function() {
-    return ( 
-      <p>yo { this.state.status }</p>
-    );
+   return (
+     <label>
+       <input
+         type="checkbox"
+         checked={this.state.isChecked}
+         onChange={this.onChange}
+       />
+       {this.state.isChecked ? this.props.labelOn : this.props.labelOff}
+     </label>
+   );
   }
 });
