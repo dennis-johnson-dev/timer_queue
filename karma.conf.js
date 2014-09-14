@@ -16,8 +16,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'spec/lib/react-with-addons.js',
-      'public/js/app/gen/components.js',
-      'public/js/spec/gen/server-spec.js'
+      'public/js/app/src/CountDown.js',
+      'public/js/spec/app/countdown-spec.js'
     ],
 
 

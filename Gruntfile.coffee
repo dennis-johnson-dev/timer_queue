@@ -1,27 +1,24 @@
 config =
   react:
-    bundle:
-      files:
-        'app/gen/bundle.js': [
-          'app/src/checkbox.jsx',
-          'app/src/countdown.jsx',
-          'app/src/app.jsx'
-        ]
-    components:
-      files:
-        'app/gen/checkbox.js': 'app/src/checkbox.jsx'
+   components:
+      files: [
+        'app/gen/countdown.js': 'app/src/CountDown.js',
+        'app/gen/app.js': 'app/src/App.js'
+      ]
     spec:
-      files:
-        'spec/gen/server-spec.js': 'spec/server/server-spec.jsx'
+      files: [
+        'spec/gen/countdown-spec.js': 'spec/app/countdown-spec.js'
+      ]
 
   browserify:
+    options:
+      transform: [ require('grunt-react').browserify ]
     app:
       expand: true
       cwd: './'
-      src: ['./app/gen/*.js', './spec/gen/*.js']
+      src: ['./spec/app/*.js', './app/src/**/*.js']
       dest: './public/js'
       ext: '.js'
-      watch: true
 
   clean:
     public: ['public/js']
@@ -49,15 +46,19 @@ config =
   watch:
     options:
       livereload: true
+    app:
+      files: ['app/src/**/*.js'],
+      tasks: ['browserify']
     server:
       files: ['server/**/*.coffee'],
       tasks: ['coffee']
-    react:
-      files: ['app/src/*.jsx'],
-      tasks: ['react:bundle', 'react:components', 'browserify']
     test:
-      files: ['spec/server/*.jsx'],
+      files: ['spec/**/*.js'],
       tasks: ['react:spec', 'browserify']
+# react:
+#   files: ['app/src/**/*.js'],
+#   tasks: ['react', 'browserify']
+
 
 module.exports = (grunt) ->
 
@@ -65,6 +66,6 @@ module.exports = (grunt) ->
 
   grunt.initConfig(config)
 
-  grunt.registerTask('default', ['coffee', 'clean', 'react', 'browserify'])
+  grunt.registerTask('default', ['coffee', 'clean', 'browserify'])
   grunt.registerTask('start', ['default', 'concurrent'])
-  grunt.registerTask('test', ['react', 'watch'])
+  grunt.registerTask('test', ['watch'])
