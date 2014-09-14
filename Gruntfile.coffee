@@ -55,10 +55,6 @@ config =
     test:
       files: ['spec/**/*.js'],
       tasks: ['react:spec', 'browserify']
-# react:
-#   files: ['app/src/**/*.js'],
-#   tasks: ['react', 'browserify']
-
 
 module.exports = (grunt) ->
 

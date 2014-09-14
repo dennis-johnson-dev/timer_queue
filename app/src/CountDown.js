@@ -70,7 +70,7 @@ var CountDown = React.createClass({
   _create: function() {
     var value = parseInt(this.state.value);
     if (value > 0) {
-      // TaskActions.create(); 
+      TaskActions.create(); 
       this.setState({
         total: this.state.total + value
       });

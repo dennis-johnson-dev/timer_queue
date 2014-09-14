@@ -5,7 +5,7 @@ var TaskActions = {
 
   create: function() {
     AppDispatcher.handleViewAction({
-      actionType: TaskConstants.Task_CREATE
+      actionType: TaskConstants.TASK_CREATE
     });
   }
 
