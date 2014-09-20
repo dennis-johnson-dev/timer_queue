@@ -3,7 +3,7 @@ var React = require('react');
 var CountDown = require('./CountDown');
 
 React.renderComponent(
-  <CountDown total="10" />,
+  <CountDown />,
   document.getElementById('content')
 );
 

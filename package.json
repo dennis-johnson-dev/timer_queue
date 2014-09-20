@@ -9,14 +9,15 @@
     "test": "node ./node_modules/jest-cli/bin/jest.js"
   },
   "dependencies": {
-    "nodemon": "^1.2.0",
+    "body-parser": "^1.2.0",
+    "express": "4.x",
     "grunt": "~0.4.0",
     "grunt-cli": "~0.1.8",
-    "express": "4.x",
-    "body-parser": "^1.2.0",
+    "jade": "^1.7.0",
     "load-grunt-tasks": "^0.6.0",
-    "react-tools": "^0.11.1",
-    "react": "^0.11.1"
+    "nodemon": "^1.2.0",
+    "react": "^0.11.1",
+    "react-tools": "^0.11.1"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/test_utils/preprocessor.js",

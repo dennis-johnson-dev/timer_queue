@@ -7,16 +7,22 @@ var CHANGE_EVENT = 'change';
 
 var _tasks = [ 
   {
-    title: 'juice_title ' 
+    id: 1,
+    time: 5,
+    title: 'Task 1'
   },
   {
-    title: 'butt'
+    id: 2,
+    time: 4,
+    title: 'Task 2'
   }
 ];
 
 function create() {
   var insert = {
-    title: ' juicey fruit '
+    id: 3,
+    title: 'Task 3',
+    time: 3
   };
 
   _tasks.push(insert);
