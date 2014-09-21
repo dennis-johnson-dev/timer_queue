@@ -1,0 +1,23 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6em;
+}
+
+ul {
+  list-style: none;
+  margin: 1em 0 0 0;
+  padding: 0;
+}
+
+li {
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+
+li ul li{
+  margin: 0;
+  padding: 0;
+}

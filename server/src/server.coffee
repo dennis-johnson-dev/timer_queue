@@ -12,13 +12,21 @@ app.set 'view engine', 'jade'
 
 # Routes
 
-app.get('/api/tasks', (req, res) ->
-  result = [1, 2, 4]
-  res.json result
-)
+tasks = [
+  {
+    id: 1,
+    time: 90,
+    title: 'Task 1'
+  },
+  {
+    id: 2,
+    time: 240,
+    title: 'Task 2'
+  }
+]
 
 app.get('/', (req, res) ->
-  res.render 'index'
+  res.render 'index', { data: tasks }
 )
   
 

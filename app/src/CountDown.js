@@ -19,22 +19,18 @@ function getTotalTime(tasks) {
 
 var CountDown = React.createClass({
   displayName: 'CountDown',
+
   getInitialState: function() {
+    TaskStore.init(this.props.data); 
+
     var tasks = getTaskState();
     var total = getTotalTime(tasks);
     return {
-      test: [],
       tasks: getTaskState(),
       total: total
     };
   },
   componentDidMount: function() {
-    $.get('/api/tasks', function(result) {
-      if (this.isMounted()) {
-        this.setState({ test: result }); 
-      }
-    }.bind(this));
-
     TaskStore.addChangeListener(this._onChange); 
   },
   start: function() {
@@ -60,21 +56,49 @@ var CountDown = React.createClass({
       this.stop(); 
     }
   },
+  _formatTime: function(total) {
+    var hours = 0;
+    var minutes = 0;
+    while (total > 3600) {
+      if (total/3600 > 0) {
+        hours += Math.floor(total/3600);
+        total -= hours * 3600;
+      }
+    }
+    while (total > 60) {
+      if (total/60 > 0) {
+        minutes += Math.floor(total/60);
+        total -= minutes * 60;
+      }
+    }
+    hours = hours < 10 ? '0' + hours + ':' : hours + ':'; 
+    minutes = minutes < 10 ? '0' + minutes + ':' : minutes + ':';    
+    total = total < 10 ? '0' + total : total;
+    var formattedTime = hours + minutes + total;
+    return formattedTime;
+  },
   render: function() {
-    var tasks = this.state.tasks;
+    var tasks = this.state.tasks.map(function(task) {
+      return {
+        id: task.id,
+        time: this._formatTime(task.time),
+        title: task.title
+      };
+    }, this);
+    var formattedTotal = this._formatTime(this.state.total);
 
     return (
       <div>
         <div>
-          <p ref="total" >Total: { this.state.total }</p>
+          <p ref="total" >Total: { formattedTotal }</p>
           <button onClick={ this.start }>Start</button>
           <button onClick={ this.stop }>Stop</button>
-          { this.state.test }
         </div>
 
         <ul>
           { 
             tasks.map(function(task) {
+              
               return <li key={ task.id }>
                        <ul>
                          <li>{ task.title }</li>
@@ -86,6 +110,9 @@ var CountDown = React.createClass({
         </ul>
       </div>
     );
+  },
+  reset: function() {
+    console.log('reset');
   },
   _onChange: function() {
     console.log('changed');

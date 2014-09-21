@@ -5,18 +5,7 @@ var merge = require('react/lib/merge');
 
 var CHANGE_EVENT = 'change';
 
-var _tasks = [ 
-  {
-    id: 1,
-    time: 5,
-    title: 'Task 1'
-  },
-  {
-    id: 2,
-    time: 4,
-    title: 'Task 2'
-  }
-];
+var _tasks = [];
 
 function create() {
   var insert = {
@@ -29,6 +18,9 @@ function create() {
 }
 
 var TaskStore = merge(EventEmitter.prototype, {
+  init: function(data) {
+    _tasks = data; 
+  },
   getAll: function() {
     return _tasks;
   },

@@ -3,14 +3,19 @@
 doctype html
 html
   head
-    title='Timer Queue'
+    title Timer Queue
     script(src="http://fb.me/react-0.10.0.js")
     script(src="http://code.jquery.com/jquery-1.11.1.min.js")
+    link(rel="stylesheet" href="/style.css")
   body
-    div(id='content') This is cool
+    div(id='content')
     script(type="text/javascript" src="js/app/src/App.js")
+    script.
+      renderApp(!{JSON.stringify(data)})
     if DEV 
       script(src="//localhost:35729/livereload.js")
+
+
 
 
 

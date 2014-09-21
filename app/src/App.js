@@ -2,8 +2,11 @@
 var React = require('react');
 var CountDown = require('./CountDown');
 
-React.renderComponent(
-  <CountDown />,
-  document.getElementById('content')
-);
+function renderApp(data) {
+  React.renderComponent(
+    CountDown({data: data}),
+    document.getElementById('content')
+  );
+}
 
+window.renderApp = renderApp;
