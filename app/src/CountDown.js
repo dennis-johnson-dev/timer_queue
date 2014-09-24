@@ -82,7 +82,8 @@ var CountDown = React.createClass({
       return {
         id: task.id,
         time: this._formatTime(task.time),
-        title: task.title
+        title: task.title,
+        desc: task.desc
       };
     }, this);
     var formattedTotal = this._formatTime(this.state.total);
@@ -102,6 +103,7 @@ var CountDown = React.createClass({
               return <li key={ task.id }>
                        <ul>
                          <li>{ task.title }</li>
+                         <li>{ task.desc }</li>
                          <li>{ task.time }</li>
                        </ul>
                      </li>; 

@@ -17,11 +17,13 @@ tasks = [
     id: 1,
     time: 90,
     title: 'Task 1'
+    desc: 'Begin brewing'
   },
   {
     id: 2,
     time: 240,
     title: 'Task 2'
+    desc: 'Stir coffee and continue brewing'
   }
 ]
 
