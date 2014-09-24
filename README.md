@@ -1,6 +1,10 @@
 # Timer Queue 
 
-Simplify working with consecutive timed tasks by adding them to a queue of timers.
+Simplify working with consecutive timed tasks by adding them to a queue of timers. 
+
+### Timers 
+
+Timers are composable and re-usable for different tasks.
 
 ### Installation
 
