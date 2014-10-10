@@ -30,19 +30,7 @@ config =
       src: ['**/*.coffee'],
       dest: 'server/gen/',
       ext: '.js'
-
-  concurrent:
-    target:
-      tasks: ['nodemon', 'watch'],
-      options:
-        logConcurrentOutput: true
-
-  nodemon:
-    dev:
-      script: 'server/gen/server.js'
-      options:
-        ignore: ['node_modules/**']
-
+ 
   watch:
     options:
       livereload: true
@@ -63,5 +51,5 @@ module.exports = (grunt) ->
   grunt.initConfig(config)
 
   grunt.registerTask('default', ['coffee', 'clean', 'browserify'])
-  grunt.registerTask('start', ['default', 'concurrent'])
+  grunt.registerTask('start', ['default'])
   grunt.registerTask('test', ['watch'])

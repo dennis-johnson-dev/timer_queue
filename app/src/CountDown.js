@@ -22,16 +22,27 @@ var CountDown = React.createClass({
 
   getInitialState: function() {
     TaskStore.init(this.props.data); 
+    var state = this._getState();
+    state.value = '';
 
-    var tasks = getTaskState();
-    var total = getTotalTime(tasks);
-    return {
-      tasks: getTaskState(),
-      total: total
-    };
+    return state;
   },
   componentDidMount: function() {
     TaskStore.addChangeListener(this._onChange); 
+  },
+  create: function() {
+    if (this.state.value && this.state.value >= 0) {
+      var task = {
+        id: 13 + parseInt(this.state.value),
+        time: parseInt(this.state.value),
+        title: 'Task ' + (13 + parseInt(this.state.value)),
+        desc: 'Begin brewing'
+      };
+      TaskActions.create(task);
+      this.setState({
+        value: ''
+      });
+    }
   },
   start: function() {
     if (!this.current) {
@@ -94,6 +105,13 @@ var CountDown = React.createClass({
           <p ref="total" >Total: { formattedTotal }</p>
           <button onClick={ this.start }>Start</button>
           <button onClick={ this.stop }>Stop</button>
+          <button onClick={ this.create }>Create</button>
+          <input 
+            type="text" 
+            onChange={this._inputChange } 
+            onKeyDown={this._onKeyDown } 
+            value={ this.state.value } 
+          />
         </div>
 
         <ul>
@@ -116,8 +134,32 @@ var CountDown = React.createClass({
   reset: function() {
     console.log('reset');
   },
+  _inputChange: function() {
+    this.setState({
+      value: event.target.value
+    });
+
+  },
+  _onKeyDown: function(e) {
+    if (e.keyCode === ENTER_KEY_CODE && this.state.value !== '') {
+      this.create();
+    }
+  },
   _onChange: function() {
-    console.log('changed');
+    var state = this._getState();
+    
+    this.setState({
+      tasks: state.tasks,
+      total: state.total
+    });
+  },
+  _getState: function() {
+    var tasks = getTaskState();
+    var total = getTotalTime(tasks);
+    return {
+      tasks: tasks,
+      total: total
+    };
   }
   
 });

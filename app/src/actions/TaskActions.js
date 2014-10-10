@@ -3,9 +3,10 @@ var TaskConstants = require('../constants/TaskConstants');
 
 var TaskActions = {
 
-  create: function() {
+  create: function(task) {
     AppDispatcher.handleViewAction({
-      actionType: TaskConstants.TASK_CREATE
+      actionType: TaskConstants.TASK_CREATE,
+      task: task
     });
   }
 

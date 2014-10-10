@@ -7,11 +7,12 @@ var CHANGE_EVENT = 'change';
 
 var _tasks = [];
 
-function create() {
+function create(task) {
   var insert = {
-    id: 3,
-    title: 'Task 3',
-    time: 3
+    id: task.id,
+    time: task.time,
+    title: task.title,
+    desc: task.desc
   };
 
   _tasks.push(insert);
@@ -37,7 +38,7 @@ TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
 
   switch(action.actionType) {
     case TaskConstants.TASK_CREATE:
-      create();
+      create(action.task);
       break;
 
     default:
