@@ -5,9 +5,16 @@ var TaskActions = {
 
   create: function(task) {
     AppDispatcher.handleViewAction({
-      actionType: TaskConstants.TASK_CREATE,
+      actionType: TaskConstants.ActionTypes.TASK_CREATE,
       task: task
     });
+  },
+
+  receiveProjects: function(projects) {
+    AppDispatcher.handleServerAction({
+      actionType: TaskConstants.ActionTypes.RECEIVE_PROJECTS,
+      projects: projects
+    })
   }
 
 };

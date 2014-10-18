@@ -2,8 +2,8 @@ extends layout
 
 block content
   div(id='content')
-  script(type="text/javascript" src="js/app/src/AppProjects.js")
+  script(type="text/javascript" src="../js/app/src/AppProject.js")
   script.
-    renderProjects()
+    renderProject(!{JSON.stringify(project)})
   if DEV 
     script(src="//localhost:35729/livereload.js")

@@ -1,14 +1,4 @@
 config =
-  react:
-   components:
-      files: [
-        'app/gen/countdown.js': 'app/src/CountDown.js',
-        'app/gen/app.js': 'app/src/App.js'
-      ]
-    spec:
-      files: [
-        'spec/gen/countdown-spec.js': 'spec/app/countdown-spec.js'
-      ]
 
   browserify:
     options:
@@ -30,7 +20,7 @@ config =
       src: ['**/*.coffee'],
       dest: 'server/gen/',
       ext: '.js'
- 
+
   watch:
     options:
       livereload: true
@@ -51,5 +41,4 @@ module.exports = (grunt) ->
   grunt.initConfig(config)
 
   grunt.registerTask('default', ['coffee', 'clean', 'browserify'])
-  grunt.registerTask('start', ['default'])
   grunt.registerTask('test', ['watch'])

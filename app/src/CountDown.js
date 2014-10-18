@@ -2,6 +2,7 @@
 var React = require('react');
 var TaskStore = require('./store/TaskStore');
 var TaskActions = require('./actions/TaskActions');
+var TaskList = require('./TaskList');
 
 var ENTER_KEY_CODE = 13;
 
@@ -21,28 +22,12 @@ var CountDown = React.createClass({
   displayName: 'CountDown',
 
   getInitialState: function() {
-    TaskStore.init(this.props.data); 
-    var state = this._getState();
-    state.value = '';
+    TaskStore.init(this.props.project.tasks); 
 
-    return state;
+    return this._getState();
   },
   componentDidMount: function() {
     TaskStore.addChangeListener(this._onChange); 
-  },
-  create: function() {
-    if (this.state.value && this.state.value >= 0) {
-      var task = {
-        id: 13 + parseInt(this.state.value),
-        time: parseInt(this.state.value),
-        title: 'Task ' + (13 + parseInt(this.state.value)),
-        desc: 'Begin brewing'
-      };
-      TaskActions.create(task);
-      this.setState({
-        value: ''
-      });
-    }
   },
   start: function() {
     if (!this.current) {
@@ -98,6 +83,7 @@ var CountDown = React.createClass({
       };
     }, this);
     var formattedTotal = this._formatTime(this.state.total);
+    var url = "/project/" + this.props.project.id;
 
     return (
       <div>
@@ -105,13 +91,6 @@ var CountDown = React.createClass({
           <p ref="total" >Total: { formattedTotal }</p>
           <button onClick={ this.start }>Start</button>
           <button onClick={ this.stop }>Stop</button>
-          <button onClick={ this.create }>Create</button>
-          <input 
-            type="text" 
-            onChange={this._inputChange } 
-            onKeyDown={this._onKeyDown } 
-            value={ this.state.value } 
-          />
         </div>
 
         <ul>
@@ -119,7 +98,7 @@ var CountDown = React.createClass({
             tasks.map(function(task) {
               
               return <li key={ task.id }>
-                       <ul>
+                       <ul id="task_holder">
                          <li>{ task.title }</li>
                          <li>{ task.desc }</li>
                          <li>{ task.time }</li>
@@ -128,22 +107,12 @@ var CountDown = React.createClass({
             })
           }
         </ul>
+        <a href= { url }>Edit</a>
       </div>
     );
   },
   reset: function() {
     console.log('reset');
-  },
-  _inputChange: function() {
-    this.setState({
-      value: event.target.value
-    });
-
-  },
-  _onKeyDown: function(e) {
-    if (e.keyCode === ENTER_KEY_CODE && this.state.value !== '') {
-      this.create();
-    }
   },
   _onChange: function() {
     var state = this._getState();

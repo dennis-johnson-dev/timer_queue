@@ -1,0 +1,15 @@
+- var DEV = process.env.DEV; 
+
+doctype html
+html
+  include header
+  body 
+    a(href="/") Home
+    block content
+
+    //- div(id='content')
+    //- script(type="text/javascript" src="/js/app/src/App.js")
+    //- script.
+    //-   renderApp(!{JSON.stringify(project)})
+    //- if DEV 
+    //-   script(src="//localhost:35729/livereload.js")

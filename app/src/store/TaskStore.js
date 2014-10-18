@@ -6,6 +6,7 @@ var merge = require('react/lib/merge');
 var CHANGE_EVENT = 'change';
 
 var _tasks = [];
+var _projects = [];
 
 function create(task) {
   var insert = {
@@ -25,6 +26,9 @@ var TaskStore = merge(EventEmitter.prototype, {
   getAll: function() {
     return _tasks;
   },
+  getProjects: function() {
+    return _projects;
+  },
   emitChange: function() {
     this.emit(CHANGE_EVENT); 
   },
@@ -32,13 +36,21 @@ var TaskStore = merge(EventEmitter.prototype, {
     this.on(CHANGE_EVENT, callback); 
   }
 });
+
+var setProjects = function(projects) {
+  _projects = projects;
+};
   
 TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
 
   switch(action.actionType) {
-    case TaskConstants.TASK_CREATE:
+    case TaskConstants.ActionTypes.TASK_CREATE:
       create(action.task);
+      break;
+
+    case TaskConstants.ActionTypes.RECEIVE_PROJECTS:
+      setProjects(action.projects);
       break;
 
     default:

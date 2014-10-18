@@ -2,9 +2,9 @@
 var React = require('react');
 var CountDown = require('./CountDown');
 
-function renderApp(data) {
+function renderApp(project) {
   React.renderComponent(
-    CountDown({data: data}),
+    CountDown({project: project}),
     document.getElementById('content')
   );
 }
