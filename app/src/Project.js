@@ -13,8 +13,7 @@ var Project = React.createClass({
     var project = this.props.project;
 
     return {
-      project: project,
-      value: ''
+      project: project
     };
   },
 
@@ -27,8 +26,8 @@ var Project = React.createClass({
       var task = {
         id: 13 + parseInt(this.state.value),
         time: parseInt(this.state.value),
-        title: 'Task ' + (13 + parseInt(this.state.value)),
-        desc: 'Begin brewing'
+        title: this.state.title,
+        desc: this.state.description
       };
       TaskActions.create(task);
       this.setState({
@@ -44,9 +43,18 @@ var Project = React.createClass({
       <div>
         <input 
           type="text"
-          onChange={ this._handleChange }
-          onKeyDown={this._onKeyDown } 
-          value={ this.state.value } 
+          onKeyDown={ this._onKeyDown } 
+        />
+        <input 
+          type="text"
+          onChange={ this._handleChange.bind(this, 'title') }
+          onKeyDown={ this._onKeyDown } 
+          value={ this.state.title } 
+        />
+        <textarea 
+          name="task"
+          onChange={ this._handleChange.bind(this, 'description') }
+          value={ this.state.description }
         />
         <button onClick={ this.create }>Create</button>
         <ul>
@@ -59,8 +67,12 @@ var Project = React.createClass({
     );
   },
 
-  _handleChange: function(event) {
-    this.setState({ value: event.target.value });
+  _handleChange: function(event, type) {
+    this.setState({ 
+      value: event.target.value,
+      description: event.target.description,
+      title: event.target.title
+    });
   },
 
   _onKeyDown: function(e) {
@@ -70,7 +82,9 @@ var Project = React.createClass({
   },
 
   _onChange: function() {
-    this.setState({ })
+    this.setState({
+      project: TaskStore.getProject()
+    });
   }
 
 });
