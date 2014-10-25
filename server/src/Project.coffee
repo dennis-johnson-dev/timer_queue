@@ -1,4 +1,5 @@
 mongoose = require('mongoose')
+Task = require('./Task').task
 
 mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
@@ -11,8 +12,9 @@ mongoose.connect(mongoUri, (err, res) ->
     console.log('Succeeded and connected to: ' + mongoUri)
 )
 
-schema = new mongoose.Schema({
-  name: String
+project = new mongoose.Schema({
+  title: String
+  tasks: [Task]
 })
 
-module.exports = mongoose.model('Project', schema)
+module.exports = mongoose.model('Project', project)

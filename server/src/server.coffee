@@ -3,6 +3,7 @@ path = require 'path'
 bodyParser = require 'body-parser'
 
 Project = require './Project'
+Task = require './Task'
 
 app = express()
 port = process.env.PORT || 3000
@@ -73,12 +74,19 @@ router.get('/', (req, res) ->
 router.route('/projects')
   .post (req,res) ->
     project = new Project()
-    console.log req.body.name
-    project.name = req.body.name
+    project.title = req.body.title
+
+    tasky = new Task()
+    tasky.title = 'juiceyfruit'
+    tasky.time = 90
+    tasky.desc = 'hi desc'
+
+    project.tasks.push(tasky)
 
     project.save((err) ->
       if err
         res.send err
+        return
 
       res.json({ message: 'Project created!' })
     )
@@ -87,6 +95,7 @@ router.route('/projects')
     Project.find((err, projects) -> 
       if err
         res.send err
+        return
 
       res.json(projects)
     )
@@ -96,6 +105,7 @@ router.route('/projects/:id')
     Project.findById(req.params.id, (err, project) ->
       if err
         res.send err
+        return
 
       res.json project
   )
@@ -105,11 +115,12 @@ router.route('/projects/:id')
       if err
         res.send err
 
-      project.name = req.body.name
+      project.title = req.body.title
 
       project.save (err) ->
         if err
           res.send err
+          return
 
         res.json({ message: 'Project updated' })
     )
@@ -120,6 +131,7 @@ router.route('/projects/:id')
     }, (err) ->
       if err
         res.send err
+        return
 
       res.json({ message: 'Project deleted!' })
     )
