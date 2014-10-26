@@ -8,7 +8,7 @@ describe('Countdown', function() {
   beforeEach(function() {
     ReactTestUtils = React.addons.TestUtils; 
      
-    CountDown = require('../../app/src/CountDown.js');
+    CountDown = require('../../app/src/components/CountDown.js');
   });
 
   it('renders as the correct component', function() {

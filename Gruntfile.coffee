@@ -6,7 +6,7 @@ config =
     app:
       expand: true
       cwd: './'
-      src: ['./spec/app/*.js', './app/src/**/*.js']
+      src: ['./app/src/**/*.js']
       dest: './public/js'
       ext: '.js'
 
@@ -30,9 +30,6 @@ config =
     server:
       files: ['server/**/*.coffee'],
       tasks: ['coffee']
-    test:
-      files: ['spec/**/*.js'],
-      tasks: ['react:spec', 'browserify']
 
 module.exports = (grunt) ->
 

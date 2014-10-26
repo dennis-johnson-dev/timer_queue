@@ -1,12 +1,25 @@
 /** @jsx React.DOM */
 var React = require('react');
-var CountDown = require('./CountDown');
+var AppAPI = require('./api/AppAPI');
 
-function renderApp(project) {
-  React.renderComponent(
-    CountDown({project: project}),
-    document.getElementById('content')
-  );
-}
+var ProjectList = require('./components/ProjectList');
+var Project = require('./components/Project');
 
-window.renderApp = renderApp;
+var Router = require('react-router');
+var Routes = Router.Routes;
+var Route = Router.Route;
+var Link = Router.Link;
+var TaskActions = require('./actions/TaskActions');
+
+var routes = (
+  <Routes>
+    <Route name="home" path="/" handler={ ProjectList }>
+      <Route name="project" path="project/:id" handler={ Project } />
+    </Route>
+  </Routes>
+);
+
+AppAPI.init().then(function(projects) {
+  TaskActions.receiveProjects(projects);
+  React.renderComponent(routes, document.getElementById('content'));
+});

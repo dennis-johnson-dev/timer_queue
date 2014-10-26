@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
-var TaskStore = require('./store/TaskStore');
-var TaskActions = require('./actions/TaskActions');
+var TaskStore = require('../store/TaskStore');
+var TaskActions = require('../actions/TaskActions');
 var TaskList = require('./TaskList');
 
 var ENTER_KEY_CODE = 13;
@@ -22,8 +22,6 @@ var CountDown = React.createClass({
   displayName: 'CountDown',
 
   getInitialState: function() {
-    TaskStore.init(this.props.project.tasks); 
-
     return this._getState();
   },
   componentDidMount: function() {
