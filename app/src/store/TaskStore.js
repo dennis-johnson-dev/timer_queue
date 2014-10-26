@@ -10,9 +10,6 @@ var CHANGE_EVENT = 'change';
 var _projects = [];
 
 var TaskStore = merge(EventEmitter.prototype, {
-  getAll: function() {
-    return _tasks;
-  },
   getProject: function(id) {
     return _.find(_projects, { '_id': id });
   },

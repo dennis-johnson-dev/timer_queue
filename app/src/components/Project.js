@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
 var React = require('react');
 var TaskStore = require('../store/TaskStore');
-var TaskList = require('./TaskList');
-var TaskActions = require('../actions/TaskActions');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var Project = React.createClass({
   displayName: 'Project',
@@ -18,9 +18,10 @@ var Project = React.createClass({
   },
   
   render: function() {
+    var project = this.state.project;
     return (
       <div>
-        <h3>{ this.state.project.title }</h3>
+        <h3>{ project.title }</h3>
         <ul>
           {
             this.state.project.tasks.map(function(task) {
@@ -30,6 +31,7 @@ var Project = React.createClass({
                   <li>{ task.desc }</li>
                   <li>{ task.time }</li>
                 </ul>
+                <Link to="play" params={{ id: project._id }}>Start</Link>
               </li>
             })
           }

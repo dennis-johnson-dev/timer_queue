@@ -1,6 +1,7 @@
 express = require 'express'
 path = require 'path'
 bodyParser = require 'body-parser'
+favicon = require 'serve-favicon'
 
 # models
 Project = require './Project'
@@ -25,6 +26,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname + '../../../public')))
 app.use(allowCrossDomain)
 app.use(log)
+app.use(favicon(path.join(__dirname + '../../../public/favicon.ico')))
 
 app.set 'views', path.join(__dirname + '../../../views')
 app.set 'view engine', 'jade'
