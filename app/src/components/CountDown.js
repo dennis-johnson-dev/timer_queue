@@ -22,7 +22,9 @@ var CountDown = React.createClass({
   displayName: 'CountDown',
 
   getInitialState: function() {
-    return this._getState();
+    return {
+      tasks: TaskStore.getProject(this.props.params.id).tasks
+    };
   },
   componentDidMount: function() {
     TaskStore.addChangeListener(this._onChange); 
@@ -79,9 +81,8 @@ var CountDown = React.createClass({
         title: task.title,
         desc: task.desc
       };
-    }, this);
+    });
     var formattedTotal = this._formatTime(this.state.total);
-    var url = "/project/" + this.props.project.id;
 
     return (
       <div>
@@ -94,7 +95,6 @@ var CountDown = React.createClass({
         <ul>
           { 
             tasks.map(function(task) {
-              
               return <li key={ task.id }>
                        <ul id="task_holder">
                          <li>{ task.title }</li>
@@ -105,7 +105,6 @@ var CountDown = React.createClass({
             })
           }
         </ul>
-        <a href= { url }>Edit</a>
       </div>
     );
   },
