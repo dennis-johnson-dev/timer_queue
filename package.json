@@ -21,7 +21,8 @@
     "react": "^0.11.1",
     "react-router": "^0.9.4",
     "react-tools": "^0.11.1",
-    "serve-favicon": "^2.1.6"
+    "serve-favicon": "^2.1.6",
+    "q": "~1.0.1"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/test_utils/preprocessor.js",
@@ -72,6 +73,7 @@
     "reactify": "^0.14.0",
     "sinon": "^1.10.3",
     "sinon-chai": "^2.5.0",
-    "watchify": "^1.0.2"
+    "watchify": "^1.0.2",
+    "grunt-6to5": "~1.0.1"
   }
 }
