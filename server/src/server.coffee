@@ -12,13 +12,13 @@ port = process.env.PORT || 3000
 router = express.Router()
 
 allowCrossDomain = (req, res, next) ->
-  res.header('Access-Control-Allow-Origin', 'http://10.0.1.203:3000')
+  res.header('Access-Control-Allow-Origin', 'http://10.0.1.203')
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  res.header('Access-Control-Allow-Headers', 'X-Foo')
   next()
 
 log = (req, res, next) ->
-  console.log res.statusCode, req.url, req.method
+  console.log res.statusCode, req.url, req.method, req.headers
   next()
 
 app.use(bodyParser.urlencoded({ extended: true }))

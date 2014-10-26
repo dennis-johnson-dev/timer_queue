@@ -4,6 +4,9 @@ module.exports = {
       $.ajax({
         dataType: "json",
         url: 'http://10.0.1.203:3000/api/projects',
+        headers: {
+          'X-Foo': 'bar'
+        },
         success: function(data) {
           resolve(data)
         }
