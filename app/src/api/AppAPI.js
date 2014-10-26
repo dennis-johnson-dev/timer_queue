@@ -3,7 +3,7 @@ module.exports = {
     var promise = new Promise(function(resolve, reject) {
       $.ajax({
         dataType: "json",
-        url: 'http://localhost:3000/api/projects',
+        url: 'http://10.0.1.203:3000/api/projects',
         success: function(data) {
           resolve(data)
         }

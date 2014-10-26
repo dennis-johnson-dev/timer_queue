@@ -10,9 +10,21 @@ app = express()
 port = process.env.PORT || 3000
 router = express.Router()
 
+allowCrossDomain = (req, res, next) ->
+  res.header('Access-Control-Allow-Origin', 'http://10.0.1.203:3000')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  next()
+
+log = (req, res, next) ->
+  console.log res.statusCode, req.url, req.method
+  next()
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname + '../../../public')))
+app.use(allowCrossDomain)
+app.use(log)
 
 app.set 'views', path.join(__dirname + '../../../views')
 app.set 'view engine', 'jade'
