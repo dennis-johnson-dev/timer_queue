@@ -18,7 +18,7 @@ allowCrossDomain = (req, res, next) ->
   next()
 
 log = (req, res, next) ->
-  console.log res.statusCode, req.url, req.method, req.headers
+  console.log res.statusCode, req.url, req.method
   next()
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -39,7 +39,7 @@ app.get('/', (req, res) ->
 
 # /api routes
 
-router.get('/', (req, res) -> 
+router.get('/', (req, res) ->
   res.json({ message: 'Awesome, fuck yeah!' })
 )
 
