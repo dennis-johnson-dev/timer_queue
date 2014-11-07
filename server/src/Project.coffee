@@ -1,7 +1,7 @@
 mongoose = require('mongoose')
 Task = require('./Task').task
 
-mongoUri = 'mongodb://localhost/timer_queue'
+mongoUri = 'mongodb://localhost/timer_queue' || process.env.MONGOLAB_URI
  
 mongoose.connect(mongoUri, (err, res) ->
   if err
