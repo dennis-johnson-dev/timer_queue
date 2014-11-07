@@ -13,6 +13,7 @@
     "express": "4.x",
     "grunt": "~0.4.0",
     "grunt-cli": "~0.1.8",
+    "grunt-6to5": "~1.0.1",
     "grunt-react": "^0.9.0",
     "jade": "^1.7.0",
     "load-grunt-tasks": "^0.6.0",
@@ -73,7 +74,6 @@
     "reactify": "^0.14.0",
     "sinon": "^1.10.3",
     "sinon-chai": "^2.5.0",
-    "watchify": "^1.0.2",
-    "grunt-6to5": "~1.0.1"
+    "watchify": "^1.0.2"
   }
 }
