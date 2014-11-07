@@ -2,10 +2,12 @@
 var React = require('react');
 var TaskStore = require('../store/TaskStore');
 var Router = require('react-router');
+var formatTime = require('../mixins/formatTime');
 var Link = Router.Link;
 
 var Project = React.createClass({
   displayName: 'Project',
+  mixins: [formatTime],
 
   getInitialState: function() {
     return {
@@ -24,18 +26,19 @@ var Project = React.createClass({
         <h3>{ project.title }</h3>
         <ul>
           {
-            this.state.project.tasks.map(function(task) {
+            project.tasks.map(function(task) {
               return <li key={ task._id }>
                 <ul>
-                  <li>{ task.title }</li>
-                  <li>{ task.desc }</li>
-                  <li>{ task.time }</li>
+                  <li>Title: { task.title }</li>
+                  <li>Description: { task.desc }</li>
+                  <li>Time: { formatTime(task.time) }</li>
                 </ul>
-                <Link to="play" params={{ id: project._id }}>Start</Link>
+               
               </li>
             })
           }
         </ul>
+        <Link to="play" params={{ id: project._id }}>Start</Link>
       </div>
     );
   }

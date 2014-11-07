@@ -9,6 +9,14 @@ var CHANGE_EVENT = 'change';
 
 var _projects = [];
 
+function getTotalTime(id) {
+  var tasks = _.find(_projects, { '_id': id }).tasks;
+  var total = _.reduce(tasks, function(sum, task) {
+    return sum += task.time;
+  }, 0);
+  return total;
+}
+
 var TaskStore = merge(EventEmitter.prototype, {
   getProject: function(id) {
     return _.find(_projects, { '_id': id });
@@ -16,6 +24,8 @@ var TaskStore = merge(EventEmitter.prototype, {
   getProjects: function() {
     return _projects;
   },
+  getTotalTime: getTotalTime
+  ,
   emitChange: function() {
     this.emit(CHANGE_EVENT); 
   },

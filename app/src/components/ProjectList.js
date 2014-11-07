@@ -9,10 +9,8 @@ var ProjectList = React.createClass({
   displayName: 'ProjectList',
 
   getInitialState: function() {
-    var projects = TaskStore.getProjects();
-
     return {
-      projects: projects
+      projects: TaskStore.getProjects()
     };
   },
 
