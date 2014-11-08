@@ -29,7 +29,7 @@ var ProjectList = React.createClass({
         <ul>
           {
             this.state.projects.map(function(project) {
-              return <li key={ project._id }><Link to="project" params={{ id: project._id }}>{ project.title }</Link></li>
+              return <li key={ project._id }><Link to="play" params={{ id: project._id }}>{ project.title }</Link></li>
             })
           }
         </ul>

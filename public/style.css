@@ -4,20 +4,25 @@ html {
 
 body {
   font-size: 1.6em;
+  margin: 0;
+  padding: 1em;
 }
 
-ul {
-  list-style: none;
-  margin: 1em 0 0 0;
-  padding: 0;
-}
-
-li {
-  margin: 0 0 1em 0;
-  padding: 0;
-}
-
-li ul li{
+.content ul {
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+ul.nav {
+  margin-bottom: 2em;
+}
+
+.nav li {
+  display: inline-block;
+  margin-right: .5em;
+}
+
+.play li {
+  margin-bottom: .5em;
 }

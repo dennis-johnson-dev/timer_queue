@@ -10,9 +10,10 @@ var Site = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <ul>
+      <div className="content">
+        <ul className="nav">
           <li><Link to="home">Home</Link></li>
+          <li><Link to="projects">Projects</Link></li>
         </ul>
         <this.props.activeRouteHandler />
       </div>

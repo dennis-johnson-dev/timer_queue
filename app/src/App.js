@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var AppAPI = require('./api/AppAPI');
+var TaskActions = require('./actions/TaskActions');
 
 var Site = require('./components/Site');
 var ProjectList = require('./components/ProjectList');
@@ -11,18 +12,18 @@ var Router = require('react-router');
 var Routes = Router.Routes;
 var Route = Router.Route;
 var Link = Router.Link;
-var TaskActions = require('./actions/TaskActions');
 
 var routes = (
   <Routes>
     <Route name="home" path="/" handler={ Site }>
-      <Route name="project" path="project/:id" handler={ Project } />
+      <Route name="projects" path="projects" handler={ ProjectList } />
+        <Route name="project" path="project/:id" handler={ Project } />
+      <Route name="play" path="play/:id" handler={ CountDown } />
     </Route>
-    <Route name="play" path="play/:id" handler={ CountDown } />
   </Routes>
 );
 
 AppAPI.init().then(function(projects) {
   TaskActions.receiveProjects(projects);
-  React.renderComponent(routes, document.getElementById('content'));
+  React.renderComponent(routes, document.getElementById('site'));
 });

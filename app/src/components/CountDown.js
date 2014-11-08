@@ -50,7 +50,7 @@ var CountDown = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div className="play">
         <h4>Play</h4>
         <button onClick={ this.start }>Play</button>
         <button onClick={ this.stop }>Pause</button>
