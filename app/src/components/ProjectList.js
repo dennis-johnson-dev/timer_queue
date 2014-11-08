@@ -25,9 +25,6 @@ var ProjectList = React.createClass({
   render: function() {
   	return (
       <div>
-        <ul>
-          <li><Link to="home">Home</Link></li>
-        </ul>
         <h3>Projects</h3>
         <ul>
           {

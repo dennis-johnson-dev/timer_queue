@@ -21,6 +21,7 @@ var Project = React.createClass({
   
   render: function() {
     var project = this.state.project;
+    
     return (
       <div>
         <h3>{ project.title }</h3>
