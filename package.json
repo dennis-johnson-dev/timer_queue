@@ -4,8 +4,9 @@
   "description": "Simplify consecutive tasks",
   "main": "server.js",
   "scripts": {
-    "start": "grunt && nodemon server/gen/server.js",
+    "start": "nodemon server/gen/server.js",
     "debug": "node --harmony --debug-brk node_modules/jest-cli/bin/jest.js --runInBand",
+    "postinstall": "grunt",
     "test": "node ./node_modules/jest-cli/bin/jest.js"
   },
   "dependencies": {
