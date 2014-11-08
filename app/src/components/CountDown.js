@@ -17,8 +17,11 @@ var CountDown = React.createClass({
   mixins: [formatTime],
 
   getInitialState: function() {
+    var project = TaskStore.getProject(this.props.params.id);
+    var tasks = project.tasks;
     return {
-      tasks: TaskStore.getProject(this.props.params.id).tasks,
+      project: project,
+      tasks: tasks,
       total: TaskStore.getTotalTime(this.props.params.id)
     };
   },
@@ -51,7 +54,7 @@ var CountDown = React.createClass({
   render: function() {
     return (
       <div className="play">
-        <h4>Play</h4>
+        <h4>Play { this.state.project.title }</h4>
         <button onClick={ this.start }>Play</button>
         <button onClick={ this.stop }>Pause</button>
         <p>Total: { formatTime(this.state.total) }</p>
