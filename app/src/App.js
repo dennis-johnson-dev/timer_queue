@@ -26,4 +26,7 @@ var routes = (
 AppAPI.init().then(function(projects) {
   TaskActions.receiveProjects(projects);
   React.renderComponent(routes, document.getElementById('site'));
+},
+function(err) {
+  console.log('You fucked up');
 });
