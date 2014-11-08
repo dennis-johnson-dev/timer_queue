@@ -6,7 +6,7 @@ module.exports = {
       $.ajax({
         crossDomain: true,
         dataType: "json",
-        url: 'http://localhost:3000/api/projects' || process.env.HOSTNAME,
+        url: process.env.HOSTNAME + '/api/projects' || 'http://localhost:3000/api/projects',
         success: function(data) {
           resolve(data);
         },
