@@ -33,8 +33,6 @@ var ProjectList = React.createClass({
             })
           }
         </ul>
-
-        <this.props.activeRouteHandler />
       </div>
     );
   },

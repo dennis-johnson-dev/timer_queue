@@ -2,6 +2,7 @@
 var React = require('react');
 var TaskStore = require('../store/TaskStore');
 var TaskList = require('./TaskList');
+var ProjectList = require('./ProjectList');
 var Router = require('react-router');
 var Link = Router.Link;
 
@@ -13,11 +14,11 @@ var Site = React.createClass({
       <div className="content">
         <ul className="nav">
           <li><Link to="home">Home</Link></li>
-          <li><Link to="projects">Projects</Link></li>
         </ul>
+        <ProjectList />
         <this.props.activeRouteHandler />
       </div>
-      );
+    );
   }
 
 });

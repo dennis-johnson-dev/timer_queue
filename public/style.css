@@ -9,25 +9,25 @@ body {
 }
 
 p {
-  margin-top: 1em;
+  margin: .5em 0;
+}
+
+h3 {
+  margin: .5em 0 .25em 0;
 }
 
 h4 {
-  margin-bottom: 1em;
+  margin: .5em 0;
 }
 
 button {
-  margin-right: .5em;
+  margin: 0;
 }
 
 .content ul {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-ul.nav {
-  margin-bottom: 2em;
 }
 
 .nav>li {
@@ -40,6 +40,10 @@ ul.nav {
   padding: 0;
 }
 
+.play {
+  padding-top: .5em;
+}
+
 .play li {
-  margin-bottom: .5em;
+  margin: .5em 0;
 }
