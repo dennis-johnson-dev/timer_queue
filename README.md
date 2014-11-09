@@ -17,7 +17,7 @@ $ npm start
 ### Build
 
 ````bash
-$ webpack
+$ webpack --watch
 ````
 
 Visit [http://localhost:3000](http://localhost:3000)
