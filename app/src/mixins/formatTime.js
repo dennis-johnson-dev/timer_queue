@@ -13,7 +13,11 @@ function formatTime(total) {
       total -= minutes * 60;
     }
   }
-  hours = hours < 10 ? '0' + hours + ':' : hours + ':'; 
+  if (hours === 0) {
+    hours = '';
+  } else {
+    hours = hours < 10 ? '0' + hours + ':' : hours + ':';
+  }
   minutes = minutes < 10 ? '0' + minutes + ':' : minutes + ':';    
   total = total < 10 ? '0' + total : total;
   var formattedTime = hours + minutes + total;

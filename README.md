@@ -14,11 +14,10 @@ $ npm install
 $ npm start 
 ````
 
-### Testing
+### Build
 
 ````bash
-$ grunt test
-$ karma start
+$ webpack
 ````
 
 Visit [http://localhost:3000](http://localhost:3000)
