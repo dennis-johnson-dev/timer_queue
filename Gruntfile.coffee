@@ -1,19 +1,9 @@
 webpack = require('webpack')
-webpackconfig = require('./webpack.config.js')
 
 config =
   webpack:
-    build: webpackconfig
-
-  browserify:
-    options:
-      transform: [ require('grunt-react').browserify ]
-    app:
-      expand: true
-      cwd: './'
-      src: ['./app/src/**/*.js']
-      dest: './public/js'
-      ext: '.js'
+    build: require('./webpack.config.js')("min")
+    dev: require('./webpack.config.js')("dev")
 
   clean:
     public: ['public/js']
@@ -31,7 +21,7 @@ config =
       livereload: true
     app:
       files: ['app/src/**/*.js'],
-      tasks: ['webpack']
+      tasks: ['webpack:dev']
     server:
       files: ['server/**/*.coffee'],
       tasks: ['coffee']
@@ -42,5 +32,7 @@ module.exports = (grunt) ->
 
   grunt.initConfig(config)
 
-  grunt.registerTask('default', ['coffee', 'clean', 'webpack'])
+  grunt.registerTask('default', ['server', 'webpack:dev'])
+  grunt.registerTask('build', ['server', 'webpack:build'])
+  grunt.registerTask('server', ['coffee', 'clean'])
   grunt.registerTask('test', ['watch'])
