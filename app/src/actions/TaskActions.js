@@ -14,7 +14,7 @@ var TaskActions = {
     AppDispatcher.handleServerAction({
       actionType: TaskConstants.ActionTypes.RECEIVE_PROJECTS,
       projects: projects
-    })
+    });
   }
 
 };

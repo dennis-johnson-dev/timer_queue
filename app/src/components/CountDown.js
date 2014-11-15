@@ -4,29 +4,31 @@ var _ = require('lodash');
 var TaskStore = require('../store/TaskStore');
 var TaskActions = require('../actions/TaskActions');
 var TaskList = require('./TaskList');
-var formatTime = require('../mixins/formatTime');
+var formatTime = require('../lib/formatTime');
 
 var ENTER_KEY_CODE = 13;
 
-function getTaskState() {
-  return TaskStore.getAll();
+function getProjectState(id) {
+  var project = TaskStore.getProject(id);
+  var tasks = project.tasks;
+  var total = TaskStore.getTotalTime(tasks);
+  return {
+    id: id,
+    project: project,
+    tasks: tasks,
+    total: total
+  };
 }
 
 var CountDown = React.createClass({
   displayName: 'CountDown',
-  mixins: [formatTime],
 
   getInitialState: function() {
-    var project = TaskStore.getProject(this.props.params.id);
-    var tasks = project.tasks;
-    return {
-      project: project,
-      tasks: tasks,
-      total: TaskStore.getTotalTime(this.props.params.id)
-    };
+    this.project = getProjectState(this.props.params.id).project;
+    return getProjectState(this.props.params.id);
   },
   componentDidMount: function() {
-
+    TaskStore.addChangeListener(this._onChange);
   },
   start: function() {
     if (!this.current) {
@@ -54,15 +56,16 @@ var CountDown = React.createClass({
   render: function() {
     return (
       <div className="play">
-        <h4>Play { this.state.project.title }</h4>
+        <h4>{ this.state.project.title }</h4>
         <button onClick={ this.start }>Play</button>
         <button onClick={ this.stop }>Pause</button>
+        <button onClick={ this.reset }>Reset</button>
         <p>{ formatTime(this.state.total) }: Time Remaining</p>
         <ul>
           {
             this.state.tasks.map(function(task) {
               return (
-                <li key={ task.id }>
+                <li key={ task._id }>
                   <div>
                     <div>{ formatTime(task.time) }</div>
                     <div>{ task.title }</div>
@@ -76,7 +79,11 @@ var CountDown = React.createClass({
     );
   },
   reset: function() {
-    console.log('reset');
+    console.log(this.project);
+    this._onChange();
+  },
+  _onChange: function() {
+    this.setState(getProjectState(this.state.id));
   }
   
 });

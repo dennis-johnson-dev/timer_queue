@@ -1,7 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var TaskConstants = require('../constants/TaskConstants');
-var merge = require('react/lib/merge');
+var _ = require('lodash');
 
 var _ = require('lodash');
 
@@ -9,15 +9,14 @@ var CHANGE_EVENT = 'change';
 
 var _projects = [];
 
-function getTotalTime(id) {
-  var tasks = _.find(_projects, { '_id': id }).tasks;
+function getTotalTime(tasks) {
   var total = _.reduce(tasks, function(sum, task) {
     return sum += task.time;
   }, 0);
   return total;
 }
 
-var TaskStore = merge(EventEmitter.prototype, {
+var TaskStore = _.extend(EventEmitter.prototype, {
   getProject: function(id) {
     return _.find(_projects, { '_id': id });
   },

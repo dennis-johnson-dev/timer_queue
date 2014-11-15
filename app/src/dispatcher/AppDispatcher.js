@@ -1,6 +1,6 @@
 var Dispatcher = require('flux').Dispatcher;
-var copyProperties = require('react/lib/copyProperties');
-var AppDispatcher = copyProperties(new Dispatcher(), {
+var _ = require('lodash');
+var AppDispatcher = _.extend(new Dispatcher(), {
 
   handleViewAction: function(action) {
     this.dispatch({
