@@ -1,4 +1,9 @@
+webpack = require('webpack')
+webpackconfig = require('./webpack.config.js')
+
 config =
+  webpack:
+    build: webpackconfig
 
   browserify:
     options:
@@ -26,7 +31,7 @@ config =
       livereload: true
     app:
       files: ['app/src/**/*.js'],
-      tasks: ['browserify']
+      tasks: ['webpack']
     server:
       files: ['server/**/*.coffee'],
       tasks: ['coffee']
@@ -37,5 +42,5 @@ module.exports = (grunt) ->
 
   grunt.initConfig(config)
 
-  grunt.registerTask('default', ['coffee', 'clean', 'browserify'])
+  grunt.registerTask('default', ['coffee', 'clean', 'webpack'])
   grunt.registerTask('test', ['watch'])
