@@ -2,6 +2,8 @@ var webpack = require('webpack');
 
 var commonsPlugin =
   new webpack.optimize.CommonsChunkPlugin('common.js');
+var uglify = 
+  new webpack.optimize.UglifyJsPlugin({ minimize: true });
 
 module.exports = {
   entry: {
@@ -19,5 +21,5 @@ module.exports = {
   externals: {
       "React": "React"
   },
-  plugins: [commonsPlugin]
+  plugins: [commonsPlugin, uglify]
 };
