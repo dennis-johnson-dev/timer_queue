@@ -24,7 +24,6 @@ var CountDown = React.createClass({
   displayName: 'CountDown',
 
   getInitialState: function() {
-    this.project = getProjectState(this.props.params.id).project;
     return getProjectState(this.props.params.id);
   },
   componentDidMount: function() {
@@ -79,7 +78,6 @@ var CountDown = React.createClass({
     );
   },
   reset: function() {
-    console.log(this.project);
     this._onChange();
   },
   _onChange: function() {
