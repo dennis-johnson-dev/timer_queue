@@ -1,24 +1,35 @@
 /** @jsx React.DOM */
 var React = require('react');
 var TaskStore = require('../store/TaskStore');
-var TaskList = require('./TaskList');
 var ProjectList = require('./ProjectList');
-var Router = require('react-router');
-var Link = Router.Link;
+var CountDown = require('./CountDown');
 
 var Site = React.createClass({
   displayName: 'Site',
+
+  getInitialState: function() {
+    return {
+      project: TaskStore.getCurrentProject()
+    }
+  },
+
+  componentDidMount: function() {
+    TaskStore.addChangeListener(this._onChange);
+  },
 
   render: function() {
     return (
       <div className="content">
         <ul className="nav">
-          <li><Link to="home">Home</Link></li>
+          <li><a href="/#">Home</a></li>
         </ul>
-        <ProjectList />
-        <this.props.activeRouteHandler />
+        <CountDown project={ this.state.project }/>
       </div>
     );
+  },
+
+  _onChange: function() {
+    this.setState({ project: TaskStore.getCurrentProject() });
   }
 
 });

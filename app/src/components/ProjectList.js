@@ -1,9 +1,8 @@
 /** @jsx React.DOM */
 var React = require('react');
 var TaskStore = require('../store/TaskStore');
-var TaskList = require('./TaskList');
-var Router = require('react-router');
-var Link = Router.Link;
+
+var CountDown = require('./CountDown');
 
 var ProjectList = React.createClass({
   displayName: 'ProjectList',
@@ -15,6 +14,7 @@ var ProjectList = React.createClass({
   },
 
   componentDidMount: function() {
+    // this._onCLick.bind(this);
     TaskStore.addChangeListener(this._onChange); 
   },
 
@@ -26,19 +26,17 @@ var ProjectList = React.createClass({
   	return (
       <div>
         <h3>Projects</h3>
-        <ul>
-          {
-            this.state.projects.map(function(project) {
-              return <li key={ project._id }><Link to="play" params={{ id: project._id }}>{ project.title }</Link></li>
-            })
-          }
-        </ul>
+        <CountDown id={ this.state.projects[0] } />
       </div>
     );
   },
 
   _onChange: function() {
     this.setState({ projects: TaskStore.getProjects() });
+  },
+
+  _onClick: function(e) {
+    console.log('yo');
   }
 
 });

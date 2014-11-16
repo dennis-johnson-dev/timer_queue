@@ -3,11 +3,10 @@ var EventEmitter = require('events').EventEmitter;
 var TaskConstants = require('../constants/TaskConstants');
 var _ = require('lodash');
 
-var _ = require('lodash');
-
 var CHANGE_EVENT = 'change';
 
 var _projects = [];
+var _currentProject = null;
 
 function getTotalTime(tasks) {
   var total = _.reduce(tasks, function(sum, task) {
@@ -17,8 +16,11 @@ function getTotalTime(tasks) {
 }
 
 var TaskStore = _.extend(EventEmitter.prototype, {
+  getCurrentProject: function() {
+    return _currentProject;
+  },
   getProject: function(id) {
-    return _.find(_projects, { '_id': id });
+    return _currentProject;
   },
   getProjects: function() {
     return _projects;
@@ -36,7 +38,20 @@ var TaskStore = _.extend(EventEmitter.prototype, {
   }
 });
 
+var decrement = function() {
+  if (_currentProject.tasks.length > 0 && _currentProject.tasks[0].time > 1) {
+    _currentProject.tasks[0].time -= 1;
+  } else {
+    _currentProject = _currentProject.tasks.slice(1);
+  }
+};
+
+var resetProject = function(time) {
+  _currentProject = _.cloneDeep(_projects[0]);
+};
+
 var setProjects = function(projects) {
+  _currentProject = _.cloneDeep(projects[0]);
   _projects = projects;
 };
   
@@ -47,6 +62,14 @@ TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
 
     case TaskConstants.ActionTypes.RECEIVE_PROJECTS:
       setProjects(action.projects);
+      break;
+
+    case TaskConstants.ActionTypes.DECREMENT:
+      decrement();
+      break;
+
+    case TaskConstants.ActionTypes.RESET_PROJECT:
+      resetProject(action.project);
       break;
 
     default:
