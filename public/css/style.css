@@ -52,6 +52,11 @@ button {
   width: 50%;
 }
 
+.play button:active {
+  background-color: #999;
+  border: none;
+}
+
 .play li {
   margin: .5em 0;
 }
