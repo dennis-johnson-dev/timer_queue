@@ -47,6 +47,8 @@ button {
 }
 
 .play button {
+  font-size: 1.4em;
+  line-height: 1.6em;
   width: 50%;
 }
 
@@ -71,10 +73,15 @@ button {
   font-weight: 200;
 }
 
+.play .time-remaining {
+  font-size: 1.4em;
+}
+
 .play .task-time {
   font-weight: bold;
 }
 
 .play .total-time {
+  font-size: 1.6em;
   font-weight: bold;
 }
