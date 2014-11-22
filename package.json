@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "body-parser": "^1.6.5",
+    "bower": "^1.3.12",
     "express": "4.x",
     "flux": "^2.0.0",
     "grunt": "~0.4.0",
@@ -56,6 +57,7 @@
   },
   "homepage": "https://github.com/songawee/timer_queue",
   "devDependencies": {
+    "bower": "^1.3.12",
     "chai": "^1.9.1",
     "del": "^0.1.3",
     "jest-cli": "^0.1.18",
