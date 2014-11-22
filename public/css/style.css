@@ -61,12 +61,12 @@ button {
 }
 
 .play .task {
-  border: 1px solid #333;
+  border: 1px solid #D8D8D8;
   border-radius: 5px;
 }
 
 .play .task-current {
-  border: 1px solid #888;
+  border: 1px solid #333;
 }
 
 .play .task-desc {
