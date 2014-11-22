@@ -24,7 +24,7 @@ var ProjectList = React.createClass({
 
   render: function() {
   	return (
-      <div>
+      <div className="project">
         <h3>Projects</h3>
         <ul>
           {

@@ -1,0 +1,18 @@
+{
+  "name": "timer_queue",
+  "version": "0.0.0",
+  "homepage": "https://github.com/songawee/timer_queue",
+  "authors": [
+    "Dennis Johnson <dennis@songawee.com>"
+  ],
+  "description": "Sequential task helper",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

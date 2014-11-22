@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var React = require('react');
+var React = require('react/addons');
 var _ = require('lodash');
 var TaskStore = require('../store/TaskStore');
 var TaskActions = require('../actions/TaskActions');
@@ -15,6 +15,7 @@ function getProjectState(id) {
   var total = TaskStore.getTotalTime(tasks);
   return {
     id: id,
+    play: true,
     project: project,
     tasks: tasks,
     total: total
@@ -34,13 +35,14 @@ var CountDown = React.createClass({
   },
   start: function() {
     if (!this.current) {
-      this.current = setInterval(this.decrement, 1000); 
+      this.current = setInterval(this.decrement, 1000);
+      this.setState({ play: false });
     }
   },
   stop: function() {
     clearInterval(this.current);
-    console.log('stopped');
     this.current = null;
+    this.setState({ play: true });
   },
   decrement: function() {
     if (this.state.tasks.length > 0 && this.state.tasks[0].time > 1) {
@@ -56,21 +58,29 @@ var CountDown = React.createClass({
     }
   },
   render: function() {
+    var cx = React.addons.classSet;
+    var play = this.state.play;
+    var classes = cx({
+      'fa': true,
+      'fa-play': play,
+      'fa-pause': !play
+    });
+    var firstTask = _.cloneDeep(this.state.tasks[0]);
     return (
       <div className="play">
         <h4>{ this.state.project.title }</h4>
-        <button onClick={ this.start }>Play</button>
-        <button onClick={ this.stop }>Pause</button>
+        <button onClick={ this.play }><i className={ classes }></i></button>
         <button onClick={ this.reset }>Reset</button>
-        <p>{ formatTime(this.state.total) }: Time Remaining</p>
-        <ul>
+        <p><span className="total-time">{ formatTime(this.state.total) }:</span> Time Remaining</p>
+        <ul className="tasks">
           {
             this.state.tasks.map(function(task) {
+              var taskItem = _.isEqual(task, firstTask) ? 'task task-current' : 'task';
               return (
-                <li key={ task._id }>
+                <li className={ taskItem } key={ task._id }>
                   <div>
-                    <div>{ formatTime(task.time) }</div>
-                    <div>{ task.title }</div>
+                    <div className="task-time">{ formatTime(task.time) }</div>
+                    <div className="task-desc">{ task.title }</div>
                   </div>
                 </li>
               );
@@ -80,8 +90,16 @@ var CountDown = React.createClass({
       </div>
     );
   },
+  play: function() {
+    if (!this.current) {
+      this.start();
+    } else {
+      this.stop();
+    }
+  },
   reset: function() {
     this._onChange();
+    this.stop();
   },
   _onChange: function() {
     this.setState(getProjectState(this.state.id));

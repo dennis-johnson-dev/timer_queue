@@ -28,22 +28,53 @@ button {
   margin: 0;
   padding: 0;
   list-style: none;
+  text-align: center;
 }
 
-.nav>li {
+.nav li {
   display: inline-block;
   margin-right: .5em;
 }
 
-.nav>li>a {
+.nav li a {
   display: inline-block;
   padding: 0;
 }
 
 .play {
   padding-top: .5em;
+  text-align: center;
+}
+
+.play button {
+  width: 50%;
 }
 
 .play li {
   margin: .5em 0;
+}
+
+.project {
+  text-align: center;
+}
+
+.play .task {
+  border: 1px solid #333;
+  border-radius: 5px;
+}
+
+.play .task-current {
+  border: 1px solid #888;
+}
+
+.play .task-desc {
+  font-weight: 200;
+}
+
+.play .task-time {
+  font-weight: bold;
+}
+
+.play .total-time {
+  font-weight: bold;
 }

@@ -5,3 +5,4 @@ app/gen
 spec/gen
 server/gen
 *.swp
+bower_components
