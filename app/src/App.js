@@ -12,16 +12,16 @@ var Route = Router.Route;
 var Link = Router.Link;
 
 var routes = (
-  <Routes>
-    <Route name="home" path="/" handler={ Site }>
-      <Route name="play" path="play/:id" handler={ CountDown } />
-    </Route>
-  </Routes>
+  <Route name="home" path="/" handler={ Site }>
+    <Route name="play" path="play/:id" handler={ CountDown } />
+  </Route>
 );
 
 AppAPI.init().then(function(projects) {
   TaskActions.receiveProjects(projects);
-  React.render(routes, document.getElementById('site'));
+  Router.run(routes, function(Handler) {
+    React.render(<Handler/>, document.getElementById('site'));
+  });
 },
 function(err) {
   console.log('You fucked up');

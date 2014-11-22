@@ -5,6 +5,7 @@ var TaskStore = require('../store/TaskStore');
 var TaskActions = require('../actions/TaskActions');
 var TaskList = require('./TaskList');
 var formatTime = require('../lib/formatTime');
+var Router = require('react-router');
 
 var ENTER_KEY_CODE = 13;
 
@@ -23,8 +24,10 @@ function getProjectState(id) {
 var CountDown = React.createClass({
   displayName: 'CountDown',
 
+  mixins: [ Router.State ],
+
   getInitialState: function() {
-    return getProjectState(this.props.params.id);
+    return getProjectState(this.getParams().id);
   },
   componentDidMount: function() {
     TaskStore.addChangeListener(this._onChange);
