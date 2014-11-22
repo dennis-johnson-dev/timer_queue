@@ -18,7 +18,7 @@ function getTotalTime(tasks) {
 
 var TaskStore = _.extend(EventEmitter.prototype, {
   getProject: function(id) {
-    return _.find(_projects, { '_id': id });
+    return _.cloneDeep(_.find(_projects, { '_id': id }));
   },
   getProjects: function() {
     return _projects;
