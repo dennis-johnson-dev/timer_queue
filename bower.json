@@ -6,6 +6,9 @@
     "Dennis Johnson <dennis@songawee.com>"
   ],
   "description": "Sequential task helper",
+  "dependencies": {
+    "font-awesome": "^4.2.0"
+  },
   "license": "MIT",
   "private": true,
   "ignore": [
