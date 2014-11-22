@@ -35,6 +35,7 @@ var CountDown = React.createClass({
   },
   start: function() {
     if (!this.current) {
+      this.decrement();
       this.current = setInterval(this.decrement, 1000);
       this.setState({ play: false });
     }
