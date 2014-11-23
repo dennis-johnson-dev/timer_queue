@@ -49,7 +49,9 @@ button {
 .play button {
   font-size: 1.4em;
   line-height: 1.6em;
-  width: 50%;
+  margin-right: .2em;
+  width: 40%;
+  box-sizing: border-box;
 }
 
 .play button:active {

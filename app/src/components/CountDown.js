@@ -33,6 +33,9 @@ var CountDown = React.createClass({
   componentDidMount: function() {
     TaskStore.addChangeListener(this._onChange);
   },
+  componentWillUnmount: function() {
+    clearInterval(this.current);
+  },
   start: function() {
     if (!this.current) {
       this.decrement();
@@ -70,8 +73,8 @@ var CountDown = React.createClass({
     return (
       <div className="play">
         <h4>{ this.state.project.title }</h4>
-        <button onClick={ this.play }><i className={ classes }></i></button>
-        <button onClick={ this.reset }>Reset</button>
+        <button className="btn btn-primary" onClick={ this.play }><i className={ classes }></i></button>
+        <button className="btn btn-info" onClick={ this.reset }>Reset</button>
         <p className="time-remaining">Time Remaining: <br />
           <span className="total-time">{ formatTime(this.state.total) }</span>
         </p>
