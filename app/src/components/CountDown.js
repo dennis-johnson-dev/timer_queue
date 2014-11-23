@@ -72,7 +72,7 @@ var CountDown = React.createClass({
     var firstTask = _.cloneDeep(this.state.tasks[0]);
     return (
       <div className="play">
-        <h4>{ this.state.project.title }</h4>
+        <h3>{ this.state.project.title }</h3>
         <button className="btn btn-primary" onClick={ this.play }><i className={ classes }></i></button>
         <button className="btn btn-info" onClick={ this.reset }>Reset</button>
         <p className="time-remaining">Time Remaining: <br />

@@ -21,7 +21,6 @@ var Site = React.createClass({
         <ul className="nav">
           <li><Link to="home">Home</Link></li>
         </ul>
-        <ProjectList />
         <RouteHandler />
       </div>
     );
