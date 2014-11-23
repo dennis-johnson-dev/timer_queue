@@ -25,7 +25,7 @@ var ProjectList = React.createClass({
   render: function() {
   	return (
       <div className="project">
-        <h3>Projects</h3>
+        <h3>Projects <i className="fa fa-gear"></i></h3>
         <ul>
           {
             this.state.projects.map(function(project) {
