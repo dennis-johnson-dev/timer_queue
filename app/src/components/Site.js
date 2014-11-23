@@ -6,9 +6,14 @@ var ProjectList = require('./ProjectList');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var Link = Router.Link;
+var attachFastClick = require('fastclick');
+
 
 var Site = React.createClass({
   displayName: 'Site',
+  componentDidMount: function() {
+    attachFastClick(document.body);
+  },
 
   render: function() {
     return (
