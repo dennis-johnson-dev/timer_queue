@@ -3,7 +3,6 @@ var React = require('react/addons');
 var _ = require('lodash');
 var TaskStore = require('../store/TaskStore');
 var TaskActions = require('../actions/TaskActions');
-var TaskList = require('./TaskList');
 var formatTime = require('../lib/formatTime');
 var Router = require('react-router');
 

@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 var React = require('react');
 var TaskStore = require('../store/TaskStore');
-var TaskList = require('./TaskList');
 var Router = require('react-router');
 var Link = Router.Link;
 
@@ -26,6 +25,7 @@ var ProjectList = React.createClass({
   	return (
       <div className="project">
         <h3>Projects <i className="fa fa-gear"></i></h3>
+        <Link to="create">Create New</Link>
         <ul>
           {
             this.state.projects.map(function(project) {

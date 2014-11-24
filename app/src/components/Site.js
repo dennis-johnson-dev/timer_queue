@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 var React = require('react');
 var TaskStore = require('../store/TaskStore');
-var TaskList = require('./TaskList');
 var ProjectList = require('./ProjectList');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
