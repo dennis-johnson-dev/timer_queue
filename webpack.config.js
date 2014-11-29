@@ -20,7 +20,7 @@ module.exports = function(profile) {
       filename: '[name].js'       
     },
     externals: {
-        "React": "React"
+      "React": "React"
     },
     plugins: [commonsPlugin]
   };

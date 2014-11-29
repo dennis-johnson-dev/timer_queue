@@ -3,10 +3,20 @@ var TaskConstants = require('../constants/TaskConstants');
 
 var TaskActions = {
 
-  create: function(task) {
+  createProject: function(project) {
+    var AppAPI = require('../api/AppAPI');
+    // AppDispatcher.handleViewAction({
+    //   actionType: TaskConstants.ActionTypes.CREATE_PROJECT,
+    //   project: project
+    // });
+
+    AppAPI.postProject(project);
+  },
+
+  receiveProject: function(project) {
     AppDispatcher.handleViewAction({
-      actionType: TaskConstants.ActionTypes.TASK_CREATE,
-      task: task
+      actionType: TaskConstants.ActionTypes.CREATE_PROJECT,
+      project: project
     });
   },
 

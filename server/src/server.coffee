@@ -2,6 +2,7 @@ express = require 'express'
 path = require 'path'
 bodyParser = require 'body-parser'
 favicon = require 'serve-favicon'
+_ = require 'lodash'
 
 # models
 Project = require './Project'
@@ -47,19 +48,15 @@ router.route('/projects')
   .post (req,res) ->
     project = new Project()
     project.title = req.body.title
+    project.tasks = _.map(req.body.tasks, (task) ->
+      taskModel = new Task()
+      taskModel.time = task.time
+      taskModel.title = task.title
+      taskModel.desc = task.desc
+      return taskModel
+    )
 
-    task = new Task()
-    task.title = 'Begin brewing'
-    task.time = 90
-    task.desc = 'Add water to the grounds in the dripper and close the lid'
-
-    task2 = new Task()
-    task2.title = 'Stir and continue brewing'
-    task2.time = 240
-    task2.desc = 'Stir the grounds at the top of the dripper and continue brewing with the lid down'
-
-    project.tasks.push(task)
-    project.tasks.push(task2)
+    
 
     project.save((err) ->
       if err

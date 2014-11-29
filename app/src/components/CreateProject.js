@@ -1,12 +1,16 @@
 /** @jsx React.DOM */
 var React = require('react');
 var _ = require('lodash');
-var Router = require('react-router');
 var TaskActions = require('../actions/TaskActions');
+var Router = require('react-router');
 var Link = Router.Link;
+var Navigation = Router.Navigation;
+var md5 = require('MD5');
 
 var CreateProject = React.createClass({
   displayName: 'CreateProject',
+
+  mixins: [Navigation],
 
   getTaskModel: function() {
     return {
@@ -18,7 +22,35 @@ var CreateProject = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    console.log('submitted');
+    var refs = this.refs;
+    var keys = _.filter(Object.keys(this.refs), function(key) {
+      return !_.isNaN(parseInt(key.slice(0,1)));
+    });
+
+    var taskItems = _.groupBy(keys, function(key) {
+      return key.slice(0,1);
+    });
+
+    var tasks = _.reduce(taskItems, function(result, values, index) {
+      var row = _.reduce(values, function(output, value, index) {
+        var key = value.slice(1);
+        output[key] = refs[value].getDOMNode().value;
+        return output;
+      }, {});
+      
+      result.push(row);
+      return result;
+    }, []);
+
+    debugger;
+    var project = {
+      _id: md5(Object.keys(tasks).toString() + Date.now()),
+      title: refs.projectTitle.getDOMNode().value,
+      tasks: tasks
+    };
+
+    TaskActions.createProject(project);
+    this.transitionTo('home');
   },
 
   getInitialState: function() {
@@ -32,24 +64,31 @@ var CreateProject = React.createClass({
     return (
       <div>
         <p>Create a new project</p>
-        <form className="projectForm" onSubmit={ this.handleSubmit }>
+        <form action="http://localhost:3000/" className="projectForm" onSubmit={ this.handleSubmit }>
           <input type="text" name="projectTitle" placeholder="Project Title" ref="projectTitle" />
           <button onClick={ me.onAddTask }>Add Task</button>
-          <ul className="taskList" ref="tasks">
+          <input className="projectSubmit" type="submit" value="Submit" />
+          <ul className="taskList">
+            <li>
+                <ul className="taskListHeader">
+                  <li>Task Title</li>
+                  <li>Task Duration</li>
+                  <li>Task Description</li>
+                </ul>
+            </li>
             {
               this.state.tasks.map(function(task, index) {
                 return ( 
                   <li key={ index } className="taskHolder">
-                    <input type="text" ref="task-title" placeholder={ task.title }/>
-                    <input type="text" ref="task-time" placeholder={ task.time }/>
-                    <input type="text" ref="task-desc" placeholder={ task.desc }/>
+                    <input type="text" ref={ index + 'title' } placeholder={ task.title }/>
+                    <input type="text" ref={ index + 'time' } placeholder={ task.time }/>
+                    <input type="text" ref={ index + 'desc' } placeholder={ task.desc }/>
                     <button onClick={ me.onDeleteTask } value={ index }><i className="fa fa-times"></i></button>
                   </li>
                 );
               })
             }
           </ul>
-          <input className="projectSubmit" type="submit" value="Submit" />
       </form>
       </div>
     );
@@ -63,8 +102,6 @@ var CreateProject = React.createClass({
     
     tasks.unshift(taskModel);
     this.setState({ tasks: tasks });
-    
-    console.log('Task added');
   },
 
   onDeleteTask: function(e) {

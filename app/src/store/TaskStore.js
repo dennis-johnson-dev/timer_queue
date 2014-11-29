@@ -39,6 +39,10 @@ var TaskStore = _.extend(EventEmitter.prototype, {
 var setProjects = function(projects) {
   _projects = projects;
 };
+
+var createProject = function(project) {
+  _projects.push(project);
+};
   
 TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
@@ -47,6 +51,10 @@ TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
 
     case TaskConstants.ActionTypes.RECEIVE_PROJECTS:
       setProjects(action.projects);
+      break;
+
+    case TaskConstants.ActionTypes.CREATE_PROJECT:
+      createProject(action.project);
       break;
 
     default:

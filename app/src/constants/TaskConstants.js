@@ -2,7 +2,7 @@ var keyMirror = require('react/lib/keyMirror');
 
 module.exports = {
   ActionTypes: keyMirror({
-    TASK_CREATE: null,
+    CREATE_PROJECT: null,
     RECEIVE_PROJECTS: null
   })
 };
