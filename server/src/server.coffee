@@ -56,8 +56,6 @@ router.route('/projects')
       return taskModel
     )
 
-    
-
     project.save((err) ->
       if err
         res.send err

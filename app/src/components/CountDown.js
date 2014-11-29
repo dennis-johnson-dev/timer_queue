@@ -55,9 +55,11 @@ var CountDown = React.createClass({
     }
 
     if ((this.state.total) > 0) {
-      this.setState({ total: this.state.total - 1 }); 
-    } else {
-      this.stop(); 
+      this.setState({ total: this.state.total - 1 });
+      
+      if (this.state.total === 0) {
+        this.stop();
+      }
     }
   },
   render: function() {

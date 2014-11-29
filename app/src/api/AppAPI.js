@@ -21,14 +21,14 @@ var AppAPI = {
     return promise;
   },
 
-  postProject: function(project) {
+  createProject: function(project) {
     $.ajax({
       crossDomain: true,
       dataType: "json",
       data: project,
       url: '/api/projects',
       success: function(data) {
-        TaskActions.receiveProject(project);
+        TaskActions.receiveProject(data);
       },
       failure: function(err) {
         console.log(err);
