@@ -82,7 +82,13 @@ router.route('/projects/:id')
         res.send err
 
       project.title = req.body.title
-      project.tasks = req.body.tasks
+      project.tasks = _.map(req.body.tasks, (task) ->
+        taskModel = new Task()
+        taskModel.time = task.time
+        taskModel.title = task.title
+        taskModel.desc = task.desc
+        return taskModel
+      )
 
       project.save (err) ->
         if err
