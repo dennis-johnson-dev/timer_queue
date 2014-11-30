@@ -10,6 +10,7 @@ var attachFastClick = require('fastclick');
 
 var Site = React.createClass({
   displayName: 'Site',
+  
   componentDidMount: function() {
     attachFastClick(document.body);
   },

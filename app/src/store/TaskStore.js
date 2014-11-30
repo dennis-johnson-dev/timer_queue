@@ -43,6 +43,11 @@ var setProjects = function(projects) {
 var createProject = function(project) {
   _projects.push(project);
 };
+
+var deleteProject = function(id) {
+  var removedItem = _.remove(_projects, { '_id': id });
+  console.log('removed ', removedItem);
+}
   
 TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
@@ -56,6 +61,10 @@ TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
     case TaskConstants.ActionTypes.CREATE_PROJECT:
       createProject(action.project);
       break;
+
+    case TaskConstants.ActionTypes.DELETE_PROJECT:
+      deleteProject(action.id);
+      break;    
 
     default:
       return true;

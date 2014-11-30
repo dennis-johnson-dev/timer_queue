@@ -1,11 +1,10 @@
 var Q = require('q');
-var TaskActions = require('../actions/TaskActions');
+var TaskServerActions = require('../actions/TaskServerActions');
 
-var AppAPI = {
+module.exports = {
   init: function() {
     var promise = new Q.Promise(function(resolve, reject) {
       $.ajax({
-        crossDomain: true,
         dataType: "json",
         url: '/api/projects',
         success: function(data) {
@@ -23,19 +22,30 @@ var AppAPI = {
 
   createProject: function(project) {
     $.ajax({
-      crossDomain: true,
       dataType: "json",
       data: project,
       url: '/api/projects',
       success: function(data) {
-        TaskActions.receiveProject(data);
+        TaskServerActions.receiveProject(data);
       },
       failure: function(err) {
         console.log(err);
       },
       type: 'POST'
     });
+  },
+
+  deleteProject: function(id) {
+    $.ajax({
+      dataType: "json",
+      url: '/api/projects/' + id,
+      success: function(data) {
+        TaskServerActions.deleteProject(id);
+      },
+      failure: function(err) {
+        console.log(err);
+      },
+      type: 'DELETE'
+    });
   }
 };
-
-module.exports = AppAPI;

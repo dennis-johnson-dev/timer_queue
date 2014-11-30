@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var _ = require('lodash');
-var TaskActions = require('../actions/TaskActions');
+var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
 var Link = Router.Link;
 var Navigation = Router.Navigation;
@@ -42,14 +42,13 @@ var CreateProject = React.createClass({
       return result;
     }, []);
 
-    debugger;
     var project = {
       _id: md5(Object.keys(tasks).toString() + Date.now()),
       title: refs.projectTitle.getDOMNode().value,
       tasks: tasks
     };
 
-    TaskActions.createProject(project);
+    TaskViewActions.createProject(project);
     this.transitionTo('home');
   },
 
@@ -80,9 +79,9 @@ var CreateProject = React.createClass({
               this.state.tasks.map(function(task, index) {
                 return ( 
                   <li key={ index } className="taskHolder">
-                    <input type="text" ref={ index + 'title' } placeholder={ task.title }/>
-                    <input type="text" ref={ index + 'time' } placeholder={ task.time }/>
-                    <input type="text" ref={ index + 'desc' } placeholder={ task.desc }/>
+                    <input type="text" ref={ index + 'title' } placeholder='Title'/>
+                    <input type="text" ref={ index + 'time' } placeholder='Duration'/>
+                    <input type="text" ref={ index + 'desc' } placeholder='Description'/>
                     <button onClick={ me.onDeleteTask } value={ index }><i className="fa fa-times"></i></button>
                   </li>
                 );

@@ -2,7 +2,6 @@
 var React = require('react/addons');
 var _ = require('lodash');
 var TaskStore = require('../store/TaskStore');
-var TaskActions = require('../actions/TaskActions');
 var formatTime = require('../lib/formatTime');
 var Router = require('react-router');
 
@@ -56,7 +55,7 @@ var CountDown = React.createClass({
 
     if ((this.state.total) > 0) {
       this.setState({ total: this.state.total - 1 });
-      
+
       if (this.state.total === 0) {
         this.stop();
       }

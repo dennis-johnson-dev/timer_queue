@@ -1,20 +1,17 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TaskConstants = require('../constants/TaskConstants');
 
-var TaskActions = {
+module.exports = {
 
-  createProject: function(project) {
-    var AppAPI = require('../api/AppAPI');
-    AppDispatcher.handleViewAction({
-      actionType: TaskConstants.ActionTypes.CREATE_PROJECT,
-      project: project
+  deleteProject: function(id) {
+    AppDispatcher.handleServerAction({
+      actionType: TaskConstants.ActionTypes.DELET_PROJECT,
+      id: id
     });
-
-    AppAPI.createProject(project);
   },
 
   receiveProject: function(result) {
-    AppDispatcher.handleViewAction({
+    AppDispatcher.handleServerAction({
       actionType: TaskConstants.ActionTypes.PROJECT_CREATE_RESULT,
       result: result
     });
@@ -28,5 +25,3 @@ var TaskActions = {
   }
 
 };
-
-module.exports = TaskActions;
