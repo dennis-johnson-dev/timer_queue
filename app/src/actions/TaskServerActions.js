@@ -3,17 +3,24 @@ var TaskConstants = require('../constants/TaskConstants');
 
 module.exports = {
 
+  createProject: function(project) {
+    AppDispatcher.handleServerAction({
+      actionType: TaskConstants.ActionTypes.CREATE_PROJECT,
+      project: project
+    });
+  },
+
   deleteProject: function(id) {
     AppDispatcher.handleServerAction({
-      actionType: TaskConstants.ActionTypes.DELET_PROJECT,
+      actionType: TaskConstants.ActionTypes.DELETE_PROJECT,
       id: id
     });
   },
 
-  receiveProject: function(result) {
+  updateProject: function(project) {
     AppDispatcher.handleServerAction({
-      actionType: TaskConstants.ActionTypes.PROJECT_CREATE_RESULT,
-      result: result
+      actionType: TaskConstants.ActionTypes.UPDATE_PROJECT,
+      project: project
     });
   },
 

@@ -3,10 +3,13 @@ var React = require('react');
 var TaskStore = require('../store/TaskStore');
 var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
 var Link = Router.Link;
 
 var ProjectList = React.createClass({
   displayName: 'ProjectList',
+
+  mixins: [Navigation],
 
   getInitialState: function() {
     return {
@@ -16,7 +19,6 @@ var ProjectList = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log('here');
     TaskStore.addChangeListener(this._onChange); 
   },
 
@@ -28,12 +30,16 @@ var ProjectList = React.createClass({
     var me = this;
   	return (
       <div className="project">
-        <h3>Projects <a href="#" onClick={ this._onEdit }><i className="fa fa-gear"></i></a></h3>
+        <h3>Projects <a href="#" onClick={ this._onEditMode }><i className="fa fa-gear"></i></a></h3>
         <Link to="create">Create New</Link>
         <ul>
           {
             this.state.projects.map(function(project) {
-              var content = me.state.edit ? <button onClick={ me._onDelete } value={ project._id }>Delete</button> : '';
+              var editBtns = <div className="editBtns">
+                               <button onClick={ me._onDelete } value={ project._id }>Delete</button>
+                               <button onClick={ me._onEdit } value={ project._id }>Edit</button>
+                             </div>
+              var content = me.state.edit ? editBtns : '';
               return (
                 <li key={ project._id }>
                   <Link to="play" params={{ id: project._id }}>{ project.title }</Link>
@@ -57,6 +63,11 @@ var ProjectList = React.createClass({
   },
 
   _onEdit: function(e) {
+    e.preventDefault();
+    this.transitionTo('edit', { id: e.target.value });
+  },
+
+  _onEditMode: function(e) {
     e.preventDefault();
     this.setState({ edit: !this.state.edit });
   }

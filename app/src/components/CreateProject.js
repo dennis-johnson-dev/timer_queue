@@ -14,9 +14,9 @@ var CreateProject = React.createClass({
 
   getTaskModel: function() {
     return {
-      title: 'ho',
-      time: Date.now(),
-      desc: 'test'
+      title: '',
+      time: '',
+      desc: ''
     };
   },
 
@@ -34,7 +34,8 @@ var CreateProject = React.createClass({
     var tasks = _.reduce(taskItems, function(result, values, index) {
       var row = _.reduce(values, function(output, value, index) {
         var key = value.slice(1);
-        output[key] = refs[value].getDOMNode().value;
+        var domVal = refs[value].getDOMNode().value;
+        output[key] = key === "time" ? parseInt(domVal) : domVal;
         return output;
       }, {});
       
@@ -106,7 +107,6 @@ var CreateProject = React.createClass({
   onDeleteTask: function(e) {
     var value = e.target.value || e.target.parentNode.value;
     var tasks = this.state.tasks;
-    console.log("value", value);
     var result = tasks.splice(parseInt(value), 1);
     this.setState({ tasks: tasks });
     e.preventDefault();

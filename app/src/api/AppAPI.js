@@ -26,7 +26,8 @@ module.exports = {
       data: project,
       url: '/api/projects',
       success: function(data) {
-        TaskServerActions.receiveProject(data);
+        // TaskServerActions.createProject(data);
+        console.log(data);
       },
       failure: function(err) {
         console.log(err);
@@ -46,6 +47,22 @@ module.exports = {
         console.log(err);
       },
       type: 'DELETE'
+    });
+  },
+
+  updateProject: function(project) {
+    $.ajax({
+      dataType: "json",
+      url: '/api/projects/' + project._id,
+      data: project,
+      success: function(data) {
+        // TaskServerActions.updateProject(data);
+        console.log(data);
+      },
+      failure: function(err) {
+        console.log(err);
+      },
+      type: 'PUT'
     });
   }
 };

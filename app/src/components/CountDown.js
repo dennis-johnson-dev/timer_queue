@@ -28,9 +28,6 @@ var CountDown = React.createClass({
   getInitialState: function() {
     return getProjectState(this.getParams().id);
   },
-  componentDidMount: function() {
-    TaskStore.addChangeListener(this._onChange);
-  },
   componentWillUnmount: function() {
     clearInterval(this.current);
   },
@@ -105,11 +102,15 @@ var CountDown = React.createClass({
     }
   },
   reset: function() {
-    this._onChange();
     this.stop();
-  },
-  _onChange: function() {
-    this.setState(getProjectState(this.state.id));
+    var tasks = TaskStore.getProject(this.getParams().id).tasks
+    var total = TaskStore.getTotalTime(tasks);
+    this.setState(
+      { 
+        tasks: tasks,
+        total: total 
+      }
+    );
   }
   
 });

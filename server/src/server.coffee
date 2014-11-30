@@ -82,6 +82,7 @@ router.route('/projects/:id')
         res.send err
 
       project.title = req.body.title
+      project.tasks = req.body.tasks
 
       project.save (err) ->
         if err

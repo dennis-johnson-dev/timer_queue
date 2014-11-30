@@ -7,6 +7,7 @@ var Site = require('./components/Site');
 var CountDown = require('./components/CountDown');
 var ProjectList = require('./components/ProjectList');
 var CreateProject = require('./components/CreateProject');
+var EditProject = require('./components/EditProject');
 
 var Router = require('react-router');
 var DefaultRoute = Router.DefaultRoute;
@@ -18,6 +19,7 @@ var routes = (
   <Route name="home" path="/" handler={ Site }>
     <DefaultRoute handler={ ProjectList }/>
     <Route name="play" path="play/:id" handler={ CountDown } />
+    <Route name="edit" path="edit/:id" handler={ EditProject } />
     <Route name="create" path="create" handler={ CreateProject } />
   </Route>
 );

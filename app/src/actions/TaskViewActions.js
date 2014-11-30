@@ -20,6 +20,14 @@ module.exports = {
     });
     
     AppAPI.deleteProject(id);
-  }
+  },
 
+  updateProject: function(project) {
+    AppDispatcher.handleViewAction({
+      actionType: TaskConstants.ActionTypes.UPDATE_PROJECT,
+      project: project
+    });
+    
+    AppAPI.updateProject(project);
+  }
 };

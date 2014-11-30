@@ -48,6 +48,14 @@ var deleteProject = function(id) {
   var removedItem = _.remove(_projects, { '_id': id });
   console.log('removed ', removedItem);
 }
+
+var updateProject = function(project) {
+  var elementIndex = _.findIndex(_projects, function(proj) {
+    return proj._id === project._id;
+  });
+
+  _projects[elementIndex] = project;
+}
   
 TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
@@ -64,7 +72,11 @@ TaskStore.dispatchToken = AppDispatcher.register(function(payload) {
 
     case TaskConstants.ActionTypes.DELETE_PROJECT:
       deleteProject(action.id);
-      break;    
+      break;  
+
+    case TaskConstants.ActionTypes.UPDATE_PROJECT:
+      updateProject(action.project)
+      break;  
 
     default:
       return true;

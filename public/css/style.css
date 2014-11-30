@@ -31,6 +31,18 @@ button {
   text-align: center;
 }
 
+.editBtns {
+  display: inline-block;
+}
+
+.editBtns button {
+  border: none;
+  background: none;
+  color: red;
+  margin-left: 0.2em;
+  padding: 0;
+}
+
 .nav li {
   display: inline-block;
   margin-right: .5em;
@@ -66,10 +78,6 @@ button {
   margin: .5em 0;
 }
 
-.project {
-  text-align: center;
-}
-
 .play .task {
   border: 1px solid #D8D8D8;
   border-radius: 5px;
@@ -94,6 +102,10 @@ button {
 .play .total-time {
   font-size: 1.6em;
   font-weight: bold;
+}
+
+.project {
+  text-align: center;
 }
 
 .taskListHeader li {
