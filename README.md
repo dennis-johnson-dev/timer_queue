@@ -10,14 +10,17 @@ $ npm install
 
 ### Development
 
+You will need to have MongoDB running.
+
 ````bash
 $ npm start 
+$ grunt watch
 ````
 
 ### Build
 
 ````bash
-$ webpack --watch
+$ grunt
 ````
 
 Visit [http://localhost:3000](http://localhost:3000)
