@@ -108,6 +108,14 @@ button {
   text-align: center;
 }
 
+.createProject {
+  text-align: center;
+}
+
+.createProjectHeader {
+  margin: 1em;
+}
+
 .taskListHeader li {
   display: inline-block;
 }

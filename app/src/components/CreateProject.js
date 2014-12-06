@@ -63,12 +63,14 @@ var CreateProject = React.createClass({
   render: function() {
     var me = this;
     return (
-      <div>
+      <div className="createProject">
         <p>Create a new project</p>
         <form action="http://localhost:3000/" className="projectForm" onSubmit={ this.handleSubmit }>
-          <input type="text" name="projectTitle" placeholder="Project Title" ref="projectTitle" />
-          <button onClick={ me.onAddTask }>Add Task</button>
-          <input className="projectSubmit" type="submit" value="Submit" />
+          <div className="createProjectHeader">
+            <input type="text" name="projectTitle" placeholder="Project Title" ref="projectTitle" />
+            <button onClick={ me.onAddTask }>Add Task</button>
+            <input className="projectSubmit" type="submit" value="Submit" />
+          </div>
           <ul className="taskList">
             {
               this.state.tasks.map(function(task, index) {
