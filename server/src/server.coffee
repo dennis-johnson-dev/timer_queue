@@ -2,11 +2,12 @@ express = require 'express'
 path = require 'path'
 bodyParser = require 'body-parser'
 favicon = require 'serve-favicon'
+mongoose = require 'mongoose'
 _ = require 'lodash'
 
 # models
-Project = require './Project'
-Task = require './Task'
+Project = require '../models/Project'
+Task = require '../models/Task'
 
 app = express()
 port = process.env.PORT || 3000
@@ -111,5 +112,15 @@ router.route('/projects/:id')
 
 app.use('/api', router)
 
-app.listen(port)
-console.log 'listening on 3000...'
+# db connection
+
+mongoUri = process.env.MONGOLAB_URI;
+mongoose.connect(mongoUri, (err, res) ->
+  if err
+    console.log('Error connect to: ' + mongoUri + '. ' + err)
+  else
+    console.log('Succeeded and connected to: ' + mongoUri)
+    app.listen(port)
+    console.log 'listening on 3000...'
+)
+

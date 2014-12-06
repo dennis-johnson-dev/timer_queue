@@ -83,7 +83,6 @@ var CountDown = React.createClass({
                 <li className={ taskItem } key={ task._id }>
                   <div>
                     <div className="task-time">{ formatTime(task.time) }</div>
-                    <div className="task-title">{ task.title }</div>
                     <div className="task-desc">{ task.desc }</div>
                   </div>
                 </li>

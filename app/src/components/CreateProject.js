@@ -54,8 +54,9 @@ var CreateProject = React.createClass({
   },
 
   getInitialState: function() {
+    var defaultTask = this.getTaskModel();
     return {
-      tasks: []
+      tasks: [defaultTask]
     };
   },
 
@@ -69,18 +70,11 @@ var CreateProject = React.createClass({
           <button onClick={ me.onAddTask }>Add Task</button>
           <input className="projectSubmit" type="submit" value="Submit" />
           <ul className="taskList">
-            <li>
-                <ul className="taskListHeader">
-                  <li>Task Title</li>
-                  <li>Task Duration</li>
-                  <li>Task Description</li>
-                </ul>
-            </li>
             {
               this.state.tasks.map(function(task, index) {
                 return ( 
                   <li key={ index } className="taskHolder">
-                    <input type="text" ref={ index + 'title' } placeholder='Title'/>
+                    <input type="hidden" ref={ index + 'title' } placeholder='Title'/>
                     <input type="text" ref={ index + 'time' } placeholder='Duration'/>
                     <input type="text" ref={ index + 'desc' } placeholder='Description'/>
                     <button onClick={ me.onDeleteTask } value={ index }><i className="fa fa-times"></i></button>
