@@ -20,7 +20,12 @@ module.exports = function(profile) {
       filename: '[name].js'       
     },
     externals: {
-      "React": "React"
+      'react': 'React', 
+      'react/addons': 'React',
+      'react-router': 'ReactRouter'
+    },
+    resolve: {
+      extensions: ['', '.js']
     },
     plugins: [commonsPlugin]
   };

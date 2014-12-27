@@ -5,7 +5,6 @@ var TaskStore = require('../store/TaskStore');
 var formatTime = require('../lib/formatTime');
 var Router = require('react-router');
 
-
 var ENTER_KEY_CODE = 13;
 
 function getProjectState(id) {
