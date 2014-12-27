@@ -2,8 +2,8 @@ webpack = require('webpack')
 
 config =
   webpack:
-    build: require('./webpack.config.js')("min")
-    dev: require('./webpack.config.js')("dev")
+    build: require('./grunt_webpack.config.js')("min")
+    dev: require('./grunt_webpack.config.js')("dev")
 
   clean:
     public: ['public/js']
@@ -18,7 +18,7 @@ config =
 
   watch:
     options:
-      livereload: true
+      livereload: false
     app:
       files: ['app/src/**/*.js'],
       tasks: ['webpack:dev']

@@ -1,6 +1,12 @@
+- var DEV = process.env.DEV; 
+
 extends layout
 
 block content
   div(id='site')
-  script(type="text/javascript" src="js/common.js")
-  script(type="text/javascript" src="js/App.js")
+  if DEV
+    script(type="text/javascript" src="http://localhost:3001/js/App.js")
+    script(type="text/javascript" src="http://localhost:3001/js/AppAPI.js")
+  else
+    script(type="text/javascript" src="/js/App.js")
+    script(type="text/javascript" src="/js/AppAPI.js")

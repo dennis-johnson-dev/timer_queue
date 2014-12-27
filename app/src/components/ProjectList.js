@@ -30,7 +30,7 @@ var ProjectList = React.createClass({
     var me = this;
   	return (
       <div className="project">
-        <h3>Projects <a href="#" onClick={ this._onEditMode }><i className="fa fa-gear"></i></a></h3>
+        <h3>Projects jaj<a href="#" onClick={ this._onEditMode }><i className="fa fa-gear"></i></a></h3>
         <Link to="create">Create New</Link>
         <ul>
           {
