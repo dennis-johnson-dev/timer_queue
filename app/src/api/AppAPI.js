@@ -1,68 +1,53 @@
 var Q = require('q');
 var TaskServerActions = require('../actions/TaskServerActions');
+var request = require('superagent');
 
 module.exports = {
   init: function() {
     var promise = new Q.Promise(function(resolve, reject) {
-      $.ajax({
-        dataType: "json",
-        url: '/api/projects',
-        success: function(data) {
-          resolve(data);
-        },
-        failure: function(err) {
-          reject(err);
-        },
-        type: 'GET'
-      });
+      request
+        .get('/api/projects')
+        .end(function(err, res) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(res.body);
+          }
+        });
     });
 
     return promise;
   },
 
   createProject: function(project) {
-    $.ajax({
-      dataType: "json",
-      data: project,
-      url: '/api/projects',
-      success: function(data) {
-        // TaskServerActions.createProject(data);
-        console.log(data);
-      },
-      failure: function(err) {
+    request
+      .post('/api/projects')
+      .send(project)
+      .end(function(err, res) {
         console.log(err);
-      },
-      type: 'POST'
-    });
+      });
   },
 
   deleteProject: function(id) {
-    $.ajax({
-      dataType: "json",
-      url: '/api/projects/' + id,
-      success: function(data) {
-        TaskServerActions.deleteProject(id);
-      },
-      failure: function(err) {
-        console.log(err);
-      },
-      type: 'DELETE'
-    });
+    request
+      .del('/api/projects/' + id)
+      .end(function(err, res) {
+        if (err) {
+          console.log(err);
+        } else {
+          TaskServerActions.deleteProject(id);
+        }
+      });
   },
 
   updateProject: function(project) {
-    $.ajax({
-      dataType: "json",
-      url: '/api/projects/' + project._id,
-      data: project,
-      success: function(data) {
-        // TaskServerActions.updateProject(data);
-        console.log(data);
-      },
-      failure: function(err) {
-        console.log(err);
-      },
-      type: 'PUT'
-    });
+    request
+      .put('/api/projects/' + project._id)
+      .send(project)
+      .end(function(err, res) {
+        if (err) {
+          console.log(err);
+        }
+      });
   }
 };

@@ -7,7 +7,8 @@
   ],
   "description": "Sequential task helper",
   "dependencies": {
-    "font-awesome": "^4.2.0"
+    "font-awesome": "^4.2.0",
+    "fastclick": "~1.0.3"
   },
   "license": "MIT",
   "private": true,
