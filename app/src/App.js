@@ -31,5 +31,5 @@ AppAPI.init().then(function(projects) {
   });
 },
 function(err) {
-  console.log('You fucked up');
+  console.log('You trucked up');
 });
