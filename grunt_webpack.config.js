@@ -6,7 +6,8 @@ var uglify =
 module.exports = function(profile) {
   var config = {
     entry: {
-      App: './app/src/App.js'
+      App: ['./app/src/App.js'],
+      AppAPI: ['./app/src/api/AppAPI.js']
     },
     module: {
       loaders: [
