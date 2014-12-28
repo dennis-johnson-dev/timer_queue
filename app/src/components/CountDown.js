@@ -73,7 +73,6 @@ var CountDown = React.createClass({
         <h3>{ this.state.project.title }</h3>
         <button className="btn btn-primary" onClick={ this.play }><i className={ classes }></i></button>
         <button className="btn btn-info" onClick={ this.reset }>Reset</button>
-        <p className="total-time">Total: { formatTime(this.state.total) }</p>
         <p className="time-remaining">Time Remaining: <br />
           <span className="curr-total-time">{ formatTime(currTimeRemaining) }</span>
         </p>
