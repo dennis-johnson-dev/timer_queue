@@ -30,25 +30,28 @@ var ProjectList = React.createClass({
     var me = this;
   	return (
       <div className="project">
-        <h3>Projects <a href="#" onClick={ this._onEditMode }><i className="fa fa-gear"></i></a></h3>
-        <Link to="create">Create New</Link>
-        <ul>
+        <h3>
+          Projects 
+          <a className="project-tools" href="#" onClick={ this._onEditMode }><i className="fa fa-gear"></i></a>
+          <Link className="project-tools" to="create"><i className="fa fa-plus"></i></Link>
+        </h3>
+        <div className="list-group project-container">
           {
             this.state.projects.map(function(project) {
               var editBtns = <div className="editBtns">
                                <button onClick={ me._onDelete } value={ project._id }>Delete</button>
                                <button onClick={ me._onEdit } value={ project._id }>Edit</button>
                              </div>
-              var content = me.state.edit ? editBtns : '';
+              var btnContent = me.state.edit ? editBtns : '';
               return (
-                <li key={ project._id }>
-                  <Link to="play" params={{ id: project._id }}>{ project.title }</Link>
-                  { content }
-                </li>
+                <Link to="play" className="list-group-item" key={ project._id } params={{ id: project._id }}>
+                  <div className="project-title">{ project.title }</div>
+                  <div className="project-maintenance">{ btnContent}</div>    
+                </Link>
               );
             })
           }
-        </ul>
+        </div>
       </div>
     );
   },

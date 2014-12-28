@@ -24,6 +24,25 @@ button {
   margin: 0;
 }
 
+.project-container {
+  margin-top: 1em;
+}
+
+.project-maintenance {
+  position: absolute;
+  right: 0.2em;
+  width: 6em;
+}
+
+.project-tools {
+  margin: 0 0 0 .3em;
+  font-size: 0.85em;
+}
+
+.project-title, .project-maintenance {
+  display: inline-block;
+}
+
 .content ul {
   margin: 0;
   padding: 0;
