@@ -1,10 +1,9 @@
-var Q = require('q');
 var TaskServerActions = require('../actions/TaskServerActions');
 var request = require('superagent');
 
 module.exports = {
   init: function() {
-    var promise = new Q.Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
       request
         .get('/api/projects')
         .end(function(err, res) {
@@ -16,8 +15,6 @@ module.exports = {
           }
         });
     });
-
-    return promise;
   },
 
   createProject: function(project) {
