@@ -1,16 +1,15 @@
 var webpack = require('webpack');
 
-var uglify = 
-  new webpack.optimize.UglifyJsPlugin({ minimize: true });
-
 module.exports =  {
   entry: {
-    App: ['webpack/hot/dev-server', './app/src/App.js'],
-    AppAPI: ['./app/src/api/AppAPI.js']
+    App: ['webpack/hot/dev-server', './app/src/App.js']
   },
   module: {
     loaders: [
-      { test: /\.js$/, loader: "jsx" }
+      { 
+        test: /\.js$/, 
+        loaders: ["jsx"] 
+      }
     ]
   },
   output: {

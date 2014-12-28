@@ -11,7 +11,8 @@ module.exports = {
           if (err) {
             reject(err);
           } else {
-            resolve(res.body);
+            TaskServerActions.receiveProjects(res.body);
+            resolve();
           }
         });
     });

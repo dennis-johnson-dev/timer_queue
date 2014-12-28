@@ -1,9 +1,19 @@
 webpack = require('webpack')
+webpackConfig = require('./webpack.config.js')
 
 config =
   webpack:
     build: require('./grunt_webpack.config.js')("min")
     dev: require('./grunt_webpack.config.js')("dev")
+
+  webpack_server:
+    server:
+      options:
+        webpack: webpackConfig
+        publicPath: "/" + webpackConfig.output.publicPath
+        port: 3001
+        contentBase: 'public/'
+        keepalive: true
 
   clean:
     public: ['public/js']
@@ -33,6 +43,6 @@ module.exports = (grunt) ->
   grunt.initConfig(config)
 
   grunt.registerTask('default', ['server', 'webpack:dev'])
-  grunt.registerTask('build', ['server', 'webpack:build'])
   grunt.registerTask('server', ['coffee', 'clean'])
+  grunt.registerTask('build', ['server', 'webpack:build'])
   grunt.registerTask('test', ['watch'])

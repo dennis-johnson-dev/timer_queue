@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 var React = require('react');
 var AppAPI = require('./api/AppAPI');
-var TaskServerActions = require('./actions/TaskServerActions');
 
 var Site = require('./components/Site');
 var CountDown = require('./components/CountDown');
@@ -24,8 +23,7 @@ var routes = (
   </Route>
 );
 
-AppAPI.init().then(function(projects) {
-  TaskServerActions.receiveProjects(projects);
+AppAPI.init().then(function() {
   Router.run(routes, function(Handler) {
     React.render(<Handler/>, document.getElementById('site'));
   });
