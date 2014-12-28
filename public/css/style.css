@@ -112,6 +112,7 @@ button {
 
 .play .time-remaining {
   font-size: 1.4em;
+  margin-top: 0;
 }
 
 .play .task-time {
@@ -119,6 +120,12 @@ button {
 }
 
 .play .total-time {
+  color: #888;
+  font-size: 1em;
+  margin-bottom: 0;
+}
+
+.play .curr-total-time {
   font-size: 1.6em;
   font-weight: bold;
 }

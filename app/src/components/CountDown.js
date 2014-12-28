@@ -67,13 +67,15 @@ var CountDown = React.createClass({
       'fa-pause': !play
     });
     var firstTask = _.cloneDeep(this.state.tasks[0]);
+    var currTimeRemaining = this.state.tasks[0] ? firstTask.time : 0;
     return (
       <div className="play">
         <h3>{ this.state.project.title }</h3>
         <button className="btn btn-primary" onClick={ this.play }><i className={ classes }></i></button>
         <button className="btn btn-info" onClick={ this.reset }>Reset</button>
+        <p className="total-time">Total: { formatTime(this.state.total) }</p>
         <p className="time-remaining">Time Remaining: <br />
-          <span className="total-time">{ formatTime(this.state.total) }</span>
+          <span className="curr-total-time">{ formatTime(currTimeRemaining) }</span>
         </p>
         <ul className="tasks">
           {
