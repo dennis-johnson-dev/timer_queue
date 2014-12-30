@@ -62,9 +62,9 @@ var CountDown = React.createClass({
     var cx = React.addons.classSet;
     var play = this.state.play;
     var classes = cx({
-      'fa': true,
-      'fa-play': play,
-      'fa-pause': !play
+      'glyphicon': true,
+      'glyphicon-play': play,
+      'glyphicon-pause': !play
     });
     var firstTask = _.cloneDeep(this.state.tasks[0]);
     var currTimeRemaining = this.state.tasks[0] ? firstTask.time : 0;

@@ -2,6 +2,7 @@
 var React = require('react');
 var _ = require('lodash');
 var TaskViewActions = require('../actions/TaskViewActions');
+var formatTime = require('../lib/formatTime');
 var Router = require('react-router');
 var Link = Router.Link;
 var Navigation = Router.Navigation;
@@ -15,7 +16,7 @@ var CreateProject = React.createClass({
   getTaskModel: function() {
     return {
       title: '',
-      time: '',
+      time: 0,
       desc: ''
     };
   },
@@ -23,7 +24,7 @@ var CreateProject = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var refs = this.refs;
-    var keys = _.filter(Object.keys(this.refs), function(key) {
+    var keys = _.filter(Object.keys(refs), function(key) {
       return !_.isNaN(parseInt(key.slice(0,1)));
     });
 
@@ -38,14 +39,14 @@ var CreateProject = React.createClass({
         output[key] = key === "time" ? parseInt(domVal) : domVal;
         return output;
       }, {});
-      
+
       result.push(row);
       return result;
     }, []);
 
     var project = {
       _id: md5(Object.keys(tasks).toString() + Date.now()),
-      title: refs.projectTitle.getDOMNode().value,
+      title: this.refs.projectTitle.getDOMNode().value,
       tasks: tasks
     };
 
@@ -62,41 +63,79 @@ var CreateProject = React.createClass({
 
   render: function() {
     var me = this;
+    var tasks = this.state.tasks;
     return (
-      <div className="createProject">
-        <p>Create a new project</p>
-        <form action="http://localhost:3000/" className="projectForm" onSubmit={ this.handleSubmit }>
-          <div className="createProjectHeader">
-            <input type="text" name="projectTitle" placeholder="Project Title" ref="projectTitle" />
-            <button onClick={ me.onAddTask }>Add Task</button>
-            <input className="projectSubmit" type="submit" value="Submit" />
+      <div className="createProject container">
+        <h3>New Project</h3>
+        <form action="http://localhost:3000/" className="projectForm form-horizontal" onSubmit={ this.handleSubmit }>
+          <div className="createProjectHeader form-group">
+            <div className="form-group text-left">
+              <label className="col-sm-2 control-label">Project Title: </label>
+              <div className="col-sm-10">
+                <input type="text" className="form-control" name="projectTitle" placeholder="Project Title" ref="projectTitle" />
+              </div>
+            </div> 
           </div>
-          <ul className="taskList">
+          <div className="form-group">
+            <ul className="task-holder">
             {
-              this.state.tasks.map(function(task, index) {
-                return ( 
-                  <li key={ index } className="taskHolder">
-                    <input type="hidden" ref={ index + 'title' } placeholder='Title'/>
-                    <input type="text" ref={ index + 'time' } placeholder='Duration'/>
-                    <input type="text" ref={ index + 'desc' } placeholder='Description'/>
-                    <button onClick={ me.onDeleteTask } value={ index }><i className="fa fa-times"></i></button>
+              tasks.map(function(task, index) {
+                return (
+                  <li key={ index }>
+                    <div className="form-group text-left">
+                      <label className="col-sm-2 control-label">Description: </label>
+                      <div className="col-sm-10">
+                        <input type="text" className="form-control" ref={ index + "desc" } defaultValue={ task.desc } />
+                      </div>
+                      <input type="hidden" ref={ index + "_id" } defaultValue={ index } />
+                      <input type="hidden" ref={ index + "time" } value={ task.time } defaultValue={ 0 } />
+                    </div>
+                    <div className="form-group text-left">
+                      <label className="col-sm-2 control-label">Duration: </label>
+                      <div className="col-sm-10">
+                        <input data-id={ index } type="number" defaultValue={ 0 } onChange={ me.handleDurationChange } ref={ index + "hours" } className="form-control duration" placeholder="00"/> :
+                        <input data-id={ index } type="number" defaultValue={ 0 } onChange={ me.handleDurationChange } ref={ index + "minutes" } className="form-control duration" placeholder="00"/> :
+                        <input data-id={ index } type="number" defaultValue={ 0 } onChange={ me.handleDurationChange } ref={ index + "seconds" } className="form-control duration" placeholder="00"/>
+                        <span>  { formatTime(task.time) }</span>
+                      </div>
+                    </div>
                   </li>
                 );
               })
             }
-          </ul>
-      </form>
+            </ul>
+          </div>
+          <div className="form-group">
+            <button onClick={ me.onAddTask } className="add-task-btn btn btn-default btn-block">Add Task</button>
+            <input className="project-submit-btn btn btn-default btn-block" type="submit" value="Submit" />
+          </div>
+        </form>
       </div>
     );
   },
 
+  handleDurationChange: function(e) {
+    var index = parseInt(e.target.dataset.id);
+    var newTime = this.getTaskTime(index);
+    var tasks = this.state.tasks;
+    tasks[index].time = newTime;
+    this.setState({ tasks: tasks });
+  },
+
+  getTaskTime: function(index) {
+    var seconds = parseInt(this.refs[index + 'seconds'].getDOMNode().value) || 0;
+    var minutes = parseInt(this.refs[index + 'minutes'].getDOMNode().value) || 0;
+    var hours = parseInt(this.refs[index + 'hours'].getDOMNode().value) || 0;
+    return hours * 3600 + minutes * 60 + seconds; 
+  },
+
   onAddTask: function(e) {
     e.preventDefault();
-    
+
     var taskModel = this.getTaskModel();
     var tasks = this.state.tasks;
-    
-    tasks.unshift(taskModel);
+
+    tasks.push(taskModel);
     this.setState({ tasks: tasks });
   },
 
