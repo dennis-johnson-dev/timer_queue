@@ -24,6 +24,15 @@ button {
   margin: 0;
 }
 
+label {
+  display: inline-block;
+  margin: 0;
+}
+
+.task-list label {
+  display: inline-block;
+}
+
 .project-container {
   margin-top: 1em;
 }
@@ -41,6 +50,18 @@ button {
 
 .project-title, .project-maintenance {
   display: inline-block;
+}
+
+.task-element {
+  display: inline-block;
+}
+
+.right{
+  text-align: right;  
+}
+
+.left{
+  text-align: left; 
 }
 
 .content ul {
@@ -137,10 +158,39 @@ button {
   text-align: center;
 }
 
-.createProjectHeader {
-  margin: 1em;
+.createProjectHeader.form-group {
+  margin-top: 1em;
+  margin-bottom: 0;
+  padding: 0 0.5em;
+}
+
+.project-submit-btn, .add-task-btn {
 }
 
 .taskListHeader li {
   display: inline-block;
+}
+
+.task-holder li {
+  border-radius: 5px;
+  border: 1px solid #888;
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+}
+
+.list-group.project-container {
+  margin-bottom: 0.5em;  
+}
+
+.duration {
+  display: inline;
+  width: 4em;
+}
+
+.form-group {
+  margin-bottom: 0.8em;
+}
+
+.form-control {
+  height: 32px;
 }

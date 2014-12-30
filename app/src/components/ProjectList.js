@@ -32,8 +32,7 @@ var ProjectList = React.createClass({
       <div className="project">
         <h3>
           Projects 
-          <a className="project-tools" href="#" onClick={ this._onEditMode }><i className="fa fa-gear"></i></a>
-          <Link className="project-tools" to="create"><i className="fa fa-plus"></i></Link>
+          <a className="project-tools" href="#" onClick={ this._onEditMode }><i className="glyphicon glyphicon-cog"></i></a>
         </h3>
         <div className="list-group project-container">
           {
@@ -52,6 +51,7 @@ var ProjectList = React.createClass({
             })
           }
         </div>
+        <Link className="project-tools" to="create"><i className="glyphicon glyphicon-plus"></i></Link>
       </div>
     );
   },
