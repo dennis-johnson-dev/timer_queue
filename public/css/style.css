@@ -184,7 +184,12 @@ label {
 
 .duration {
   display: inline;
-  width: 4em;
+  text-align: right;
+  width: 3em;
+}
+
+.formatted-duration {
+  margin-left: 0.5em;
 }
 
 .form-group {
