@@ -11,7 +11,7 @@ module.exports = function(profile) {
     },
     module: {
       loaders: [
-        { test: /\.js$/, loader: "jsx?" }
+        { test: /\.js$/, loader: "jsx?harmony" }
       ]
     },
     output: {
