@@ -123,10 +123,14 @@ var CreateProject = React.createClass({
   },
 
   getTaskTime: function(index) {
-    var seconds = parseInt(this.refs[index + 'seconds'].getDOMNode().value) || 0;
-    var minutes = parseInt(this.refs[index + 'minutes'].getDOMNode().value) || 0;
-    var hours = parseInt(this.refs[index + 'hours'].getDOMNode().value) || 0;
+    var seconds = this._getTimeValue(index, 'seconds');
+    var minutes = this._getTimeValue(index, 'minutes');
+    var hours = this._getTimeValue(index, 'hours');
     return hours * 3600 + minutes * 60 + seconds; 
+  },
+
+  _getTimeValue: function(index, key) {
+    return parseInt(this.refs[index + key].getDOMNode().value) || 0; 
   },
 
   onAddTask: function(e) {
