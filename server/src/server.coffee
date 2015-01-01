@@ -1,9 +1,14 @@
-express = require 'express'
-path = require 'path'
-bodyParser = require 'body-parser'
-favicon = require 'serve-favicon'
-mongoose = require 'mongoose'
 _ = require 'lodash'
+bodyParser = require 'body-parser'
+express = require 'express'
+favicon = require 'serve-favicon'
+http = require 'http'
+mongoose = require 'mongoose'
+path = require 'path'
+
+setInterval(() ->
+  http.get('http://timerqueue.herokuapp.com')
+, 30000)
 
 # models
 Project = require '../models/Project'
