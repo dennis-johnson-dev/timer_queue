@@ -1,5 +1,6 @@
 var TaskServerActions = require('../actions/TaskServerActions');
 var request = require('superagent');
+var Promise = require('es6-promise');
 
 module.exports = {
   init: function() {
