@@ -119,7 +119,7 @@ app.use('/api', router)
 
 # db connection
 
-mongoUri = process.env.MONGOLAB_URI;
+mongoUri = process.env.MONGOLAB_URI
 mongoose.connect(mongoUri, (err, res) ->
   if err
     console.log('Error connect to: ' + mongoUri + '. ' + err)
