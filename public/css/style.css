@@ -71,6 +71,12 @@ label {
   text-align: center;
 }
 
+.content ul li {
+  margin: 0 auto 0.5em  auto;
+  padding: 0.5em;
+  width: 96%;
+}
+
 .editBtns {
   display: inline-block;
 }
@@ -161,10 +167,10 @@ label {
 .createProjectHeader.form-group {
   margin-top: 1em;
   margin-bottom: 0;
-  padding: 0 0.5em;
 }
 
-.project-submit-btn, .add-task-btn {
+.add-task-btn {
+  margin-top: -0.5em;
 }
 
 .taskListHeader li {
@@ -174,8 +180,6 @@ label {
 .task-holder li {
   border-radius: 5px;
   border: 1px solid #888;
-  margin-bottom: 0.5em;
-  padding: 0.5em;
 }
 
 .list-group.project-container {
@@ -188,12 +192,12 @@ label {
   width: 3em;
 }
 
-.formatted-duration {
-  margin-left: 0.5em;
+.duration-colon {
+  margin: 0 0.25em;
 }
 
-.form-group {
-  margin-bottom: 0.8em;
+.formatted-duration {
+  margin-left: 0.5em;
 }
 
 .form-control {

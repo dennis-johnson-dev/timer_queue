@@ -93,8 +93,10 @@ var CreateProject = React.createClass({
                     <div className="form-group text-left">
                       <label className="col-sm-2 control-label">Duration: </label>
                       <div className="col-sm-10">
-                        <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "hours" } className="form-control duration" placeholder="00"/> :
-                        <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "minutes" } className="form-control duration" placeholder="00"/> :
+                        <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "hours" } className="form-control duration" placeholder="00"/>
+                        <span className="duration-colon">:</span>
+                        <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "minutes" } className="form-control duration" placeholder="00"/>
+                        <span className="duration-colon">:</span>
                         <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "seconds" } className="form-control duration" placeholder="00"/>
                         <span className="formatted-duration">  { formatTime(task.time) }</span>
                       </div>
