@@ -139,6 +139,7 @@ label {
 
 .play .time-remaining {
   font-size: 1.4em;
+  margin-bottom: 0;
 }
 
 .play .task-time {
@@ -154,6 +155,10 @@ label {
 .play .curr-total-time {
   font-size: 1.6em;
   font-weight: bold;
+}
+
+.curr-task-description {
+  margin: 0 0 1em 0;
 }
 
 .project {

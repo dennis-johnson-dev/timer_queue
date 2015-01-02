@@ -66,22 +66,26 @@ var CountDown = React.createClass({
       'glyphicon-play': play,
       'glyphicon-pause': !play
     });
-    var firstTask = _.cloneDeep(this.state.tasks[0]);
-    var currTimeRemaining = this.state.tasks[0] ? firstTask.time : 0;
+
+    var firstTask = this.state.tasks[0] ? this.state.tasks[0] : { time: 0, desc: '' };
+
     return (
       <div className="play">
         <h3>{ this.state.project.title }</h3>
         <button className="btn btn-primary" onClick={ this.play }><i className={ classes }></i></button>
         <button className="btn btn-info" onClick={ this.reset }>Reset</button>
         <p className="time-remaining">Time Remaining: <br />
-          <span className="curr-total-time">{ formatTime(currTimeRemaining) }</span>
+          <span className="curr-total-time">{ formatTime(firstTask.time) }</span>
         </p>
+        <p className="curr-task-description">{ firstTask.desc }</p>
         <ul className="tasks">
           {
             this.state.tasks.map(function(task) {
-              var taskItem = _.isEqual(task, firstTask) ? 'task task-current' : 'task';
+              if (task === firstTask) {
+                return;
+              }
               return (
-                <li className={ taskItem } key={ task._id }>
+                <li className='task' key={ task._id }>
                   <div>
                     <div className="task-time">{ formatTime(task.time) }</div>
                     <div className="task-desc">{ task.desc }</div>
