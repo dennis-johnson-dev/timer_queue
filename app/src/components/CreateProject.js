@@ -2,6 +2,7 @@
 var React = require('react');
 var _ = require('lodash');
 var TaskViewActions = require('../actions/TaskViewActions');
+var TaskList = require('./TaskList');
 var formatTime = require('../lib/formatTime');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -23,31 +24,10 @@ var CreateProject = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var refs = this.refs;
-    var keys = _.filter(Object.keys(refs), function(key) {
-      return !_.isNaN(parseInt(key.slice(0,1)));
-    });
-
-    var taskItems = _.groupBy(keys, function(key) {
-      return key.slice(0,1);
-    });
-
-    var tasks = _.reduce(taskItems, function(result, values, index) {
-      var row = _.reduce(values, function(output, value, index) {
-        var key = value.slice(1);
-        var domVal = refs[value].getDOMNode().value;
-        output[key] = key === "time" ? parseInt(domVal) : domVal;
-        return output;
-      }, {});
-
-      result.push(row);
-      return result;
-    }, []);
-
     var project = {
-      _id: md5(Object.keys(tasks).toString() + Date.now()),
+      _id: md5(Object.keys(this.state.tasks).toString() + Date.now()),
       title: this.refs.projectTitle.getDOMNode().value,
-      tasks: tasks
+      tasks: this.state.tasks
     };
 
     TaskViewActions.createProject(project);
@@ -63,7 +43,6 @@ var CreateProject = React.createClass({
 
   render: function() {
     var me = this;
-    var tasks = this.state.tasks;
     return (
       <div className="createProject container">
         <h3>New Project</h3>
@@ -77,35 +56,7 @@ var CreateProject = React.createClass({
             </div> 
           </div>
           <div className="form-group">
-            <ul className="task-holder">
-            {
-              tasks.map(function(task, index) {
-                return (
-                  <li key={ index }>
-                    <div className="form-group text-left">
-                      <label className="col-sm-2 control-label">Description: </label>
-                      <div className="col-sm-10">
-                        <input type="text" className="form-control" ref={ index + "desc" } defaultValue={ task.desc } />
-                      </div>
-                      <input type="hidden" ref={ index + "_id" } defaultValue={ index } />
-                      <input type="hidden" ref={ index + "time" } value={ task.time } defaultValue={ 0 } />
-                    </div>
-                    <div className="form-group text-left">
-                      <label className="col-sm-2 control-label">Duration: </label>
-                      <div className="col-sm-10">
-                        <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "hours" } className="form-control duration" placeholder="00"/>
-                        <span className="duration-colon">:</span>
-                        <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "minutes" } className="form-control duration" placeholder="00"/>
-                        <span className="duration-colon">:</span>
-                        <input data-id={ index } type="text" maxLength="2"  onChange={ me.handleDurationChange } ref={ index + "seconds" } className="form-control duration" placeholder="00"/>
-                        <span className="formatted-duration">  { formatTime(task.time) }</span>
-                      </div>
-                    </div>
-                  </li>
-                );
-              })
-            }
-            </ul>
+            <TaskList tasks={ this.state.tasks } onTaskChange={ this.handleTaskChange }/>
           </div>
           <div className="form-group">
             <button onClick={ me.onAddTask } className="add-task-btn btn btn-default btn-block">Add Task</button>
@@ -116,23 +67,10 @@ var CreateProject = React.createClass({
     );
   },
 
-  handleDurationChange: function(e) {
-    var index = parseInt(e.target.dataset.id);
-    var newTime = this.getTaskTime(index);
+  handleTaskChange: function(task, index) {
     var tasks = this.state.tasks;
-    tasks[index].time = newTime;
+    tasks[index] = task;
     this.setState({ tasks: tasks });
-  },
-
-  getTaskTime: function(index) {
-    var seconds = this._getTimeValue(index, 'seconds');
-    var minutes = this._getTimeValue(index, 'minutes');
-    var hours = this._getTimeValue(index, 'hours');
-    return hours * 3600 + minutes * 60 + seconds; 
-  },
-
-  _getTimeValue: function(index, key) {
-    return parseInt(this.refs[index + key].getDOMNode().value) || 0; 
   },
 
   onAddTask: function(e) {
@@ -143,14 +81,6 @@ var CreateProject = React.createClass({
 
     tasks.push(taskModel);
     this.setState({ tasks: tasks });
-  },
-
-  onDeleteTask: function(e) {
-    var value = e.target.value || e.target.parentNode.value;
-    var tasks = this.state.tasks;
-    var result = tasks.splice(parseInt(value), 1);
-    this.setState({ tasks: tasks });
-    e.preventDefault();
   }
 
 });
