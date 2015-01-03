@@ -11,8 +11,7 @@ var es6 = new webpack.ProvidePlugin({
 module.exports = function(profile) {
   var config = {
     entry: {
-      App: ['./app/src/App.js'],
-      AppAPI: ['./app/src/api/AppAPI.js']
+      App: ['./app/src/App.js']
     },
     module: {
       loaders: [
