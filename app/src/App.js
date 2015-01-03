@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+require('6to5/polyfill');
 var React = require('react');
 var AppAPI = require('./api/AppAPI');
 
