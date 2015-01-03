@@ -1,10 +1,9 @@
 var TaskServerActions = require('../actions/TaskServerActions');
 var request = require('superagent');
-var Promise = require('es6-promise').Promise;
 
 module.exports = {
   init: function() {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       request
         .get('/api/projects')
         .end(function(err, res) {
@@ -18,7 +17,7 @@ module.exports = {
     });
   },
 
-  createProject: function(project) {
+  createProject: (project) => {
     request
       .post('/api/projects')
       .send(project)
@@ -27,7 +26,7 @@ module.exports = {
       });
   },
 
-  deleteProject: function(id) {
+  deleteProject: (id) => {
     request
       .del('/api/projects/' + id)
       .end(function(err, res) {
@@ -39,7 +38,7 @@ module.exports = {
       });
   },
 
-  updateProject: function(project) {
+  updateProject: (project) => {
     request
       .put('/api/projects/' + project._id)
       .send(project)

@@ -3,7 +3,7 @@ webpackConfig = require('./webpack.config.js')
 
 config =
   webpack:
-    build: require('./grunt_webpack.config.js')("min")
+    build: require('./grunt_webpack.config_6to5.js')("min")
     dev: require('./grunt_webpack.config.js')("dev")
 
   webpack_server:

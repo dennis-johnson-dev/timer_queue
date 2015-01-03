@@ -7,8 +7,9 @@ module.exports =  {
   module: {
     loaders: [
       { 
-        test: /\.js$/, 
-        loaders: ["jsx?harmony"] 
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: ['6to5-loader?experimental=true&runtime=true'] 
       }
     ]
   },
@@ -26,6 +27,9 @@ module.exports =  {
     extensions: ['', '.js']
   },
   plugins: [
+    new webpack.ProvidePlugin({
+    to5Runtime: "imports?global=>{}!exports-loader?global.to5Runtime!6to5/runtime"
+  })
   ]
 };
 
