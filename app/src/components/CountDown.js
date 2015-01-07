@@ -59,6 +59,15 @@ var CountDown = React.createClass({
     }
   },
   render: function() {
+    var x = 17;
+    var y = 8;
+    if (x > y) {
+      var stuff = 'hi';
+      let _gammaa = y + 2;
+      console.log(_gammaa);
+    }
+    console.log(stuff);
+
     var cx = React.addons.classSet;
     var play = this.state.play;
     var classes = cx({

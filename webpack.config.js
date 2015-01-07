@@ -1,22 +1,22 @@
 var webpack = require('webpack');
 
 module.exports =  {
-  entry: {
-    App: ['webpack/hot/dev-server', './app/src/App.js']
-  },
+  entry: [ 
+    'webpack-dev-server/client?http://localhost:3001', 'webpack/dev-server', './app/src/App.js'
+  ],
   module: {
     loaders: [
       { 
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: ['6to5-loader?experimental=true&runtime=true'] 
+        loaders: ['react-hot', '6to5-loader?&runtime=true'] 
       }
     ]
   },
   output: {
     path: 'public/js',
-    filename: '[name].js', 
-    publicPath: 'http://localhost:3001/js'
+    filename: 'App.js', 
+    publicPath: 'http://localhost:3001/js/'
   },
   externals: {
     'react': 'React', 
@@ -27,9 +27,10 @@ module.exports =  {
     extensions: ['', '.js']
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
-    to5Runtime: "imports?global=>{}!exports-loader?global.to5Runtime!6to5/runtime"
-  })
+      to5Runtime: "imports?global=>{}!exports-loader?global.to5Runtime!6to5/runtime"
+    })
   ]
 };
 

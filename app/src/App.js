@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-require('6to5/polyfill');
+require('6to5/register');
 var React = require('react');
 var AppAPI = require('./api/AppAPI');
 
@@ -28,7 +28,8 @@ AppAPI.init().then(function() {
   Router.run(routes, function(Handler) {
     React.render(<Handler/>, document.getElementById('site'));
   });
-},
-function(err) {
-  console.log('You trucked up');
-});
+  },
+  function(err) {
+    console.log('You trucked up');
+  }
+);
