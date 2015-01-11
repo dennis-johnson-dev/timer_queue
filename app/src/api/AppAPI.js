@@ -22,7 +22,9 @@ module.exports = {
       .post('/api/projects')
       .send(project)
       .end(function(err, res) {
-        console.log(err);
+        if (err) {
+          console.log(err);
+        }
       });
   },
 

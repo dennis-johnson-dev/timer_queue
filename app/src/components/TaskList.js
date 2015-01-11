@@ -51,7 +51,7 @@ var TaskList = React.createClass({
       hours += 1;
     }
 
-    while (time/60 > 1) {
+    while (time/60 >= 1) {
       time -= 60;
       minutes += 1;
     }
