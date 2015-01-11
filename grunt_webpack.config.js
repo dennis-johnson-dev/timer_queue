@@ -1,13 +1,17 @@
 var webpack = require('webpack');
 
 var uglify = 
-  new webpack.optimize.UglifyJsPlugin({ minimize: true });
+  new webpack.optimize.UglifyJsPlugin({ 
+    compress: {
+      warnings: false
+    },
+    minimize: true,
+  });
 
 module.exports = function(profile) {
   var config = {
     entry: {
-      App: ['./app/src/App.js'],
-      AppAPI: ['./app/src/api/AppAPI.js']
+      App: ['./app/src/App.js']
     },
     module: {
       loaders: [
