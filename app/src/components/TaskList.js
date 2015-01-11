@@ -44,7 +44,7 @@ var TaskList = React.createClass({
   getDisplayTime: function(time) {
     var hours = null;
     var minutes = null;
-    var seconds = null;
+    var seconds;
 
     while (time/3600 > 1) {
       time -= 3600;

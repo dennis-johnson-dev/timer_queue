@@ -38,10 +38,10 @@
     "mongoose": "^3.8.18",
     "nodemon": "^1.2.0",
     "q": "~1.0.1",
-    "react": "^0.12.0",
+    "react": "^0.12.2",
     "react-hot-loader": "^1.0.4",
     "react-router": "^0.11.1",
-    "react-tools": "^0.12.0",
+    "react-tools": "^0.12.2",
     "serve-favicon": "^2.1.6",
     "superagent": "^0.21.0",
     "webpack": "^1.4.13"
@@ -50,6 +50,7 @@
     "scriptPreprocessor": "<rootDir>/test_utils/preprocessor.js",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/lodash",
       "<rootDir>/node_modules/react-test-utilities"
     ]
   },
