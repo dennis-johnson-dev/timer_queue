@@ -46,7 +46,6 @@ var createProject = function(project) {
 
 var deleteProject = function(id) {
   var removedItem = _.remove(_projects, { '_id': id });
-  console.log('removed ', removedItem);
 }
 
 var updateProject = function(project) {

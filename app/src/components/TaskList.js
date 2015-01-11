@@ -17,7 +17,7 @@ var TaskList = React.createClass({
               <div className="form-group text-left">
                 <label className="col-sm-2 control-label">Description: </label>
                 <div className="col-sm-10">
-                  <input type="text" className="form-control" ref={ index + "desc" } defaultValue={ task.desc } />
+                  <input data-id={ index } type="text" className="form-control" onChange={ me.onChange } ref={ index + "desc" } defaultValue={ task.desc } />
                 </div>
                 <input type="hidden" ref={ index + "_id" } defaultValue={ index } />
                 <input type="hidden" ref={ index + "time" } value={ task.time } defaultValue={ 0 } />
@@ -74,7 +74,8 @@ var TaskList = React.createClass({
     var seconds = this._getTimeValue(index, 'seconds');
     var minutes = this._getTimeValue(index, 'minutes');
     var hours = this._getTimeValue(index, 'hours');
-    task.time = seconds + minutes + hours; 
+    task.time = seconds + minutes + hours;
+    task.desc = this.refs[index + 'desc'].getDOMNode().value;
     this.props.onTaskChange(task, index); 
   },
 
