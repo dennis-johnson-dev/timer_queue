@@ -3,6 +3,7 @@ var React = require('react');
 var _ = require('lodash');
 var TaskViewActions = require('../actions/TaskViewActions');
 var TaskStore = require('../store/TaskStore');
+var TaskList = require('./TaskList');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Link = Router.Link;
@@ -13,33 +14,20 @@ var EditProject = React.createClass({
 
   mixins: [Router.State, Navigation],
 
+  getTaskModel: function() {
+    return {
+      title: '',
+      time: 0,
+      desc: ''
+    };
+  },
+
   handleSubmit: function(e) {
     e.preventDefault();
-    var refs = this.refs;
-    var keys = _.filter(Object.keys(this.refs), function(key) {
-      return !_.isNaN(parseInt(key.slice(0,1)));
-    });
-
-    var taskItems = _.groupBy(keys, function(key) {
-      return key.slice(0,1);
-    });
-
-    var tasks = _.reduce(taskItems, function(result, values, index) {
-      var row = _.reduce(values, function(output, value, index) {
-        var key = value.slice(1);
-        var domVal = refs[value].getDOMNode().value;
-        output[key] = key === "time" ? parseInt(domVal) : domVal;
-        return output;
-      }, {});
-      
-      result.push(row);
-      return result;
-    }, []);
-
     var project = {
       _id: this.state.project._id,
-      title: refs.projectTitle.getDOMNode().value,
-      tasks: tasks
+      title: this.state.project.title,
+      tasks: this.state.tasks
     };
 
     TaskViewActions.updateProject(project);
@@ -47,38 +35,64 @@ var EditProject = React.createClass({
   },
 
   getInitialState: function() {
+    var project = TaskStore.getProject(this.getParams().id);
+    var tasks = project.tasks;
     return {
-      project: TaskStore.getProject(this.getParams().id)
+      project: project,
+      tasks: tasks
     };
   },
 
   render: function() {
     var me = this;
+    
     return (
-      <div>
-        <p>Edit</p>
-        <form action="http://localhost:3000/" className="projectForm" onSubmit={ this.handleSubmit }>
-          <input className="projectSubmit" type="submit" value="Submit" />
-          <p>Project Title</p>
-          <input type="text" ref="projectTitle" defaultValue={ this.state.project.title } />
-          <ul>
-            {
-              this.state.project.tasks.map(function(task, index) {
-                return <li key={ task._id }>
-                    <p>Task Title:</p>
-                    <input type="text" ref={ index + "title" } defaultValue={ task.title } />
-                    <p>Task Duration:</p>
-                    <input type="text" ref={ index + "time" } defaultValue={ task.time } />
-                    <p>Task Desc:</p>
-                    <input type="text" ref={ index + "desc" } defaultValue={ task.desc } />
-                    <input type="hidden" ref={ index + "_id" } value={ task._id } />
-                  </li>
-              })
-            }
-          </ul>
+      <div className="createProject container">
+        <h3>Edit Project</h3>
+        <form action="http://localhost:3000/" className="projectForm form-horizontal" onSubmit={ this.handleSubmit }>
+          <div className="createProjectHeader form-group">
+            <div className="form-group text-left">
+              <label className="col-sm-2 control-label">Project Title: </label>
+              <div className="col-sm-10">
+                <input type="text" onChange={ me.onTitleChange } className="form-control" name="projectTitle" placeholder="Project Title" ref="projectTitle" defaultValue={ this.state.project.title } />
+              </div> 
+            </div> 
+          </div>
+          <div className="form-group">
+            <TaskList tasks={ this.state.tasks } onTaskChange={ this.handleTaskChange }/>
+          </div>
+          <div className="form-group">
+            <button onClick={ me.onAddTask } className="add-task-btn btn btn-default btn-block">Add Task</button>
+            <input className="project-submit-btn btn btn-default btn-block" type="submit" value="Submit" />
+          </div>
         </form>
       </div>
     );
+  },
+
+  handleTaskChange: function(task, index) {
+    var tasks = this.state.tasks;
+    tasks[index] = task;
+    this.setState({ tasks: tasks });
+  },
+
+  onAddTask: function(e) {
+    e.preventDefault();
+
+    var taskModel = this.getTaskModel();
+    var tasks = this.state.tasks;
+
+    tasks.push(taskModel);
+    this.setState({ tasks: tasks });
+  },
+
+  onTitleChange: function(e) {
+    e.preventDefault();
+    var project = this.state.project;
+    project.title = e.target.value;
+    this.setState({
+      project: project
+    });
   }
 
 });

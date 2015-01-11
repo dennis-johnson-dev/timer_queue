@@ -33,6 +33,7 @@ module.exports =  {
     stats: {
       colors: true
     }
-  }
+  },
+  devtool: 'inline-source-map'
 };
 
