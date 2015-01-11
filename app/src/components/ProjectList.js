@@ -31,7 +31,7 @@ var ProjectList = React.createClass({
   	return (
       <div className="project">
         <h3>
-          Projects 
+          Projects
           <a className="project-tools" href="#" onClick={ this._onEditMode }><i className="glyphicon glyphicon-cog"></i></a>
         </h3>
         <div className="list-group project-container">

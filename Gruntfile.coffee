@@ -6,14 +6,15 @@ config =
     build: require('./grunt_webpack.config_6to5.js')("min")
     dev: require('./grunt_webpack.config.js')("dev")
 
-  webpack_server:
+  "webpack-dev-server":
     server:
       options:
-        webpack: webpackConfig
-        publicPath: "/" + webpackConfig.output.publicPath
-        port: 3001
         contentBase: 'public/'
+        hot: true
         keepalive: true
+        port: 3001
+        publicPath: webpackConfig.output.publicPath
+        webpack: webpackConfig
 
   clean:
     public: ['public/js']
