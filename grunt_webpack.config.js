@@ -1,12 +1,15 @@
 var webpack = require('webpack');
 
-var uglify = 
-  new webpack.optimize.UglifyJsPlugin({ 
-    compress: {
-      warnings: false
-    },
-    minimize: true,
-  });
+var uglify = new webpack.optimize.UglifyJsPlugin({ 
+  compress: {
+    warnings: false
+  },
+  minimize: true,
+});
+
+var runtime = new webpack.ProvidePlugin({
+  to5Runtime: "imports?global=>{}!exports?global.to5Runtime!6to5/runtime"
+});
 
 module.exports = function(profile) {
   var config = {
@@ -15,7 +18,11 @@ module.exports = function(profile) {
     },
     module: {
       loaders: [
-        { test: /\.js$/, loader: "jsx?harmony" }
+        { 
+          test: /\.js$/, 
+          exclude: /node_modules/, 
+          loader: '6to5-loader?runtime'
+        }
       ]
     },
     output: {
@@ -36,6 +43,7 @@ module.exports = function(profile) {
   };
 
   if (profile === "min") {
+    config.plugins.push(runtime);
     config.plugins.push(uglify);
   }
 

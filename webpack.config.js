@@ -1,5 +1,9 @@
 var webpack = require('webpack');
 
+var runtime = new webpack.ProvidePlugin({
+  to5Runtime: "imports?global=>{}!exports?global.to5Runtime!6to5/runtime"
+});
+
 module.exports =  {
   entry: {
     App: ['webpack/hot/dev-server', './app/src/App.js']
@@ -13,8 +17,8 @@ module.exports =  {
     loaders: [
       { 
         test: /\.js$/, 
-        exclude: /node_modules/,
-        loaders: ['jsx-loader?harmony'] 
+        exclude: /node_modules/, 
+        loader: '6to5-loader?runtime'
       }
     ]
   },
@@ -28,6 +32,7 @@ module.exports =  {
     extensions: ['', '.js']
   },
   plugins: [
+    runtime
   ],
   devServer: {
     stats: {

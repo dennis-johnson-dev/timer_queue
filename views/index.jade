@@ -4,6 +4,8 @@ extends layout
 
 block content
   div(id='site')
+
+  script(src="vendor/browser-polyfill.js")
   if DEV
     script(type="text/javascript" src="http://localhost:3001/js/App.js")
   else
