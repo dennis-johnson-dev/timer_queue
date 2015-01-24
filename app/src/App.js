@@ -14,14 +14,14 @@ var Routes = Router.Routes;
 var Route = Router.Route;
 var Link = Router.Link;
 
-var routes = (
+var routes = [
   <Route name="home" path="/" handler={ Site }>
     <DefaultRoute handler={ ProjectList }/>
     <Route name="play" path="play/:id" handler={ CountDown } />
     <Route name="edit" path="edit/:id" handler={ EditProject } />
     <Route name="create" path="create" handler={ CreateProject } />
   </Route>
-);
+];
 
 AppAPI.init().then(function() {
   Router.run(routes, function(Handler) {

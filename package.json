@@ -47,10 +47,11 @@
     "webpack": "^1.4.13"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/test_utils/preprocessor.js",
+    "scriptPreprocessor": "<rootDir>/node_modules/6to5-jest",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/lodash",
+      "<rootDir>/node_modules/react-router",
       "<rootDir>/node_modules/react-test-utilities"
     ]
   },
@@ -65,14 +66,9 @@
   },
   "homepage": "https://github.com/songawee/timer_queue",
   "devDependencies": {
-    "bower": "^1.3.12",
-    "chai": "^1.9.1",
+    "6to5-jest": "^1.0.0",
     "del": "^0.1.3",
     "jest-cli": "^0.2.1",
-    "reactify": "^0.14.0",
-    "sinon": "^1.10.3",
-    "sinon-chai": "^2.5.0",
-    "watchify": "^1.0.2",
     "webpack-dev-server": "^1.6.5"
   }
 }

@@ -1,18 +1,15 @@
 /** @jsx React.DOM */
 var React = require('react');
-var TaskStore = require('../store/TaskStore');
-var ProjectList = require('./ProjectList');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var Link = Router.Link;
-var attachFastClick = require('fastclick');
-
+var fastclick = require('fastclick');
 
 var Site = React.createClass({
   displayName: 'Site',
-  
+
   componentDidMount: function() {
-    attachFastClick(document.body);
+    fastclick.attach(document.body);
   },
 
   render: function() {
