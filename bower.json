@@ -8,7 +8,6 @@
   "description": "Sequential task helper",
   "dependencies": {
     "fastclick": "~1.0.3",
-    "6to5": "^2.13.0",
     "react": "0.12.2"
   },
   "license": "MIT",
