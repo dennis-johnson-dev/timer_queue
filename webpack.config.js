@@ -34,11 +34,6 @@ module.exports =  {
   plugins: [
     runtime
   ],
-  devServer: {
-    stats: {
-      colors: true
-    }
-  },
   devtool: '#inline-source-map'
 };
 

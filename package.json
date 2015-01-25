@@ -8,7 +8,7 @@
     "debug": "node --harmony --debug-brk node_modules/jest-cli/bin/jest.js --runInBand",
     "postinstall": "grunt build && bower install",
     "test": "node ./node_modules/jest-cli/bin/jest.js",
-    "dev-server": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base public/ --port 3001 --hot"
+    "dev-server": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base public/ --port 3001 --hot --progress --colors"
   },
   "dependencies": {
     "6to5": "^2.13.7",
