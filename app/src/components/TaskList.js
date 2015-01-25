@@ -19,6 +19,7 @@ var TaskList = React.createClass({
                 <div className="col-sm-10">
                   <input data-id={ index } type="text" className="form-control" onChange={ me.onChange } ref={ index + "desc" } defaultValue={ task.desc } />
                 </div>
+                <input type="hidden" ref={ index + "_id" } defaultValue={ index } />
                 <input type="hidden" ref={ index + "time" } value={ task.time } defaultValue={ 0 } />
               </div>
               <div className="form-group text-left">

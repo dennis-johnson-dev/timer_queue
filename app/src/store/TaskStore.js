@@ -18,7 +18,7 @@ function getTotalTime(tasks) {
 
 var TaskStore = _.extend(EventEmitter.prototype, {
   getProject: function(id) {
-    return _.cloneDeep(_.find(_projects, { 'id': id }));
+    return _.cloneDeep(_.find(_projects, { '_id': id }));
   },
   getProjects: function() {
     return _projects;
@@ -45,12 +45,12 @@ var createProject = function(project) {
 };
 
 var deleteProject = function(id) {
-  var removedItem = _.remove(_projects, { 'id': id });
+  var removedItem = _.remove(_projects, { '_id': id });
 }
 
 var updateProject = function(project) {
   var elementIndex = _.findIndex(_projects, function(proj) {
-    return proj.id === project.id;
+    return proj._id === project._id;
   });
 
   _projects[elementIndex] = project;
