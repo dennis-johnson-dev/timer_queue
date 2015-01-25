@@ -42,7 +42,7 @@ module.exports = {
 
   updateProject: (project) => {
     request
-      .put('/api/projects/' + project._id)
+      .put('/api/projects/' + project.id)
       .send(project)
       .end(function(err, res) {
         if (err) {
