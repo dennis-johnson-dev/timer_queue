@@ -1,11 +1,7 @@
-- var DEV = process.env.DEV; 
+extends content
 
-extends layout
+block scripts
 
-block content
-  div(id='site')
-
-  block scripts
   script(src="vendor/browser-polyfill.js")
   if DEV
     script(type="text/javascript" src="bower_components/react/react-with-addons.js")

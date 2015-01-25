@@ -5,6 +5,7 @@ favicon = require 'serve-favicon'
 http = require 'http'
 mongoose = require 'mongoose'
 path = require 'path'
+compression = require('compression')
 
 setInterval(() ->
   http.get('http://timerqueue.herokuapp.com')
@@ -24,9 +25,11 @@ log = (req, res, next) ->
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname + '../../../public')))
+app.use(express.static(path.join(__dirname + '../../../public'), { maxAge: 8640000  } ))
 app.use(log)
 app.use(favicon(path.join(__dirname + '../../../public/favicon.ico')))
+
+app.use(compression())
 
 app.set 'views', path.join(__dirname + '../../../views')
 app.set 'view engine', 'jade'
@@ -64,11 +67,12 @@ router.route('/projects')
     )
 
   .get (req, res) ->
-    Project.find((err, projects) -> 
+    Project.find((err, projects) ->
       if err
         res.send err
         return
 
+      res.setHeader('Cache-Control', 'public, max-age=3155')
       res.json(projects)
     )
 

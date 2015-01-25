@@ -42,7 +42,7 @@ module.exports = (grunt) ->
 
   grunt.initConfig(config)
 
-  grunt.registerTask('default', ['server', 'webpack:dev'])
+  grunt.registerTask('default', ['server'])
   grunt.registerTask('server', ['coffee', 'clean'])
   grunt.registerTask('build', ['server', 'webpack:build'])
   grunt.registerTask('test', ['watch'])

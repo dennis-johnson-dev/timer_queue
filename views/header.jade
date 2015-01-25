@@ -1,13 +1,7 @@
 - var DEV = process.env.DEV;
 
 head
-    include meta
-    title Timer Queue
-    link(rel="stylesheet" href="/vendor/bootstrap.min.css")
-    link(rel="stylesheet" href="/css/style.css")
-    if DEV
-      script(type="text/javascript" src="bower_components/react/react-with-addons.js")
-      script(type="text/javascript" src="vendor/react-router.js")
-    else
-      script(type="text/javascript" src="bower_components/react/react-with-addons.min.js")
-      script(type="text/javascript" src="vendor/react-router.min.js")
+  include meta
+  title Timer Queue
+  link(rel="stylesheet" href="/vendor/bootstrap.min.css")
+  link(rel="stylesheet" href="/css/style.css")
