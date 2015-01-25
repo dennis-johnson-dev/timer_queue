@@ -49,6 +49,7 @@ router.get('/', (req, res) ->
 router.route('/projects')
   .post (req,res) ->
     project = new Project()
+    project.id = req.body.id
     project.title = req.body.title
     project.tasks = _.map(req.body.tasks, (task) ->
       taskModel = new Task()
@@ -87,10 +88,11 @@ router.route('/projects/:id')
   )
 
   .put (req, res) ->
-    Project.findById(req.params.id, (err, project) ->
+    Project.find({ id: req.body.id }, (err, project) ->
       if err
         res.send err
 
+      console.log(req.body.title)
       project.title = req.body.title
       project.tasks = _.map(req.body.tasks, (task) ->
         taskModel = new Task()
@@ -110,7 +112,7 @@ router.route('/projects/:id')
 
   .delete (req, res) ->
     Project.remove({
-      _id: req.params.id
+      id: req.params.id
     }, (err) ->
       if err
         res.send err

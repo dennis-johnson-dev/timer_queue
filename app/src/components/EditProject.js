@@ -25,7 +25,7 @@ var EditProject = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var project = {
-      _id: this.state.project._id,
+      id: this.state.project.id,
       title: this.state.project.title,
       tasks: this.state.tasks
     };
