@@ -29,9 +29,6 @@ config =
   watch:
     options:
       livereload: false
-    app:
-      files: ['app/src/**/*.js'],
-      tasks: ['webpack:dev']
     server:
       files: ['server/**/*.coffee'],
       tasks: ['coffee']

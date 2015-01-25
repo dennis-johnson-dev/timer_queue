@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Simplify consecutive tasks",
   "main": "server.js",
+  "engines": {
+    "node": "0.10.x"
+  },
   "scripts": {
     "start": "nodemon server/gen/server.js",
     "debug": "node --harmony --debug-brk node_modules/jest-cli/bin/jest.js --runInBand",
