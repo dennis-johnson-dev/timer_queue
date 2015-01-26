@@ -10,13 +10,11 @@ var ENTER_KEY_CODE = 13;
 function getProjectState(id) {
   var project = TaskStore.getProject(id);
   var tasks = project.tasks;
-  var total = TaskStore.getTotalTime(tasks);
   return {
     id: id,
     play: true,
     project: project,
-    tasks: tasks,
-    total: total
+    tasks: tasks
   };
 }
 
@@ -45,7 +43,13 @@ var CountDown = React.createClass({
   },
   decrement: function() {
     if (this.state.tasks.length > 0 && this.state.tasks[0].time > 1) {
-      this.state.tasks[0].time -= 1;
+      let task = this.state.tasks[0];
+      task.time -= 1;
+      let tasks = this.state.tasks;
+      tasks[0] = task;
+      this.setState({ tasks: tasks });
+    } else if (this.state.tasks.length === 0) {
+      this.stop();
     } else {
       this.setState({ tasks: this.state.tasks.slice(1) });
     }
@@ -108,11 +112,9 @@ var CountDown = React.createClass({
   reset: function() {
     this.stop();
     var tasks = TaskStore.getProject(this.getParams().id).tasks
-    var total = TaskStore.getTotalTime(tasks);
     this.setState(
       { 
-        tasks: tasks,
-        total: total 
+        tasks: tasks
       }
     );
   }

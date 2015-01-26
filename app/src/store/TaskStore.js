@@ -3,18 +3,9 @@ var EventEmitter = require('events').EventEmitter;
 var TaskConstants = require('../constants/TaskConstants');
 var _ = require('lodash');
 
-var _ = require('lodash');
-
 var CHANGE_EVENT = 'change';
 
 var _projects = [];
-
-function getTotalTime(tasks) {
-  var total = _.reduce(tasks, function(sum, task) {
-    return sum += task.time;
-  }, 0);
-  return total;
-}
 
 var TaskStore = _.extend(EventEmitter.prototype, {
   getProject: function(id) {
@@ -23,8 +14,6 @@ var TaskStore = _.extend(EventEmitter.prototype, {
   getProjects: function() {
     return _projects;
   },
-  getTotalTime: getTotalTime
-  ,
   emitChange: function() {
     this.emit(CHANGE_EVENT); 
   },
