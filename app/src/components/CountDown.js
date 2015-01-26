@@ -53,14 +53,6 @@ var CountDown = React.createClass({
     } else {
       this.setState({ tasks: this.state.tasks.slice(1) });
     }
-
-    if ((this.state.total) > 0) {
-      this.setState({ total: this.state.total - 1 });
-
-      if (this.state.total === 0) {
-        this.stop();
-      }
-    }
   },
   render: function() {
     var cx = React.addons.classSet;
