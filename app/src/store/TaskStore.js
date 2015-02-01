@@ -2,10 +2,12 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var TaskConstants = require('../constants/TaskConstants');
 var _ = require('lodash');
+var Immutable = require('immutable');
+var List = Immutable.List;
 
 var CHANGE_EVENT = 'change';
 
-var _projects = [];
+var _projects = List([]);
 
 var TaskStore = _.extend(EventEmitter.prototype, {
   getProject: function(id) {
@@ -25,19 +27,19 @@ var TaskStore = _.extend(EventEmitter.prototype, {
   }
 });
 
-var setProjects = function(projects) {
-  _projects = projects;
+function setProjects(projects) {
+  _projects = List(projects);
 };
 
-var createProject = function(project) {
+function createProject(project) {
   _projects.push(project);
 };
 
-var deleteProject = function(id) {
-  var removedItem = _.remove(_projects, { '_id': id });
+function deleteProject(id) {
+  _.remove(_projects, { '_id': id });
 }
 
-var updateProject = function(project) {
+function updateProject(project) {
   var elementIndex = _.findIndex(_projects, function(proj) {
     return proj._id === project._id;
   });
