@@ -14,7 +14,7 @@ var ProjectList = React.createClass({
   getInitialState: function() {
     return {
       edit: false,
-      projects: TaskStore.getProjects()
+      projects: TaskStore.getProjects().toJS()
     };
   },
 
