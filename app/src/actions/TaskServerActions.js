@@ -1,34 +1,25 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TaskConstants = require('../constants/TaskConstants');
+var Marty = require('marty');
 
-module.exports = {
+var TaskServerActions = Marty.createActionCreators({
 
-  createProject: function(project) {
-    AppDispatcher.handleServerAction({
-      actionType: TaskConstants.ActionTypes.CREATE_PROJECT,
-      project: project
-    });
-  },
+  createProject: TaskConstants.CREATE_PROJECT(function(project) {
+    this.dispatch(project);
+  }),
 
-  deleteProject: function(id) {
-    AppDispatcher.handleServerAction({
-      actionType: TaskConstants.ActionTypes.DELETE_PROJECT,
-      id: id
-    });
-  },
+  deleteProject: TaskConstants.DELETE_PROJECT(function(id) {
+    this.dispatch(id);
+  }),
 
-  updateProject: function(project) {
-    AppDispatcher.handleServerAction({
-      actionType: TaskConstants.ActionTypes.UPDATE_PROJECT,
-      project: project
-    });
-  },
+  updateProject: TaskConstants.UPDATE_PROJECT(function(project) {
+    this.dispatch(project);
+  }),
 
-  receiveProjects: function(projects) {
-    AppDispatcher.handleServerAction({
-      actionType: TaskConstants.ActionTypes.RECEIVE_PROJECTS,
-      projects: projects
-    });
-  }
+  receiveProjects: TaskConstants.RECEIVE_PROJECTS(function(projects) {
+    this.dispatch(projects);
+  })
 
-};
+});
+
+module.exports = TaskServerActions;

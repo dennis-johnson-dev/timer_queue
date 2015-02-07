@@ -1,10 +1,10 @@
-var keyMirror = require('react/lib/keyMirror');
+var Marty = require('marty');
 
-module.exports = {
-  ActionTypes: keyMirror({
-    CREATE_PROJECT: null,
-    DELETE_PROJECT: null,
-    UPDATE_PROJECT: null,
-    RECEIVE_PROJECTS: null
-  })
-};
+var TaskConstants = Marty.createConstants([
+  'CREATE_PROJECT',
+  'DELETE_PROJECT',
+  'UPDATE_PROJECT',
+  'RECEIVE_PROJECTS'
+]);
+
+module.exports = TaskConstants;

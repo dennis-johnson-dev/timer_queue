@@ -8,11 +8,16 @@ var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Link = Router.Link;
 var md5 = require('MD5');
+var Marty = require('marty');
+
+var ProjectState = Marty.createStateMixin({
+  listenTo: [ TaskStore ]
+});
 
 var EditProject = React.createClass({
   displayName: 'EditProject',
 
-  mixins: [Router.State, Navigation],
+  mixins: [ Router.State, Navigation, ProjectState ],
 
   getTaskModel: function() {
     return {

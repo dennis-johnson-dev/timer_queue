@@ -1,33 +1,27 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TaskConstants = require('../constants/TaskConstants');
 var AppAPI = require('../api/AppAPI');
+var Marty = require('marty');
 
-module.exports = {
+var TaskViewActions = Marty.createActionCreators({
 
-  createProject: function(project) {
-    AppDispatcher.handleViewAction({
-      actionType: TaskConstants.ActionTypes.CREATE_PROJECT,
-      project: project
-    });
+  createProject: TaskConstants.CREATE_PROJECT(function(project) {
+    this.dispatch(project);
 
     AppAPI.createProject(project);
-  },
+  }),
 
-  deleteProject: function(id) {
-    AppDispatcher.handleViewAction({
-      actionType: TaskConstants.ActionTypes.DELETE_PROJECT,
-      id: id
-    });
+  deleteProject: TaskConstants.DELETE_PROJECT(function(id) {
+    this.dispatch(id);
     
     AppAPI.deleteProject(id);
-  },
+  }),
 
-  updateProject: function(project) {
-    AppDispatcher.handleViewAction({
-      actionType: TaskConstants.ActionTypes.UPDATE_PROJECT,
-      project: project
-    });
+  updateProject: TaskConstants.UPDATE_PROJECT(function(project) {
+    this.dispatch(project);
     
     AppAPI.updateProject(project);
-  }
-};
+  })
+});
+
+module.exports = TaskViewActions;

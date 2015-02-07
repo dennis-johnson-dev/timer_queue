@@ -12,7 +12,7 @@ var md5 = require('MD5');
 var CreateProject = React.createClass({
   displayName: 'CreateProject',
 
-  mixins: [Navigation],
+  mixins: [ Navigation ],
 
   getTaskModel: function() {
     return {
@@ -26,6 +26,7 @@ var CreateProject = React.createClass({
     e.preventDefault();
     var project = {
       _id: md5(Object.keys(this.state.tasks).toString() + Date.now()),
+      id: md5(Object.keys(this.state.tasks).toString() + Date.now()) + 2,
       title: this.refs.projectTitle.getDOMNode().value,
       tasks: this.state.tasks
     };

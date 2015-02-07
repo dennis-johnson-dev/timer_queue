@@ -5,25 +5,22 @@ var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Link = Router.Link;
+var Marty = require('marty');
+
+var ProjectState = Marty.createStateMixin({
+  listenTo: [ TaskStore ]
+});
 
 var ProjectList = React.createClass({
   displayName: 'ProjectList',
 
-  mixins: [Navigation],
+  mixins: [ Navigation, ProjectState ],
 
   getInitialState: function() {
     return {
       edit: false,
       projects: TaskStore.getProjects()
     };
-  },
-
-  componentDidMount: function() {
-    TaskStore.addChangeListener(this._onChange); 
-  },
-
-  componentWillUnmount: function() {
-    TaskStore.removeChangeListener(this._onChange); 
   },
 
   render: function() {
