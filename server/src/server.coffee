@@ -50,6 +50,7 @@ router.route('/projects')
   .post (req,res) ->
     project = new Project()
     project.title = req.body.title
+    project.id = req.body.id
     project.tasks = _.map(req.body.tasks, (task) ->
       taskModel = new Task()
       taskModel.time = task.time

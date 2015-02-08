@@ -2,22 +2,27 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TaskConstants = require('../constants/TaskConstants');
 var AppAPI = require('../api/AppAPI');
 var Marty = require('marty');
+var _ = require('lodash');
 
 var TaskViewActions = Marty.createActionCreators({
 
-  createProject: TaskConstants.CREATE_PROJECT(function(project) {
-    this.dispatch(project);
+  createProject: TaskConstants.OPT_CREATE_PROJECT(function(project) {
+    var action = {
+      payload: project,
+      uid: _.uniqueId()
+    }
+    this.dispatch(action);
 
-    AppAPI.createProject(project);
+    AppAPI.createProject(project, action.uid);
   }),
 
-  deleteProject: TaskConstants.DELETE_PROJECT(function(id) {
+  deleteProject: TaskConstants.OPT_DELETE_PROJECT(function(id) {
     this.dispatch(id);
     
     AppAPI.deleteProject(id);
   }),
 
-  updateProject: TaskConstants.UPDATE_PROJECT(function(project) {
+  updateProject: TaskConstants.OPT_UPDATE_PROJECT(function(project) {
     this.dispatch(project);
     
     AppAPI.updateProject(project);

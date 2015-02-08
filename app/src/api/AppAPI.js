@@ -17,13 +17,15 @@ module.exports = {
     });
   },
 
-  createProject: (project) => {
+  createProject: (project, actionId) => {
     request
       .post('/api/projects')
       .send(project)
       .end(function(err, res) {
         if (err) {
           console.log(err);
+        } else {
+          TaskServerActions.createProject(project, actionId);
         }
       });
   },
@@ -47,6 +49,8 @@ module.exports = {
       .end(function(err, res) {
         if (err) {
           console.log(err);
+        } else {
+          TaskServerActions.updateProject(project);
         }
       });
   }

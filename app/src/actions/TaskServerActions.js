@@ -4,8 +4,8 @@ var Marty = require('marty');
 
 var TaskServerActions = Marty.createActionCreators({
 
-  createProject: TaskConstants.CREATE_PROJECT(function(project) {
-    this.dispatch(project);
+  createProject: TaskConstants.CREATE_PROJECT(function(project, uid) {
+    this.dispatch(project, uid);
   }),
 
   deleteProject: TaskConstants.DELETE_PROJECT(function(id) {
