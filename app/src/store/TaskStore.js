@@ -6,6 +6,8 @@ var Immutable = require('immutable');
 var CHANGE_EVENT = 'change';
 
 var _projects = [];
+
+// Todo: Make REAL queue...
 var actionQueue = [];
 
 function createProject(project) {
@@ -33,7 +35,8 @@ var TaskStore = Marty.createStore({
     updateProject: TaskConstants.UPDATE_PROJECT,
     opt_createProject: TaskConstants.OPT_CREATE_PROJECT,
     opt_deleteProject: TaskConstants.OPT_DELETE_PROJECT,
-    opt_updateProject: TaskConstants.OPT_UPDATE_PROJECT
+    opt_updateProject: TaskConstants.OPT_UPDATE_PROJECT,
+    error: TaskConstants.ERROR
   },
   getInitialState: function() {
     return {
@@ -106,6 +109,9 @@ var TaskStore = Marty.createStore({
     actionQueue.forEach(function(action) {
       action.cb(action.payload);
     });
+  },
+  error: function(id) {
+    _.remove(actionQueue, { id: actionId });
   }
 });
 

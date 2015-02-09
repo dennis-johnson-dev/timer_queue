@@ -24,6 +24,8 @@ module.exports = {
       .end(function(err, res) {
         if (err) {
           console.log(err);
+          // invalidate action from queue
+          TaskServerActions.error(actionId);
         } else {
           TaskServerActions.createProject(project, actionId);
         }

@@ -18,6 +18,10 @@ var TaskServerActions = Marty.createActionCreators({
 
   receiveProjects: TaskConstants.RECEIVE_PROJECTS(function(projects) {
     this.dispatch(projects);
+  }),
+
+  error: TaskConstants.ERROR(function(id) {
+    this.dispatch(id);
   })
 
 });
