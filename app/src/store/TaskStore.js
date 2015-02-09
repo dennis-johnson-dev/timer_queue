@@ -6,14 +6,23 @@ var Immutable = require('immutable');
 var CHANGE_EVENT = 'change';
 
 var _projects = [];
+var actionQueue = [];
 
 function createProject(project) {
   _projects.push(project);
-  TaskStore.hasChanged();
 }
 
-var actionQueue = [];
-// array of functions to call 
+function updateProject(project) {
+  var elementIndex = _.findIndex(_projects, function(proj) {
+    return proj.id === project.id;
+  });
+
+  _projects[elementIndex] = project;
+}
+
+function deleteProject(id) {
+  _.remove(_projects, { 'id': id });
+}
 
 var TaskStore = Marty.createStore({
   displayName: 'tasks',
@@ -28,12 +37,12 @@ var TaskStore = Marty.createStore({
   },
   getInitialState: function() {
     return {
-      projects: Immutable.List()
+      projects: Immutable.List(),
+      projectChangeState: Immutable.List()
     };
   },
   setProjects: function(projects) {
     this.state.projects = Immutable.List(projects);
-    _projects = projects;
     this.hasChanged();
   },
   createProject: function(project, actionId) {
@@ -41,34 +50,23 @@ var TaskStore = Marty.createStore({
     _.remove(actionQueue, { id: actionId });
     this.hasChanged();
   },
-  deleteProject: function(id) {
-    _.remove(_projects, { '_id': id });
-    // remove opt action from queue
+  deleteProject: function(id, actionId) {
+    let index = this.state.projects.findIndex((project) => { 
+      return project.id === id;
+    });
+    this.state.projects = this.state.projects.delete(index);
+    _.remove(actionQueue, { id: actionId });
     this.hasChanged();
   },
-  updateProject: function(project) {
-    var elementIndex = _.findIndex(_projects, function(proj) {
+  updateProject: function(project, actionId) {
+    let elementIndex = _.findIndex(_projects, function(proj) {
       return proj._id === project._id;
     });
 
-    _projects[elementIndex] = project;
-    // remove opt action from queue
+    this.state.projects = this.state.projects.set(elementIndex, project);
+
+    _.remove(actionQueue, { id: actionId });
     this.hasChanged();
-  },
-  getProject: function(id) {
-    this.applyUpdates();
-    return _.cloneDeep(_.find(_projects, { '_id': id }));
-  },
-  getProjects: function() {
-    this.applyUpdates();
-    return _projects;
-  },
-  applyUpdates: function() {
-    _projects = this.state.projects.toJS();
-    console.log('action queue', actionQueue);
-    actionQueue.forEach(function(element) {
-      element.cb(element.payload);
-    });
   },
   opt_createProject: function(action) {
     actionQueue.push({
@@ -78,19 +76,36 @@ var TaskStore = Marty.createStore({
     });
     this.hasChanged();
   },
-  opt_deleteProject: () => {
+  opt_deleteProject: function(action) {
+    actionQueue.push({
+      id: action.uid, 
+      cb: deleteProject,
+      payload: action.payload
+    });
+    this.hasChanged();
   },
-  opt_updateProject: () => {
-
+  opt_updateProject: function(action) {
+    actionQueue.push({
+      id: action.uid, 
+      cb: updateProject,
+      payload: action.payload
+    });
+    this.hasChanged();
   },
-  queueAdd: () => {
-
+  getProject: function(id) {
+    this.applyUpdates();
+    return _.cloneDeep(_.find(_projects, { 'id': id }));
   },
-  queueDelete: () => {
-
+  getProjects: function() {
+    this.applyUpdates();
+    return _projects;
   },
-  queueUpdate: () => {
-
+  applyUpdates: function() {
+    _projects = this.state.projects.toJS();
+    console.log('action queue', actionQueue);
+    actionQueue.forEach(function(action) {
+      action.cb(action.payload);
+    });
   }
 });
 

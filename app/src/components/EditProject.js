@@ -11,7 +11,15 @@ var md5 = require('MD5');
 var Marty = require('marty');
 
 var ProjectState = Marty.createStateMixin({
-  listenTo: [ TaskStore ]
+  listenTo: [ TaskStore ],
+  getState: function () {
+    var project = TaskStore.getProject(this.getParams().id);
+    var tasks = project.tasks;
+    return {
+      project: project,
+      tasks: tasks
+    };
+  }
 });
 
 var EditProject = React.createClass({
@@ -31,21 +39,13 @@ var EditProject = React.createClass({
     e.preventDefault();
     var project = {
       _id: this.state.project._id,
+      id: this.state.project.id,
       title: this.state.project.title,
       tasks: this.state.tasks
     };
 
     TaskViewActions.updateProject(project);
     this.transitionTo('home');
-  },
-
-  getInitialState: function() {
-    var project = TaskStore.getProject(this.getParams().id);
-    var tasks = project.tasks;
-    return {
-      project: project,
-      tasks: tasks
-    };
   },
 
   render: function() {

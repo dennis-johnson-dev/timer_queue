@@ -17,15 +17,23 @@ var TaskViewActions = Marty.createActionCreators({
   }),
 
   deleteProject: TaskConstants.OPT_DELETE_PROJECT(function(id) {
-    this.dispatch(id);
+    var action = {
+      payload: id,
+      uid: _.uniqueId()
+    };
+    this.dispatch(action);
     
-    AppAPI.deleteProject(id);
+    AppAPI.deleteProject(id, action.uid);
   }),
 
   updateProject: TaskConstants.OPT_UPDATE_PROJECT(function(project) {
-    this.dispatch(project);
+    var action = {
+      payload: project,
+      uid: _.uniqueId()
+    };
+    this.dispatch(action);
     
-    AppAPI.updateProject(project);
+    AppAPI.updateProject(project, action.uid);
   })
 });
 

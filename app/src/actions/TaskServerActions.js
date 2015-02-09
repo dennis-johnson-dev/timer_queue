@@ -8,12 +8,12 @@ var TaskServerActions = Marty.createActionCreators({
     this.dispatch(project, uid);
   }),
 
-  deleteProject: TaskConstants.DELETE_PROJECT(function(id) {
-    this.dispatch(id);
+  deleteProject: TaskConstants.DELETE_PROJECT(function(id, uid) {
+    this.dispatch(id, uid);
   }),
 
-  updateProject: TaskConstants.UPDATE_PROJECT(function(project) {
-    this.dispatch(project);
+  updateProject: TaskConstants.UPDATE_PROJECT(function(project, uid) {
+    this.dispatch(project, uid);
   }),
 
   receiveProjects: TaskConstants.RECEIVE_PROJECTS(function(projects) {

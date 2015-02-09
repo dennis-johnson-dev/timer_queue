@@ -25,7 +25,6 @@ var CreateProject = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var project = {
-      _id: md5(Object.keys(this.state.tasks).toString() + Date.now()),
       id: md5(Object.keys(this.state.tasks).toString() + Date.now()) + 2,
       title: this.refs.projectTitle.getDOMNode().value,
       tasks: this.state.tasks

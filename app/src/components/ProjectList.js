@@ -8,20 +8,19 @@ var Link = Router.Link;
 var Marty = require('marty');
 
 var ProjectState = Marty.createStateMixin({
-  listenTo: [ TaskStore ]
+  listenTo: [ TaskStore ],
+  getState: function () {
+    return {
+      edit: false,
+      projects: TaskStore.getProjects()
+    };
+  }
 });
 
 var ProjectList = React.createClass({
   displayName: 'ProjectList',
 
   mixins: [ Navigation, ProjectState ],
-
-  getInitialState: function() {
-    return {
-      edit: false,
-      projects: TaskStore.getProjects()
-    };
-  },
 
   render: function() {
     var me = this;
@@ -35,12 +34,12 @@ var ProjectList = React.createClass({
           {
             this.state.projects.map(function(project) {
               var editBtns = <div className="editBtns">
-                               <button onClick={ me._onDelete } value={ project._id }>Delete</button>
-                               <button onClick={ me._onEdit } value={ project._id }>Edit</button>
+                               <button onClick={ me._onDelete } value={ project.id }>Delete</button>
+                               <button onClick={ me._onEdit } value={ project.id }>Edit</button>
                              </div>
               var btnContent = me.state.edit ? editBtns : '';
               return (
-                <Link to="play" className="list-group-item" key={ project._id } params={{ id: project._id }}>
+                <Link to="play" className="list-group-item" key={ project.id } params={{ id: project.id }}>
                   <div className="project-title">{ project.title }</div>
                   <div className="project-maintenance">{ btnContent}</div>    
                 </Link>

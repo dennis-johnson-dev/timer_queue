@@ -30,19 +30,19 @@ module.exports = {
       });
   },
 
-  deleteProject: (id) => {
+  deleteProject: (id, actionId) => {
     request
       .del('/api/projects/' + id)
       .end(function(err, res) {
         if (err) {
           console.log(err);
         } else {
-          TaskServerActions.deleteProject(id);
+          TaskServerActions.deleteProject(id, actionId);
         }
       });
   },
 
-  updateProject: (project) => {
+  updateProject: (project, actionId) => {
     request
       .put('/api/projects/' + project._id)
       .send(project)
@@ -50,7 +50,7 @@ module.exports = {
         if (err) {
           console.log(err);
         } else {
-          TaskServerActions.updateProject(project);
+          TaskServerActions.updateProject(project, actionId);
         }
       });
   }

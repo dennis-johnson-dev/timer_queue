@@ -111,7 +111,7 @@ router.route('/projects/:id')
 
   .delete (req, res) ->
     Project.remove({
-      _id: req.params.id
+      id: req.params.id
     }, (err) ->
       if err
         res.send err
