@@ -117,6 +117,7 @@ var TaskStore = Marty.createStore({
     this.hasChanged();
   },
   _createProjectChange: function(project) {
+    console.log('creating project on the view');
     this.state.projectChange = this.state.projectChange.push(project);
   },
   _deleteProjectChange: function(id) {
