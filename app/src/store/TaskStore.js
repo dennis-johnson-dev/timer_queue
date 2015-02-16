@@ -38,7 +38,6 @@ var TaskStore = Marty.createStore({
       cb: this._createProjectChange.bind(this),
       payload: project
     });
-    console.log('action queue in viewCreate ', actionQueue);
 
     this._createProjectChange(project);
     this.hasChanged();

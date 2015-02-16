@@ -6,6 +6,7 @@ var Marty = require('marty');
 var TaskServerActions = Marty.createActionCreators({
 
   createProject: TaskConstants.CREATE_PROJECT(function(project, uid) {
+    console.log('server create project action');
     this.dispatch(project, uid);
   }),
 
