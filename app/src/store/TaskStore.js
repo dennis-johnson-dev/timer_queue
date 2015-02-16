@@ -40,7 +40,6 @@ var TaskStore = Marty.createStore({
     });
 
     this._createProjectChange(project);
-    this.hasChanged();
   },
   viewDeleteProject: function(id, actionId) {
     actionQueue.push({
@@ -50,7 +49,6 @@ var TaskStore = Marty.createStore({
     });
 
     this._deleteProjectChange(id);
-    this.hasChanged();
   },
   viewUpdateProject: function(project, actionId) {
     actionQueue.push({
@@ -60,7 +58,6 @@ var TaskStore = Marty.createStore({
     });
 
     this._updateProjectChange(project);
-    this.hasChanged();
   },
   createProject: function(project, actionId) {
     this.state.projects = this.state.projects.push(project);
