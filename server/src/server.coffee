@@ -53,6 +53,7 @@ router.route('/projects')
     project.id = req.body.id
     project.tasks = _.map(req.body.tasks, (task) ->
       taskModel = new Task()
+      taskModel.id = task.id
       taskModel.time = task.time
       taskModel.title = task.title
       taskModel.desc = task.desc
@@ -95,6 +96,7 @@ router.route('/projects/:id')
       project.title = req.body.title
       project.tasks = _.map(req.body.tasks, (task) ->
         taskModel = new Task()
+        taskModel.id = task.id
         taskModel.time = task.time
         taskModel.title = task.title
         taskModel.desc = task.desc

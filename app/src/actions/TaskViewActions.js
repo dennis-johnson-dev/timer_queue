@@ -6,32 +6,32 @@ var _ = require('lodash');
 
 var TaskViewActions = Marty.createActionCreators({
 
-  createProject: TaskConstants.OPT_CREATE_PROJECT(function(project) {
+  createProject: TaskConstants.VIEW_CREATE_PROJECT(function(project) {
     var action = {
       payload: project,
       uid: _.uniqueId()
-    }
-    this.dispatch(action);
+    };
+    this.dispatch(action.payload, action.uid);
 
     AppAPI.createProject(project, action.uid);
   }),
 
-  deleteProject: TaskConstants.OPT_DELETE_PROJECT(function(id) {
+  deleteProject: TaskConstants.VIEW_DELETE_PROJECT(function(id) {
     var action = {
       payload: id,
       uid: _.uniqueId()
     };
-    this.dispatch(action);
+    this.dispatch(action.payload, action.uid);
     
     AppAPI.deleteProject(id, action.uid);
   }),
 
-  updateProject: TaskConstants.OPT_UPDATE_PROJECT(function(project) {
+  updateProject: TaskConstants.VIEW_UPDATE_PROJECT(function(project) {
     var action = {
       payload: project,
       uid: _.uniqueId()
     };
-    this.dispatch(action);
+    this.dispatch(action.payload, action.uid);
     
     AppAPI.updateProject(project, action.uid);
   })

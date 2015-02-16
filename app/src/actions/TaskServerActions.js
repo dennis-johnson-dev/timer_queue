@@ -1,5 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TaskConstants = require('../constants/TaskConstants');
+var AppConstants = require('../constants/AppConstants');
 var Marty = require('marty');
 
 var TaskServerActions = Marty.createActionCreators({
@@ -20,8 +21,8 @@ var TaskServerActions = Marty.createActionCreators({
     this.dispatch(projects);
   }),
 
-  error: TaskConstants.ERROR(function(id) {
-    this.dispatch(id);
+  error: AppConstants.ERROR(function(actionId) {
+    this.dispatch(actionId);
   })
 
 });

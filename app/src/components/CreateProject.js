@@ -15,7 +15,9 @@ var CreateProject = React.createClass({
   mixins: [ Navigation ],
 
   getTaskModel: function() {
+    var id = md5(Date.now() + 2);
     return {
+      id: id,
       title: '',
       time: 0,
       desc: ''
@@ -25,7 +27,7 @@ var CreateProject = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var project = {
-      id: md5(Object.keys(this.state.tasks).toString() + Date.now()) + 2,
+      id: md5(Object.keys(this.state.tasks).toString() + Date.now()),
       title: this.refs.projectTitle.getDOMNode().value,
       tasks: this.state.tasks
     };

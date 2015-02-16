@@ -18,7 +18,7 @@ module.exports =  {
       { 
         test: /\.js$/, 
         exclude: /node_modules/, 
-        loader: '6to5-loader?runtime'
+        loader: 'react-hot!6to5-loader?runtime'
       }
     ]
   },

@@ -28,7 +28,9 @@ var EditProject = React.createClass({
   mixins: [ Router.State, Navigation, ProjectState ],
 
   getTaskModel: function() {
+    var id = md5(Date.now() + 2);
     return {
+      id: id,
       title: '',
       time: 0,
       desc: ''

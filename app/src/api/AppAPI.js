@@ -1,4 +1,5 @@
 var TaskServerActions = require('../actions/TaskServerActions');
+var AppActions = require('../actions/AppActions');
 var request = require('superagent');
 
 module.exports = {
@@ -8,6 +9,7 @@ module.exports = {
         .get('/api/projects')
         .end(function(err, res) {
           if (err) {
+            TaskServerActions.error(actionId);
             reject(err);
           } else {
             TaskServerActions.receiveProjects(res.body);
@@ -23,8 +25,7 @@ module.exports = {
       .send(project)
       .end(function(err, res) {
         if (err) {
-          console.log(err);
-          // invalidate action from queue
+          // figure out how to handle error handling
           TaskServerActions.error(actionId);
         } else {
           TaskServerActions.createProject(project, actionId);
@@ -37,7 +38,7 @@ module.exports = {
       .del('/api/projects/' + id)
       .end(function(err, res) {
         if (err) {
-          console.log(err);
+          TaskServerActions.error(actionId);
         } else {
           TaskServerActions.deleteProject(id, actionId);
         }
@@ -50,7 +51,7 @@ module.exports = {
       .send(project)
       .end(function(err, res) {
         if (err) {
-          console.log(err);
+          TaskServerActions.error(actionId);
         } else {
           TaskServerActions.updateProject(project, actionId);
         }
