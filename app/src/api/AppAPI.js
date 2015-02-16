@@ -20,10 +20,12 @@ module.exports = {
   },
 
   createProject: (project, actionId) => {
+    console.log('about to post');
     request
       .post('/api/projects')
       .send(project)
       .end(function(err, res) {
+        console.log(res);
         if (err) {
           // figure out how to handle error handling
           TaskServerActions.error(actionId);

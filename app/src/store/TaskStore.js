@@ -61,6 +61,7 @@ var TaskStore = Marty.createStore({
   },
   createProject: function(project, actionId) {
     this.state.projects = this.state.projects.push(project);
+    console.log(actionId);
     _.remove(actionQueue, { id: actionId });
     console.log('creating project from server');
     this.applyUpdates();
@@ -99,6 +100,7 @@ var TaskStore = Marty.createStore({
   },
   applyUpdates: function() {
     console.log('applying updates');
+    debugger;
     if (!Immutable.is(this.state.projectChange, this.state.projects)) {
       console.log(this.state.projectChange, this.state.projects);
       this.state.projectChange = this.state.projects;
