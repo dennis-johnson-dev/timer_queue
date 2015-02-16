@@ -28,6 +28,7 @@ module.exports = {
           // figure out how to handle error handling
           TaskServerActions.error(actionId);
         } else {
+          console.log('stuck on server part');
           TaskServerActions.createProject(project, actionId);
         }
       });
