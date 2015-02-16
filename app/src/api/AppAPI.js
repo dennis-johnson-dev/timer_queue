@@ -28,7 +28,6 @@ module.exports = {
           // figure out how to handle error handling
           TaskServerActions.error(actionId);
         } else {
-          console.log('response is good');
           TaskServerActions.createProject(project, actionId);
         }
       });

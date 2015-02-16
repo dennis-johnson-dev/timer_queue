@@ -78,7 +78,7 @@ var TaskStore = Marty.createStore({
   },
   updateProject: function(project, actionId) {
     let index = this.state.projects.findIndex((projectChange) => {
-      return projectChange._id === project.id;
+      return projectChange.id === project.id;
     });
 
     this.state.projects = this.state.projects.set(index, project);
