@@ -102,6 +102,7 @@ var TaskStore = Marty.createStore({
   applyUpdates: function() {
     console.log('applying updates');
     if (!Immutable.is(this.state.projectChange, this.state.projects)) {
+      console.log(this.state.projectChange, this.state.projects);
       this.state.projectChange = this.state.projects;
       actionQueue.forEach((action) => {
         action.cb(action.payload);
