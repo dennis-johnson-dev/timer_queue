@@ -8,7 +8,7 @@ module.exports = {
       request
         .get('/api/projects')
         .end(function(err, res) {
-          if (err) {
+          if (res.status !== 200) {
             TaskServerActions.error(actionId);
             reject(err);
           } else {
@@ -20,17 +20,15 @@ module.exports = {
   },
 
   createProject: (project, actionId) => {
-    console.log('about to post');
     request
       .post('/api/projects')
       .send(project)
       .end(function(err, res) {
-        console.log(res);
-        if (err) {
+        if (res.status !== 200) {
           // figure out how to handle error handling
           TaskServerActions.error(actionId);
         } else {
-          console.log('stuck on server part');
+          console.log('response is good');
           TaskServerActions.createProject(project, actionId);
         }
       });
@@ -40,7 +38,7 @@ module.exports = {
     request
       .del('/api/projects/' + id)
       .end(function(err, res) {
-        if (err) {
+        if (res.status !== 200) {
           TaskServerActions.error(actionId);
         } else {
           TaskServerActions.deleteProject(id, actionId);
@@ -53,7 +51,7 @@ module.exports = {
       .put('/api/projects/' + project._id)
       .send(project)
       .end(function(err, res) {
-        if (err) {
+        if (res.status !== 200) {
           TaskServerActions.error(actionId);
         } else {
           TaskServerActions.updateProject(project, actionId);

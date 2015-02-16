@@ -13,7 +13,6 @@ var TaskViewActions = Marty.createActionCreators({
     };
     this.dispatch(action.payload, action.uid);
 
-    console.log('about to create in API');
     AppAPI.createProject(project, action.uid);
   }),
 
