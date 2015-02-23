@@ -2,7 +2,7 @@
 var React = require('react');
 var _ = require('lodash');
 var TaskViewActions = require('../actions/TaskViewActions');
-var TaskStore = require('../store/TaskStore');
+var TaskStore = require('../stores/TaskStore');
 var TaskList = require('./TaskList');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -40,7 +40,6 @@ var EditProject = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var project = {
-      _id: this.state.project._id,
       id: this.state.project.id,
       title: this.state.project.title,
       tasks: this.state.tasks

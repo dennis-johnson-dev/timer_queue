@@ -21,7 +21,7 @@ var TaskServerActions = Marty.createActionCreators({
     this.dispatch(projects);
   }),
 
-  error: AppConstants.ERROR(function(actionId) {
+  error: AppConstants.ERROR(function(msg, actionId) {
     this.dispatch(actionId);
   })
 

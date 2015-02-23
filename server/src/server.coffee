@@ -42,10 +42,6 @@ app.get('/', (req, res) ->
 
 # /api routes
 
-router.get('/', (req, res) ->
-  res.json({ message: 'Awesome, fuck yeah!' })
-)
-
 router.route('/projects')
   .post (req,res) ->
     project = new Project()
@@ -80,7 +76,7 @@ router.route('/projects')
 
 router.route('/projects/:id')
   .get (req, res) ->
-    Project.findById(req.params.id, (err, project) ->
+    Project.findOne({ id: req.params.id }, (err, project) ->
       if err
         res.send err
         return
@@ -89,7 +85,7 @@ router.route('/projects/:id')
   )
 
   .put (req, res) ->
-    Project.findById(req.params.id, (err, project) ->
+    Project.findOne({ id: req.params.id }, (err, project) ->
       if err
         res.send err
 

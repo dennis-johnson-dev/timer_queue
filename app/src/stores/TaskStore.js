@@ -19,16 +19,16 @@ var TaskStore = Marty.createStore({
     createProject: TaskConstants.CREATE_PROJECT,
     deleteProject: TaskConstants.DELETE_PROJECT,
     updateProject: TaskConstants.UPDATE_PROJECT,
-    error: AppConstants.ERROR
+    error: AppConstants.RESOLVE
   },
   getInitialState: function() {
     return {
-      projects: Immutable.List(),
-      projectChange: Immutable.List()
+      projects: new Immutable.List(),
+      projectChange: new Immutable.List()
     };
   },
   setProjects: function(projects) {
-    this.state.projects = Immutable.List(projects);
+    this.state.projects = new Immutable.List(projects);
     this.applyUpdates();
     this.hasChanged();
   },
@@ -39,7 +39,7 @@ var TaskStore = Marty.createStore({
       payload: project
     });
 
-    this._createProjectChange(project);
+    this._createProjectChange(project, this.state.projectChange);
   },
   viewDeleteProject: function(id, actionId) {
     actionQueue.push({
@@ -70,7 +70,9 @@ var TaskStore = Marty.createStore({
       return project.id === id;
     });
 
-    this.state.projects = this.state.projects.delete(index);
+    if (index > -1) {
+      this.state.projects = this.state.projects.delete(index);
+    }
 
     _.remove(actionQueue, { id: actionId });
     this.applyUpdates();
@@ -81,7 +83,9 @@ var TaskStore = Marty.createStore({
       return projectChange.id === project.id;
     });
 
-    this.state.projects = this.state.projects.set(index, project);
+    if (index > -1 ) {
+      this.state.projects = this.state.projects.set(index, project);
+    }
 
     _.remove(actionQueue, { id: actionId });
     this.applyUpdates();
@@ -91,14 +95,15 @@ var TaskStore = Marty.createStore({
     var index = this.state.projectChange.findIndex(function(project) {
       return project.id === id;
     });
-    return this.state.projectChange.get(index);
+  
+    return _.cloneDeep(this.state.projectChange.get(index));
   },
   getProjects: function() {
     return this.state.projectChange.toJS();
   },
-  applyUpdates: function() {
+  applyUpdates: function(force) {
     console.log('applying updates');
-    if (!Immutable.is(this.state.projectChange, this.state.projects)) {
+    if (force || !Immutable.is(this.state.projectChange, this.state.projects)) {
       this.state.projectChange = this.state.projects;
       actionQueue.forEach((action) => {
         action.cb(action.payload);
@@ -108,25 +113,31 @@ var TaskStore = Marty.createStore({
       console.log('no update needed');
     }
   },
-  error: function(actionId) {
-    _.remove(actionQueue, { id: actionId });
-    this.applyUpdates();
+  error: function(action) {
+    _.remove(actionQueue, { id: action.actionId });
+    this.applyUpdates(true);
     this.hasChanged();
   },
-  _createProjectChange: function(project) {
+  _createProjectChange: function(project, source) {
     this.state.projectChange = this.state.projectChange.push(project);
   },
   _deleteProjectChange: function(id) {
     let index = this.state.projectChange.findIndex((projectChange) => {
       return projectChange.id === id;
     });
-    this.state.projectChange = this.state.projectChange.delete(index);
+
+    if (index > -1) {
+      this.state.projectChange = this.state.projectChange.delete(index);
+    }
   },
   _updateProjectChange: function(project) {
     let index = this.state.projectChange.findIndex((projectChange) => {
       return projectChange.id === project.id;
     });
-    this.state.projectChange = this.state.projectChange.set(index, project);
+  
+    if (index > -1) {
+      this.state.projectChange = this.state.projectChange.set(index, project);
+    }
   }
 });
 

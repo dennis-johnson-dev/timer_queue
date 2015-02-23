@@ -1,7 +1,9 @@
 var Marty = require('marty');
 
 var AppConstants = Marty.createConstants([
-  'ERROR'
+  'ERROR',
+  'REMOVE',
+  'RESOLVE'
 ]);
 
 module.exports = AppConstants;

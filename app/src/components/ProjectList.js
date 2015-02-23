@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var React = require('react');
-var TaskStore = require('../store/TaskStore');
+var TaskStore = require('../stores/TaskStore');
 var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
