@@ -1,5 +1,6 @@
 jest.dontMock('../src/components/Site');
 jest.dontMock('../../test_utils/unit-test-handlers');
+jest.dontMock('util');
 
 var React = require('react/addons');
 var Router = require('react-router');

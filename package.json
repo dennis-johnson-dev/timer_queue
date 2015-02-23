@@ -56,7 +56,8 @@
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/lodash",
       "<rootDir>/node_modules/react-router",
-      "<rootDir>/node_modules/react-test-utilities"
+      "<rootDir>/node_modules/react-test-utilities",
+      "<rootDir>/node_modules/marty"
     ]
   },
   "repository": {
