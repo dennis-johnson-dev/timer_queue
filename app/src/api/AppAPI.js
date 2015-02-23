@@ -8,7 +8,7 @@ module.exports = {
       request
         .get('/api/projects')
         .end(function(err, res) {
-          if (err || res.status !== 200) {
+          if (err) {
             AppActions.error('Unable to get project', actionId);
             reject(err);
           } else {
@@ -24,7 +24,7 @@ module.exports = {
       .post('/api/projects')
       .send(project)
       .end(function(err, res) {
-        if (err || res.status !== 200) {
+        if (err) {
           AppActions.error('Unable to creat project', actionId);
         } else {
           TaskServerActions.createProject(project, actionId);
@@ -36,7 +36,7 @@ module.exports = {
     request
       .del('/api/projects/' + id)
       .end(function(err, res) {
-        if (err || res.status !== 200) {
+        if (err) {
           AppActions.error('Unable to delete project', actionId);
         } else {
           TaskServerActions.deleteProject(id, actionId);
@@ -49,7 +49,7 @@ module.exports = {
       .put('/api/projects/' + project.id)
       .send(project)
       .end(function(err, res) {
-        if (err || res.status !== 200) {
+        if (err) {
           AppActions.error('Unable to update project', actionId);
         } else {
           TaskServerActions.updateProject(project, actionId);
