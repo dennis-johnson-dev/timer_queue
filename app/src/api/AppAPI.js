@@ -1,59 +1,78 @@
 var TaskServerActions = require('../actions/TaskServerActions');
 var AppActions = require('../actions/AppActions');
-var request = require('superagent');
+var Marty = require('marty');
 
-module.exports = {
-  init: function() {
+var AppAPI = Marty.createStateSource({
+  type: 'http',
+  init() {
+    var options = {
+      url: '/api/projects',
+      method: 'GET'
+    };
+
     return new Promise((resolve, reject) => {
-      request
-        .get('/api/projects')
-        .end(function(err, res) {
-          if (res.err) {
-            AppActions.error('Unable to get project', actionId);
-            reject(res.err);
-          } else {
-            TaskServerActions.receiveProjects(res.body);
-            resolve();
-          }
-        });
+      this.request(options).then(
+        function(res) {
+          TaskServerActions.receiveProjects(res.body);
+          resolve();
+        },
+        function(err) {
+          AppActions.error('Unable to get project');
+          reject(err);
+        }
+      );
     });
   },
 
-  createProject: (project, actionId) => {
-    request
-      .post('/api/projects')
-      .send(project)
-      .end(function(err, res) {
-        if (res.err) {
-          AppActions.error('Unable to creat project', actionId);
-        } else {
-          TaskServerActions.createProject(project, actionId);
-        }
-      });
+  createProject(project, actionId) {
+    var options = {
+      url: '/api/projects',
+      method: 'POST',
+      body: project
+    };
+
+    this.request(options).then(
+      function() {
+        TaskServerActions.createProject(project, actionId);
+      },
+      function() {
+        AppActions.error('Unable to creat project', actionId);
+      }
+    );
   },
 
-  deleteProject: (id, actionId) => {
-    request
-      .del('/api/projects/' + id)
-      .end(function(err, res) {
-        if (res.err) {
-          AppActions.error('Unable to delete project', actionId);
-        } else {
-          TaskServerActions.deleteProject(id, actionId);
-        }
-      });
+  deleteProject(id, actionId) {
+    var options = {
+      url: '/api/projects/' + id,
+      method: 'DELETE'
+    };
+
+    this.request(options).then(
+      function() {
+        TaskServerActions.deleteProject(id, actionId);
+      },
+      function() {
+        AppActions.error('Unable to delete project', actionId);
+      }
+    );
   },
 
-  updateProject: (project, actionId) => {
-    request
-      .put('/api/projects/' + project.id)
-      .send(project)
-      .end(function(err, res) {
-        if (res.err) {
-          AppActions.error('Unable to update project', actionId);
-        } else {
-          TaskServerActions.updateProject(project, actionId);
-        }
-      });
+  updateProject(project, actionId) {
+    var options = {
+      url: '/api/projects/' + project.id,
+      method: 'PUT',
+      body: project
+    };
+
+    this.request(options).then(
+      function() {
+        TaskServerActions.updateProject(project, actionId);
+      }, 
+      function () {
+        AppActions.error('Unable to update project', actionId);
+      }
+    );
   }
-};
+});
+
+module.exports = AppAPI;

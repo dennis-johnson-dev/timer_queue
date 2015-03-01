@@ -25,14 +25,16 @@ var routes = [
   </Route>
 ];
 
-AppAPI.init().then(function() {
-  Router.run(routes, function(Handler) {
-    rootInstance = React.render(<Handler/>, document.getElementById('site'));
-  });
-},
-function(err) {
-  console.log('You trucked up');
-});
+AppAPI.init().then(
+  function() {
+    Router.run(routes, function(Handler) {
+      rootInstance = React.render(<Handler/>, document.getElementById('site'));
+    });
+  },
+  function(err) {
+    console.log('You trucked up');
+  }
+);
 
 if (module.hot) {
   require('react-hot-loader/Injection').RootInstanceProvider.injectProvider({

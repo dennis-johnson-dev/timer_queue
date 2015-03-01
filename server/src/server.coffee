@@ -6,6 +6,7 @@ http = require 'http'
 mongoose = require 'mongoose'
 path = require 'path'
 compression = require('compression')
+_ = require('lodash')
 
 setInterval(() ->
   http.get('http://timerqueue.herokuapp.com')
@@ -58,7 +59,7 @@ router.route('/projects')
 
     project.save((err) ->
       if err
-        res.send err
+        res.status(500).send(new Error('Unable to create project'))
         return
 
       res.json({ message: 'Project created!' })
@@ -66,8 +67,9 @@ router.route('/projects')
 
   .get (req, res) ->
     Project.find((err, projects) ->
+      
       if err
-        res.send err
+        res.status(500).send(new Error('Unable to get projects'))
         return
 
       res.setHeader('Cache-Control', 'public, max-age=3155')
@@ -77,8 +79,9 @@ router.route('/projects')
 router.route('/projects/:id')
   .get (req, res) ->
     Project.findOne({ id: req.params.id }, (err, project) ->
-      if err
-        res.send err
+
+      if (_.isNull(project))
+        res.status(404).send(new Error('Unable to get project'))
         return
 
       res.json project
@@ -101,7 +104,7 @@ router.route('/projects/:id')
 
       project.save (err) ->
         if err
-          res.send err
+          res.status(500).send(new Error('Unable to update project'))
           return
 
         res.json({ message: 'Project updated' })
@@ -112,7 +115,7 @@ router.route('/projects/:id')
       id: req.params.id
     }, (err) ->
       if err
-        res.send err
+        res.status(500).send(new Error('Unable to delete project'))
         return
 
       res.json({ message: 'Project deleted!' })
