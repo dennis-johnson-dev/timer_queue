@@ -10,18 +10,14 @@ var AppAPI = Marty.createStateSource({
       method: 'GET'
     };
 
-    return new Promise((resolve, reject) => {
-      this.request(options).then(
-        function(res) {
-          TaskServerActions.receiveProjects(res.body);
-          resolve();
-        },
-        function(err) {
-          AppActions.error('Unable to get project');
-          reject(err);
-        }
-      );
-    });
+    return this.request(options).then(
+      function(res) {
+        TaskServerActions.receiveProjects(res.body);
+      },
+      function(err) {
+        AppActions.error('Unable to get projects');
+      }
+    );
   },
 
   createProject(project, actionId) {
@@ -36,7 +32,7 @@ var AppAPI = Marty.createStateSource({
         TaskServerActions.createProject(project, actionId);
       },
       function() {
-        AppActions.error('Unable to creat project', actionId);
+        AppActions.error('Unable to creat project', actionId, options);
       }
     );
   },
@@ -52,7 +48,7 @@ var AppAPI = Marty.createStateSource({
         TaskServerActions.deleteProject(id, actionId);
       },
       function() {
-        AppActions.error('Unable to delete project', actionId);
+        AppActions.error('Unable to delete project', actionId, options);
       }
     );
   },
@@ -69,9 +65,13 @@ var AppAPI = Marty.createStateSource({
         TaskServerActions.updateProject(project, actionId);
       }, 
       function () {
-        AppActions.error('Unable to update project', actionId);
+        AppActions.error('Unable to update project', actionId, options);
       }
     );
+  },
+
+  request(options) {
+    return this.request(options);
   }
 });
 
