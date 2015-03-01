@@ -33,9 +33,7 @@ module.exports = function(profile) {
     externals: {
       'react': 'React', 
       'react/addons': 'React',
-      'react-router': 'ReactRouter',
-      'es6-promise': 'Promise',
-      'underscore': '_'
+      'react-router': 'ReactRouter'
     },
     resolve: {
       extensions: ['', '.js']
