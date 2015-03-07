@@ -13,10 +13,9 @@ var ENTER_KEY_CODE = 13;
 var ProjectState = Marty.createStateMixin({
   listenTo: [ TaskStore ],
   getState: function () {
-    var project = new Immutable.Map(TaskStore.getProject(this.getParams().id).result);
     return {
       play: true,
-      project: project
+      project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id)))
     };
   }
 });
@@ -34,7 +33,11 @@ var CountDownContainer = React.createClass({
   },
 
   reset: function() {
-    this.setState(this.getState());
+    this.setState(
+      { 
+        project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id)))
+      }
+    );
   }
   
 });

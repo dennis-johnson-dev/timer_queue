@@ -44,21 +44,18 @@ var CountDown = React.createClass({
     if (this.state.tasks.count() > 0 && task.time > 1) {
 
       this.setState({ 
-        tasks: this.state.tasks.update(
-          0, (task) => {
-           task.time -=1;
-           return task;
-          }
-        ) 
+        tasks: this.state.tasks.update(0, 
+                                       (task) => {
+                                         task.time -=1;
+                                         return task;
+                                       }
+                                      ) 
       });
 
     } else if (this.state.tasks.count() === 0) {
       this.stop();
     } else {
       this.setState({ tasks: this.state.tasks.shift() });
-      if (this.state.tasks.count() === 0) {
-        this.stop();
-      }
     }
   },
   render: function() {
