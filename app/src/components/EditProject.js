@@ -14,7 +14,10 @@ var ProjectState = Marty.createStateMixin({
   listenTo: [ TaskStore ],
   getState: function () {
     var project = TaskStore.getProject(this.getParams().id);
-    var tasks = project.tasks;
+    var tasks;
+    if (project.done) {
+      tasks = project.result.tasks;
+    }
     return {
       project: project,
       tasks: tasks

@@ -3,6 +3,7 @@ var TaskConstants = require('../constants/TaskConstants');
 var _ = require('lodash');
 var Marty = require('marty');
 var Immutable = require('immutable');
+var OptimisticStore = require('./OptimisticStore');
 
 var CHANGE_EVENT = 'change';
 
@@ -10,7 +11,7 @@ var CHANGE_EVENT = 'change';
 var actionQueue = [];
 
 var TaskStore = Marty.createStore({
-  displayName: 'tasks',
+  displayName: 'Task Store',
   handlers: {
     setProjects: TaskConstants.RECEIVE_PROJECTS,
     viewCreateProject: TaskConstants.VIEW_CREATE_PROJECT,
@@ -92,11 +93,22 @@ var TaskStore = Marty.createStore({
     this.hasChanged();
   },
   getProject: function(id) {
-    var index = this.state.projectChange.findIndex(function(project) {
-      return project.id === id;
+    return this.fetch({
+      id: id,
+      locally: function() {
+        var optimisticProject = OptimisticStore.getProject(id);
+        if (_.isNull(optimisticProject)) {
+          var index = this.state.projects.findIndex(function(project) {
+            return project.id === id;
+          });
+
+          return _.cloneDeep(this.state.projects.get(index));
+        } else {
+          console.log('optimistic record');
+          return optimisticProject;
+        }
+      }
     });
-  
-    return _.cloneDeep(this.state.projectChange.get(index));
   },
   getProjects: function() {
     return this.state.projectChange.toJS();
