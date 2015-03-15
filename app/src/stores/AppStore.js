@@ -1,4 +1,5 @@
 var AppConstants = require('../constants/AppConstants');
+var TaskConstants = require('../constants/TaskConstants');
 var _ = require('lodash');
 var Marty = require('marty');
 var Immutable = require('immutable');
@@ -9,7 +10,13 @@ var AppStore = Marty.createStore({
   displayName: 'App',
   handlers: {
     setError: AppConstants.ERROR,
-    removeError: [ AppConstants.REMOVE, AppConstants.RESOLVE ]
+    removeError: [ AppConstants.REMOVE, AppConstants.RESOLVE ],
+    removeErrors: [
+      TaskConstants.CREATE_PROJECT,
+      TaskConstants.DELETE_PROJECT,
+      TaskConstants.UPDATE_PROJECT,
+      TaskConstants.REMOVE_ERRORS
+    ]
   },
   getInitialState: function() {
     return {
@@ -17,7 +24,7 @@ var AppStore = Marty.createStore({
     };
   },
   getErrors: function() {
-    return this.state.errors.toJS();
+    return this.state.errors.count();
   },
   setError: function(action) {
     this.state.errors = this.state.errors.push({
@@ -33,6 +40,10 @@ var AppStore = Marty.createStore({
     });
 
     this.state.errors = this.state.errors.delete(index);
+    this.hasChanged();
+  },
+  removeErrors: function() {
+    this.state.errors = new Immutable.List();
     this.hasChanged();
   }
 });

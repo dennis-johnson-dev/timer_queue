@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react/addons');
 var _ = require('lodash');
 var TaskStore = require('../stores/TaskStore');

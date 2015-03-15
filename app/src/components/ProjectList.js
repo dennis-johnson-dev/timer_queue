@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
 var React = require('react');
 var TaskStore = require('../stores/TaskStore');
+var OptimisticStore = require('../stores/OptimisticStore');
 var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -12,7 +12,7 @@ var ProjectState = Marty.createStateMixin({
   getState: function () {
     return {
       edit: false,
-      projects: TaskStore.getProjects()
+      projects: TaskStore.getProjects().result
     };
   }
 });
