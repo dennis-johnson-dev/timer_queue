@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
@@ -7,6 +6,7 @@ var fastclick = require('fastclick');
 var Marty = require('marty');
 var AppStore = require('../stores/AppStore');
 var AppActions = require('../actions/AppActions');
+var TaskViewActions = require('../actions/TaskViewActions');
 var Immutable = require('immutable');
 
 var AppState = Marty.createStateMixin({
@@ -31,24 +31,7 @@ var Site = React.createClass({
     var notification = null;
     var errors = this.state.errors || null;
     if (errors) {
-      notification = errors.map((error, index) => {
-        if (index === 0) {
-          return (
-            <p key={ error.id }>{ error.msg }
-              <button data-errorid={ error.id } data-actionid={ error.actionId } onClick={ this._onRemoveError }> Continue</button>
-              <button data-errorid={ error.id } data-actionid={ error.actionId } onClick={ this._onErrorResolve }> Undo</button>
-            </p>
-          );
-        } else if (index === 1) {
-          return (
-            <div>
-              <p key={ error.id }>{ error.msg }</p>
-            </div>
-          )
-        } else {
-          return <p>...</p>;
-        }
-      });
+      notification = <p>An error has occurred <a href="" onClick={ this.retry }>Click to retry</a></p>;
     }
     return (
       <div className="content">
@@ -59,6 +42,11 @@ var Site = React.createClass({
         <RouteHandler />
       </div>
     );
+  },
+
+  retry: function(e) {
+    e.preventDefault();
+    TaskViewActions.retry();
   },
 
   _onRemoveError: function(e) {

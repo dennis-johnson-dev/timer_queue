@@ -23,6 +23,14 @@ var TaskServerActions = Marty.createActionCreators({
 
   error: AppConstants.ERROR(function(msg, actionId) {
     this.dispatch(actionId);
+  }),
+
+  flushRequests: TaskConstants.FLUSH_REQUESTS(function() {
+    this.dispatch();
+  }),
+
+  removeErrors: TaskConstants.REMOVE_ERRORS(function(results) {
+    this.dispatch(results);
   })
 
 });

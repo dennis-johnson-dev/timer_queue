@@ -1,9 +1,5 @@
 var webpack = require('webpack');
 
-var runtime = new webpack.ProvidePlugin({
-  to5Runtime: "imports?global=>{}!exports?global.to5Runtime!6to5/runtime"
-});
-
 module.exports =  {
   entry: {
     App: ['webpack/hot/dev-server', './app/src/App.js']
@@ -18,24 +14,20 @@ module.exports =  {
       { 
         test: /\.js$/, 
         exclude: /node_modules/, 
-        loader: 'react-hot!6to5-loader?runtime'
+        loader: 'react-hot!babel-loader?experimental&optional=runtime'
       }
     ]
   },
   externals: {
     'react': 'React', 
     'react/addons': 'React',
-    'react-router': 'ReactRouter',
-    'es6-promise': 'Promise',
-    'underscore': '_'
+    'react-router': 'ReactRouter'
   },
   resolve: {
     moduleDirectories: ['node_modules', 'app/src'],
     extensions: ['', '.js']
   },
-  plugins: [
-    runtime
-  ],
+  plugins: [],
   devtool: '#inline-source-map'
 };
 

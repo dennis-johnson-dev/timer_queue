@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
 var React = require('react');
 var TaskStore = require('../stores/TaskStore');
+var OptimisticStore = require('../stores/OptimisticStore');
 var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
@@ -12,7 +12,7 @@ var ProjectState = Marty.createStateMixin({
   getState: function () {
     return {
       edit: false,
-      projects: TaskStore.getProjects()
+      projects: TaskStore.getProjects().result
     };
   }
 });
@@ -50,10 +50,6 @@ var ProjectList = React.createClass({
         <Link className="project-tools" to="create"><i className="glyphicon glyphicon-plus"></i></Link>
       </div>
     );
-  },
-
-  _onChange: function() {
-    this.setState({ projects: TaskStore.getProjects() });
   },
 
   _onDelete: function(e) {
