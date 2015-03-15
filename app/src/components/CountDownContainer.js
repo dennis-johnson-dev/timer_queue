@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react/addons');
 var _ = require('lodash');
 var TaskStore = require('../stores/TaskStore');
@@ -15,7 +14,7 @@ var ProjectState = Marty.createStateMixin({
   getState: function () {
     return {
       play: true,
-      project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id)))
+      project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id).result))
     };
   }
 });
@@ -35,7 +34,7 @@ var CountDownContainer = React.createClass({
   reset: function() {
     this.setState(
       { 
-        project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id)))
+        project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id).result))
       }
     );
   }

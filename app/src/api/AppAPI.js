@@ -1,7 +1,10 @@
 var TaskServerActions = require('../actions/TaskServerActions');
 var AppActions = require('../actions/AppActions');
 var Marty = require('marty');
+var OptimisticStore = require('../stores/OptimisticStore');
+var Helper = require('./Helper');
 
+var requester;
 var AppAPI = Marty.createStateSource({
   type: 'http',
   init() {
@@ -20,58 +23,58 @@ var AppAPI = Marty.createStateSource({
     );
   },
 
-  createProject(project, actionId) {
-    var options = {
-      url: '/api/projects',
-      method: 'POST',
-      body: project
-    };
-
-    this.request(options).then(
-      function() {
-        TaskServerActions.createProject(project, actionId);
-      },
-      function() {
-        AppActions.error('Unable to creat project', actionId, options);
-      }
-    );
+  createProject(project, actionId, options) {
+    this.flush().then(function() {
+      TaskServerActions.createProject(project, actionId);
+    }, function(err) {
+      AppActions.error('Unable to creat project', actionId, options);
+    });
   },
 
-  deleteProject(id, actionId) {
-    var options = {
-      url: '/api/projects/' + id,
-      method: 'DELETE'
-    };
-
-    this.request(options).then(
-      function() {
-        TaskServerActions.deleteProject(id, actionId);
-      },
-      function() {
-        AppActions.error('Unable to delete project', actionId, options);
-      }
-    );
+  deleteProject(id, actionId, options) {
+    this.flush().then(function() {
+      TaskServerActions.deleteProject(id, actionId);
+    },
+    function() {
+      AppActions.error('Unable to delete project', actionId, options);
+    });
   },
 
-  updateProject(project, actionId) {
-    var options = {
-      url: '/api/projects/' + project.id,
-      method: 'PUT',
-      body: project
-    };
-
-    this.request(options).then(
-      function() {
-        TaskServerActions.updateProject(project, actionId);
-      }, 
-      function () {
-        AppActions.error('Unable to update project', actionId, options);
-      }
-    );
+  updateProject(project, actionId, options) {
+    this.flush().then(function() {
+      TaskServerActions.updateProject(project, actionId);
+    }, 
+    function () {
+      AppActions.error('Unable to update project', actionId, options);
+    });
   },
 
-  request(options) {
-    return this.request(options);
+  flush() {
+    var requests = OptimisticStore.getRequests();
+    var requestQueue = [];
+
+    requests.forEach((request) => {
+      var options = {
+        url: request.url,
+        method: request.method,
+        body: JSON.stringify(request.body),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      };
+
+      if (request.method === 'DELETE') {
+        options.headers = {};
+        options.body = "";
+      }
+
+      requestQueue.push(options);
+    });
+
+    return Helper.wrapper(requestQueue, this.request).then(function() {
+      TaskServerActions.removeErrors();
+    });
   }
 });
 

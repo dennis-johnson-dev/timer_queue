@@ -7,10 +7,6 @@ var uglify = new webpack.optimize.UglifyJsPlugin({
   minimize: true,
 });
 
-var runtime = new webpack.ProvidePlugin({
-  to5Runtime: "imports?global=>{}!exports?global.to5Runtime!6to5/runtime"
-});
-
 module.exports = function(profile) {
   var config = {
     entry: {
@@ -21,7 +17,7 @@ module.exports = function(profile) {
         { 
           test: /\.js$/, 
           exclude: /node_modules/, 
-          loader: '6to5-loader?runtime'
+          loader: 'babel-loader?experimental&optional=runtime'
         }
       ]
     },
@@ -43,7 +39,6 @@ module.exports = function(profile) {
   };
 
   if (profile === "min") {
-    config.plugins.push(runtime);
     config.plugins.push(uglify);
   }
 

@@ -7,7 +7,10 @@ var TaskConstants = Marty.createConstants([
   'CREATE_PROJECT',
   'DELETE_PROJECT',
   'UPDATE_PROJECT',
-  'RECEIVE_PROJECTS'
+  'RECEIVE_PROJECTS',
+  'FLUSH_REQUESTS',
+  'RETRY_REQUESTS',
+  'REMOVE_ERRORS'
 ]);
 
 module.exports = TaskConstants;

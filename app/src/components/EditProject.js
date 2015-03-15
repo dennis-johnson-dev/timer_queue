@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react');
 var _ = require('lodash');
 var TaskViewActions = require('../actions/TaskViewActions');
@@ -13,7 +12,7 @@ var Marty = require('marty');
 var ProjectState = Marty.createStateMixin({
   listenTo: [ TaskStore ],
   getState: function () {
-    var project = TaskStore.getProject(this.getParams().id);
+    var project = TaskStore.getProject(this.getParams().id).result;
     var tasks = project.tasks;
     return {
       project: project,
