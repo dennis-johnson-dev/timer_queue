@@ -3,7 +3,6 @@ var TaskStore = require('../stores/TaskStore');
 var OptimisticStore = require('../stores/OptimisticStore');
 var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
-var Navigation = Router.Navigation;
 var Link = Router.Link;
 var Marty = require('marty');
 
@@ -18,9 +17,13 @@ var ProjectState = Marty.createStateMixin({
 });
 
 var ProjectList = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   displayName: 'ProjectList',
 
-  mixins: [ Navigation, ProjectState ],
+  mixins: [ ProjectState ],
 
   render: function() {
     var me = this;
@@ -59,7 +62,7 @@ var ProjectList = React.createClass({
 
   _onEdit: function(e) {
     e.preventDefault();
-    this.transitionTo('edit', { id: e.target.value });
+    this.context.router.transitionTo('edit', { id: e.target.value });
   },
 
   _onEditMode: function(e) {

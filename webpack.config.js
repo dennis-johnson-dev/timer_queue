@@ -13,15 +13,14 @@ module.exports =  {
     loaders: [
       { 
         test: /\.js$/, 
-        exclude: /node_modules/, 
+        exclude: /node_modules\/(?!marty)/,
         loader: 'react-hot!babel-loader?experimental&optional=runtime'
       }
     ]
   },
   externals: {
     'react': 'React', 
-    'react/addons': 'React',
-    'react-router': 'ReactRouter'
+    'react/addons': 'React'
   },
   resolve: {
     moduleDirectories: ['node_modules', 'app/src'],

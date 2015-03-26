@@ -4,34 +4,35 @@ var AppConstants = require('../constants/AppConstants');
 var Marty = require('marty');
 
 var TaskServerActions = Marty.createActionCreators({
+  id: 'TaskServerActionCreators',
 
-  createProject: TaskConstants.CREATE_PROJECT(function(project, uid) {
-    this.dispatch(project, uid);
-  }),
+  createProject: function(project, uid) {
+    this.dispatch(TaskConstants.CREATE_PROJECT, project, uid);
+  },
 
-  deleteProject: TaskConstants.DELETE_PROJECT(function(id, uid) {
-    this.dispatch(id, uid);
-  }),
+  deleteProject: function(id, uid) {
+    this.dispatch(TaskConstants.DELETE_PROJECT, id, uid);
+  },
 
-  updateProject: TaskConstants.UPDATE_PROJECT(function(project, uid) {
-    this.dispatch(project, uid);
-  }),
+  updateProject: function(project, uid) {
+    this.dispatch(TaskConstants.UPDATE_PROJECT, project, uid);
+  },
 
-  receiveProjects: TaskConstants.RECEIVE_PROJECTS(function(projects) {
-    this.dispatch(projects);
-  }),
+  receiveProjects: function(projects) {
+    this.dispatch(TaskConstants.RECEIVE_PROJECTS, projects);
+  },
 
-  error: AppConstants.ERROR(function(msg, actionId) {
-    this.dispatch(actionId);
-  }),
+  error: function(msg, actionId) {
+    this.dispatch(AppConstants.ERROR, actionId);
+  },
 
-  flushRequests: TaskConstants.FLUSH_REQUESTS(function() {
-    this.dispatch();
-  }),
+  flushRequests: function() {
+    this.dispatch(TaskConstants.FLUSH_REQUESTS);
+  },
 
-  removeErrors: TaskConstants.REMOVE_ERRORS(function(results) {
-    this.dispatch(results);
-  })
+  removeErrors: function(results) {
+    this.dispatch(TaskConstants.REMOVE_ERRORS, results);
+  }
 
 });
 

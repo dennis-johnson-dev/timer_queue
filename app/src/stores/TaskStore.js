@@ -8,7 +8,7 @@ var OptimisticStore = require('./OptimisticStore');
 var CHANGE_EVENT = 'change';
 
 var TaskStore = Marty.createStore({
-  displayName: 'Task Store',
+  id: 'Task Store',
   handlers: {
     setProjects: TaskConstants.RECEIVE_PROJECTS,
     createProject: TaskConstants.CREATE_PROJECT,

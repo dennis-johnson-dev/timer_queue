@@ -3,24 +3,19 @@ var Marty = require('marty');
 var _ = require('lodash');
 
 var AppActions = Marty.createActionCreators({
+  id: 'AppActionCreators',
 
-  error: AppConstants.ERROR(function(errMsg, id) {
-    var action = {
-      payload: errMsg,
-      uid: _.uniqueId(),
-      actionId: id
-    };
+  error: function(errMsg, id) {
+    this.dispatch(AppConstants.ERROR, errMsg, id);
+  },
 
-    this.dispatch(action);
-  }),
+  removeError: function(action) {
+    this.dispatch(AppConstants.REMOVE, action);
+  },
 
-  removeError: AppConstants.REMOVE(function(action) {
-    this.dispatch(action);
-  }),
-
-  resolveError: AppConstants.RESOLVE(function(action) {
-    this.dispatch(action);
-  })
+  resolveError: function(action) {
+    this.dispatch(AppConstants.RESOLVE, action);
+  }
 
 });
 

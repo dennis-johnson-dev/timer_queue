@@ -6,7 +6,7 @@ var TaskConstants = require('../constants/TaskConstants');
 var CHANGE_EVENT = 'change';
 
 var OptimisticStore = Marty.createStore({
-  displayName: 'Optimistic Store',
+  id: 'Optimistic Store',
   handlers: {
     addRequest: [
       TaskConstants.VIEW_CREATE_PROJECT, 

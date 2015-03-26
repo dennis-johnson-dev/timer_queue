@@ -3,15 +3,14 @@ var _ = require('lodash');
 var TaskViewActions = require('../actions/TaskViewActions');
 var TaskList = require('./TaskList');
 var formatTime = require('../lib/formatTime');
-var Router = require('react-router');
-var Link = Router.Link;
-var Navigation = Router.Navigation;
 var md5 = require('MD5');
 
 var CreateProject = React.createClass({
-  displayName: 'CreateProject',
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
-  mixins: [ Navigation ],
+  displayName: 'CreateProject',
 
   getTaskModel: function() {
     var id = md5(Date.now() + 2);
@@ -32,7 +31,7 @@ var CreateProject = React.createClass({
     };
 
     TaskViewActions.createProject(project);
-    this.transitionTo('home');
+    this.context.router.transitionTo('home');
   },
 
   getInitialState: function() {

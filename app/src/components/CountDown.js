@@ -4,6 +4,7 @@ var TaskStore = require('../stores/TaskStore');
 var formatTime = require('../lib/formatTime');
 var Marty = require('marty');
 var Immutable = require('immutable');
+var classnames = require('classnames');
 
 var ENTER_KEY_CODE = 13;
 
@@ -58,9 +59,8 @@ var CountDown = React.createClass({
     }
   },
   render: function() {
-    var cx = React.addons.classSet;
     var play = this.state.play;
-    var classes = cx({
+    var classes = classnames({
       'glyphicon': true,
       'glyphicon-play': play,
       'glyphicon-pause': !play

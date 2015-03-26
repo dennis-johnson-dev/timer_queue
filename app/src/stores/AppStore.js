@@ -7,7 +7,7 @@ var Immutable = require('immutable');
 var CHANGE_EVENT = 'change';
 
 var AppStore = Marty.createStore({
-  displayName: 'App',
+  id: 'App',
   handlers: {
     setError: AppConstants.ERROR,
     removeError: [ AppConstants.REMOVE, AppConstants.RESOLVE ],

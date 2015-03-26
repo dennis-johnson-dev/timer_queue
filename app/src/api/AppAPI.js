@@ -7,6 +7,7 @@ var Helper = require('./Helper');
 var requester;
 var AppAPI = Marty.createStateSource({
   type: 'http',
+  id: 'AppAPI',
   init() {
     var options = {
       url: '/api/projects',

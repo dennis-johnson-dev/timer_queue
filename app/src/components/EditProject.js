@@ -3,16 +3,13 @@ var _ = require('lodash');
 var TaskViewActions = require('../actions/TaskViewActions');
 var TaskStore = require('../stores/TaskStore');
 var TaskList = require('./TaskList');
-var Router = require('react-router');
-var Navigation = Router.Navigation;
-var Link = Router.Link;
 var md5 = require('MD5');
 var Marty = require('marty');
 
 var ProjectState = Marty.createStateMixin({
   listenTo: [ TaskStore ],
   getState: function () {
-    var project = TaskStore.getProject(this.getParams().id).result;
+    var project = TaskStore.getProject(this.context.router.getCurrentParams().id).result;
     var tasks = project.tasks;
     return {
       project: project,
@@ -22,9 +19,13 @@ var ProjectState = Marty.createStateMixin({
 });
 
 var EditProject = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   displayName: 'EditProject',
 
-  mixins: [ Router.State, Navigation, ProjectState ],
+  mixins: [ ProjectState ],
 
   getTaskModel: function() {
     var id = md5(Date.now() + 2);
@@ -45,7 +46,7 @@ var EditProject = React.createClass({
     };
 
     TaskViewActions.updateProject(project);
-    this.transitionTo('home');
+    this.context.router.transitionTo('home');
   },
 
   render: function() {

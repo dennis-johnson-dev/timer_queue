@@ -3,7 +3,6 @@ var _ = require('lodash');
 var TaskStore = require('../stores/TaskStore');
 var CountDown = require('./CountDown');
 var formatTime = require('../lib/formatTime');
-var Router = require('react-router');
 var Marty = require('marty');
 var Immutable = require('immutable');
 
@@ -14,15 +13,19 @@ var ProjectState = Marty.createStateMixin({
   getState: function () {
     return {
       play: true,
-      project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id).result))
+      project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.context.router.getCurrentParams().id).result))
     };
   }
 });
 
 var CountDownContainer = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   displayName: 'CountDownContainer',
 
-  mixins: [ Router.State, ProjectState ],
+  mixins: [ ProjectState ],
 
   render: function() {
 
@@ -34,7 +37,7 @@ var CountDownContainer = React.createClass({
   reset: function() {
     this.setState(
       { 
-        project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.getParams().id).result))
+        project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.context.router.getCurrentParams().id).result))
       }
     );
   }
