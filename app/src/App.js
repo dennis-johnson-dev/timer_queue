@@ -1,5 +1,8 @@
 var React = require('react');
+var Marty = require('marty');
+
 var AppAPI = require('./api/AppAPI');
+var enableFastclick = require('./lib/enableFastclick');
 
 var Site = require('./components/Site');
 var CountDownContainer = require('./components/CountDownContainer');
@@ -9,25 +12,15 @@ var EditProject = require('./components/EditProject');
 
 var rootInstance = null;
 
-var Router = require('react-router');
-var DefaultRoute = Router.DefaultRoute;
-var Routes = Router.Routes;
-var Route = Router.Route;
-var Link = Router.Link;
-
-var routes = [
-  <Route name="home" path="/" handler={ Site }>
-    <DefaultRoute handler={ ProjectList }/>
-    <Route name="play" path="play/:id" handler={ CountDownContainer } />
-    <Route name="edit" path="edit/:id" handler={ EditProject } />
-    <Route name="create" path="create" handler={ CreateProject } />
-  </Route>
-];
+var Router = require('./Router');
+var routes = require('./Routes');
 
 AppAPI.init().then(
   function() {
-    Router.run(routes, function(Handler) {
-      rootInstance = React.render(<Handler/>, document.getElementById('site'));
+    enableFastclick();
+    Marty.rehydrate();
+    Router.run(function(Handler, state) {
+      rootInstance = React.render(<Handler {...state.params} />, document.getElementById('site'));
     });
   },
   function(err) {

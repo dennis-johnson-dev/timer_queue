@@ -1,4 +1,3 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TaskConstants = require('../constants/TaskConstants');
 var AppConstants = require('../constants/AppConstants');
 var Marty = require('marty');

@@ -54,7 +54,7 @@ var TaskStore = Marty.createStore({
     return this.fetch({
       id: 'updates-' + _.uniqueId(),
       locally: function() {
-        this.state.updates = OptimisticStore.getUpdates();
+        this.state.updates = OptimisticStore.for(this).getUpdates();
         this.applyUpdates();
         return true;
       }

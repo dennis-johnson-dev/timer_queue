@@ -6,43 +6,52 @@ var Immutable = require('immutable');
 
 var CHANGE_EVENT = 'change';
 
-var AppStore = Marty.createStore({
-  id: 'App',
-  handlers: {
-    setError: AppConstants.ERROR,
-    removeError: [ AppConstants.REMOVE, AppConstants.RESOLVE ],
-    removeErrors: [
-      TaskConstants.REMOVE_ERRORS
-    ]
-  },
-  getInitialState: function() {
-    return {
-      errors: new Immutable.List()
-    };
-  },
-  getErrors: function() {
-    return this.state.errors.count();
-  },
-  setError: function(action) {
+class AppStore extends Marty.Store {
+  constructor(options) {
+    super(options);
+    this.state.errors = new Immutable.List();
+    this.handlers = {
+      setError: AppConstants.ERROR,
+      removeError: [ AppConstants.REMOVE, AppConstants.RESOLVE ],
+      removeErrors: [
+        TaskConstants.REMOVE_ERRORS
+      ]
+    }
+  }
+
+  getErrors() {
+    let count = this.state.errors.count();
+    return this.fetch({
+      id: 'errors',
+      locally() {
+        return count;
+        
+      }
+    });
+  }
+
+  setError(action) {
     this.state.errors = this.state.errors.push({
       id: action.uid,
       msg: action.payload,
       actionId: action.actionId
     });
     this.hasChanged();
-  },
-  removeError: function(action) {
+  }
+
+  removeError(action) {
     let index = this.state.errors.findIndex((error) => {
       return error.id === action.errorId;
     });
 
     this.state.errors = this.state.errors.delete(index);
     this.hasChanged();
-  },
-  removeErrors: function(errors) {
+  }
+
+  removeErrors(errors) {
     this.state.errors = new Immutable.List();
     this.hasChanged();
   }
-});
+}
 
-module.exports = AppStore;
+module.exports = Marty.register(AppStore);

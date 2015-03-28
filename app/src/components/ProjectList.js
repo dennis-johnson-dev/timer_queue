@@ -1,31 +1,26 @@
 var React = require('react');
 var TaskStore = require('../stores/TaskStore');
-var OptimisticStore = require('../stores/OptimisticStore');
 var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
 var Link = Router.Link;
 var Marty = require('marty');
 
-var ProjectState = Marty.createStateMixin({
-  listenTo: [ TaskStore ],
-  getState: function () {
-    return {
-      edit: false,
-      projects: TaskStore.getProjects().result
+class ProjectList extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      edit: this.props.edit,
+      projects: this.props.projects
     };
   }
-});
 
-var ProjectList = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
-  },
+  }
 
-  displayName: 'ProjectList',
+  displayName: 'ProjectList'
 
-  mixins: [ ProjectState ],
-
-  render: function() {
+  render() {
     var me = this;
   	return (
       <div className="project">
@@ -53,23 +48,33 @@ var ProjectList = React.createClass({
         <Link className="project-tools" to="create"><i className="glyphicon glyphicon-plus"></i></Link>
       </div>
     );
-  },
+  }
 
-  _onDelete: function(e) {
+  _onDelete(e) {
     e.preventDefault();
     TaskViewActions.deleteProject(e.target.value);
-  },
+  }
 
-  _onEdit: function(e) {
+  _onEdit(e) {
     e.preventDefault();
     this.context.router.transitionTo('edit', { id: e.target.value });
-  },
+  }
 
-  _onEditMode: function(e) {
+  _onEditMode(e) {
     e.preventDefault();
     this.setState({ edit: !this.state.edit });
   }
 
-});
+}
 
-module.exports = ProjectList;
+module.exports = Marty.createContainer(ProjectList, {
+  listenTo: [ TaskStore ],
+  fetch: {
+    edit() {
+      return false;
+    },
+    projects() {
+      return TaskStore.for(this).getProjects();
+    } 
+  }
+});

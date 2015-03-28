@@ -7,6 +7,8 @@ mongoose = require 'mongoose'
 path = require 'path'
 compression = require('compression')
 _ = require('lodash')
+require('babel/register')
+
 
 setInterval(() ->
   http.get('http://timerqueue.herokuapp.com')
@@ -37,9 +39,13 @@ app.set 'view engine', 'jade'
 
 # app routes
 
-app.get('/', (req, res) ->
-  res.render 'index'
-)
+# app.get('/', (req, res) ->
+#   res.render 'index', { body: 'hi' }
+# )
+
+app.use(require('marty-express')({
+  routes: require('../../app/src/Routes')
+}))
 
 # /api routes
 

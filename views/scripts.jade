@@ -1,16 +1,14 @@
-extends content
+- var DEV = process.env.DEV; 
 
-block scripts
+script(src="vendor/browser-polyfill.js")
+if DEV
+  script(type="text/javascript" src="bower_components/react/react-with-addons.js")
+else
+  script(type="text/javascript" src="bower_components/react/react-with-addons.min.js")
 
-  script(src="vendor/browser-polyfill.js")
-  if DEV
-    script(type="text/javascript" src="bower_components/react/react-with-addons.js")
-  else
-    script(type="text/javascript" src="bower_components/react/react-with-addons.min.js")
-
-  if DEV
-    script(type="text/javascript" src="http://localhost:3001/js/App.js")
-  else
-    script(type="text/javascript" src="/js/App.js")
-  if DEV 
-    script(src="http://localhost:3001/webpack-dev-server.js")
+if DEV
+  script(type="text/javascript" src="http://localhost:3001/js/App.js")
+else
+  script(type="text/javascript" src="/js/App.js")
+if DEV 
+  script(src="http://localhost:3001/webpack-dev-server.js")

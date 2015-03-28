@@ -1,22 +1,20 @@
 var AppConstants = require('../constants/AppConstants');
 var Marty = require('marty');
-var _ = require('lodash');
 
-var AppActions = Marty.createActionCreators({
-  id: 'AppActionCreators',
+class AppActions extends Marty.createActionCreators {
 
-  error: function(errMsg, id) {
+  error(errMsg, id) {
     this.dispatch(AppConstants.ERROR, errMsg, id);
-  },
+  }
 
-  removeError: function(action) {
+  removeError(action) {
     this.dispatch(AppConstants.REMOVE, action);
-  },
+  }
 
-  resolveError: function(action) {
+  resolveError(action) {
     this.dispatch(AppConstants.RESOLVE, action);
   }
 
-});
+}
 
-module.exports = AppActions;
+module.exports = Marty.register(AppActions);
