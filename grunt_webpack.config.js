@@ -28,8 +28,7 @@ module.exports = function(profile) {
     },
     externals: {
       'react': 'React', 
-      'react/addons': 'React',
-      'react-router': 'ReactRouter'
+      'react/addons': 'React'
     },
     resolve: {
       extensions: ['', '.js']
