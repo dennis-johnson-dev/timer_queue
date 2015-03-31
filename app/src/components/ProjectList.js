@@ -70,9 +70,6 @@ class ProjectList extends React.Component {
 module.exports = Marty.createContainer(ProjectList, {
   listenTo: [ TaskStore ],
   fetch: {
-    edit() {
-      return false;
-    },
     projects() {
       return TaskStore.for(this).getProjects();
     } 

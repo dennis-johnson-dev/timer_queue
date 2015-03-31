@@ -5,24 +5,16 @@ var OptimisticStore = require('../stores/OptimisticStore');
 var Helper = require('./Helper');
 
 var requester;
-var AppAPI = Marty.createStateSource({
-  type: 'http',
-  id: 'AppAPI',
-  init() {
+class AppAPI extends Marty.HttpStateSource {
+
+  getProjects() {
     var options = {
       url: '/api/projects',
       method: 'GET'
     };
 
-    return this.request(options).then(
-      function(res) {
-        TaskServerActions.receiveProjects(res.body);
-      },
-      function(err) {
-        AppActions.error('Unable to get projects');
-      }
-    );
-  },
+    this.request(options);
+  }
 
   createProject(project, actionId, options) {
     this.flush().then(function() {
@@ -30,7 +22,7 @@ var AppAPI = Marty.createStateSource({
     }, function(err) {
       AppActions.error('Unable to creat project', actionId, options);
     });
-  },
+  }
 
   deleteProject(id, actionId, options) {
     this.flush().then(function() {
@@ -39,7 +31,7 @@ var AppAPI = Marty.createStateSource({
     function() {
       AppActions.error('Unable to delete project', actionId, options);
     });
-  },
+  }
 
   updateProject(project, actionId, options) {
     this.flush().then(function() {
@@ -48,10 +40,10 @@ var AppAPI = Marty.createStateSource({
     function () {
       AppActions.error('Unable to update project', actionId, options);
     });
-  },
+  }
 
   flush() {
-    var requests = OptimisticStore.getRequests();
+    var requests = OptimisticStore.for(this).getRequests().result;
     var requestQueue = [];
     let fetcher = this.request;
 
@@ -82,6 +74,5 @@ var AppAPI = Marty.createStateSource({
       return Promise.reject(err);
     });
   }
-});
-
-module.exports = AppAPI;
+}
+module.exports = Marty.register(AppAPI);

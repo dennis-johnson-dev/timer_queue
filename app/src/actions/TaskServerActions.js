@@ -2,37 +2,38 @@ var TaskConstants = require('../constants/TaskConstants');
 var AppConstants = require('../constants/AppConstants');
 var Marty = require('marty');
 
-var TaskServerActions = Marty.createActionCreators({
-  id: 'TaskServerActionCreators',
+class TaskServerActions extends Marty.ActionCreators {
+  id: 'TaskServerActionCreators'
+  displayName: 'TaskServerActionCreators'
 
-  createProject: function(project, uid) {
+  createProject(project, uid) {
     this.dispatch(TaskConstants.CREATE_PROJECT, project, uid);
-  },
+  }
 
-  deleteProject: function(id, uid) {
+  deleteProject(id, uid) {
     this.dispatch(TaskConstants.DELETE_PROJECT, id, uid);
-  },
+  }
 
-  updateProject: function(project, uid) {
+  updateProject(project, uid) {
     this.dispatch(TaskConstants.UPDATE_PROJECT, project, uid);
-  },
+  }
 
-  receiveProjects: function(projects) {
+  receiveProjects(projects) {
     this.dispatch(TaskConstants.RECEIVE_PROJECTS, projects);
-  },
+  }
 
-  error: function(msg, actionId) {
+  error(msg, actionId) {
     this.dispatch(AppConstants.ERROR, actionId);
-  },
+  }
 
-  flushRequests: function() {
+  flushRequests() {
     this.dispatch(TaskConstants.FLUSH_REQUESTS);
-  },
+  }
 
-  removeErrors: function(results) {
+  removeErrors(results) {
     this.dispatch(TaskConstants.REMOVE_ERRORS, results);
   }
 
-});
+}
 
-module.exports = TaskServerActions;
+module.exports = Marty.register(TaskServerActions);

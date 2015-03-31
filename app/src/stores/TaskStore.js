@@ -7,28 +7,29 @@ var OptimisticStore = require('./OptimisticStore');
 
 var CHANGE_EVENT = 'change';
 
-var TaskStore = Marty.createStore({
-  id: 'Task Store',
-  handlers: {
-    setProjects: TaskConstants.RECEIVE_PROJECTS,
-    createProject: TaskConstants.CREATE_PROJECT,
-    deleteProject: TaskConstants.DELETE_PROJECT,
-    updateProject: TaskConstants.UPDATE_PROJECT,
-    error: AppConstants.RESOLVE
-  },
-  getInitialState: function() {
-    return {
+class TaskStore extends Marty.Store {
+  constructor() {
+    super({});
+    this.id = 'TaskStore';
+    this.state = {
       projects: new Immutable.List(),
       projectChange: new Immutable.List(),
       updates: []
     };
-  },
-  setProjects: function(projects) {
+    this.handlers = {
+      setProjects: TaskConstants.RECEIVE_PROJECTS,
+      createProject: TaskConstants.CREATE_PROJECT,
+      deleteProject: TaskConstants.DELETE_PROJECT,
+      updateProject: TaskConstants.UPDATE_PROJECT,
+      error: AppConstants.RESOLVE
+    };
+  }
+  setProjects(projects) {
     this.state.projects = new Immutable.List(projects);
     this.applyUpdates();
     this.hasChanged();
-  },
-  getProject: function(id) {
+  }
+  getProject(id) {
     return this.fetch({
       id: 'project-' + id,
       locally: function() {
@@ -40,27 +41,31 @@ var TaskStore = Marty.createStore({
       },
       dependsOn: this.getUpdates()
     });
-  },
-  getProjects: function() {
+  }
+  getProjects() {
+    this.constructor({});
     return this.fetch({
       id: 'projects' + _.uniqueId(),
       locally: function() {
         return this.state.projectChange.toJS();
       },
+      remotely: function() {
+        return AppAPI.getProjects();
+      },
       dependsOn: this.getUpdates()
     });
-  },
-  getUpdates: function() {
+  }
+  getUpdates() {
     return this.fetch({
       id: 'updates-' + _.uniqueId(),
       locally: function() {
-        this.state.updates = OptimisticStore.for(this).getUpdates();
+        this.state.updates = OptimisticStore.for(this).getUpdates().result;
         this.applyUpdates();
         return true;
       }
     });
-  },
-  applyUpdates: function(force=false) {
+  }
+  applyUpdates(force=false) {
     var hasUpdates = this.state.updates.length > 0;
     if (force || hasUpdates || !Immutable.is(this.state.projectChange, this.state.projects)) {
       this.state.projectChange = this.state.projects;
@@ -96,17 +101,17 @@ var TaskStore = Marty.createStore({
         return !_.isUndefined(project);
       });
     }
-  },
-  error: function(action) {
+  }
+  error(action) {
     this.applyUpdates(true);
     this.hasChanged();
-  },
-  createProject: function(project) {
+  }
+  createProject(project) {
     this.state.projects = this.state.projects.push(project);
     this.applyUpdates();
     this.hasChanged();
-  },
-  deleteProject: function(id) {
+  }
+  deleteProject(id) {
     const index = this.state.projects.findIndex((project) => { 
       return project.id === id;
     });
@@ -121,8 +126,8 @@ var TaskStore = Marty.createStore({
 
     this.applyUpdates();
     this.hasChanged();
-  },
-  updateProject: function(project) {
+  }
+  updateProject(project) {
     const index = this.state.projects.findIndex((projectChange) => {
       return projectChange.id === project.id;
     });
@@ -134,6 +139,6 @@ var TaskStore = Marty.createStore({
     this.applyUpdates();
     this.hasChanged();
   }
-});
+}
 
-module.exports = TaskStore;
+module.exports = Marty.register(TaskStore);

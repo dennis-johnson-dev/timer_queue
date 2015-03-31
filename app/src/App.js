@@ -15,18 +15,11 @@ var rootInstance = null;
 var Router = require('./Router');
 var routes = require('./Routes');
 
-AppAPI.init().then(
-  function() {
-    enableFastclick();
-    Marty.rehydrate();
-    Router.run(function(Handler, state) {
-      rootInstance = React.render(<Handler {...state.params} />, document.getElementById('site'));
-    });
-  },
-  function(err) {
-    console.log('You trucked up');
-  }
-);
+enableFastclick();
+Marty.rehydrate();
+Router.run(function(Handler, state) {
+  rootInstance = React.render(<Handler {...state.params} />, document.getElementById('site'));
+});
 
 if (module.hot) {
   require('react-hot-loader/Injection').RootInstanceProvider.injectProvider({

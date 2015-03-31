@@ -3,10 +3,11 @@ var AppAPI = require('../api/AppAPI');
 var Marty = require('marty');
 var _ = require('lodash');
 
-var TaskViewActions = Marty.createActionCreators({
-  id: 'TaskViewActionCreators',
+class TaskViewActions extends Marty.ActionCreators {
+  id: 'TaskViewActionCreators'
+  displayName: 'TaskViewActionCreators'
 
-  createProject: function(project) {
+  createProject(project) {
     var action = {
       payload: project,
       uid: _.uniqueId()
@@ -21,9 +22,9 @@ var TaskViewActions = Marty.createActionCreators({
     this.dispatch(TaskConstants.VIEW_CREATE_PROJECT, action.payload, action.uid, apiOptions);
 
     AppAPI.createProject(project, action.uid, apiOptions);
-  },
+  }
 
-  deleteProject: function(id) {
+  deleteProject(id) {
     var action = {
       payload: id,
       uid: _.uniqueId()
@@ -38,9 +39,9 @@ var TaskViewActions = Marty.createActionCreators({
     this.dispatch(TaskConstants.VIEW_DELETE_PROJECT, action.payload, action.uid, apiOptions);
     
     AppAPI.deleteProject(id, action.uid, apiOptions);
-  },
+  }
 
-  updateProject: function(project) {
+  updateProject(project) {
     var action = {
       payload: project,
       uid: _.uniqueId()
@@ -55,12 +56,12 @@ var TaskViewActions = Marty.createActionCreators({
     this.dispatch(TaskConstants.VIEW_UPDATE_PROJECT, action.payload, action.uid, apiOptions);
     
     AppAPI.updateProject(project, action.uid, apiOptions);
-  },
+  }
 
-  retry: function() {
+  retry() {
     AppAPI.flush();
     this.dispatch(TaskConstants.RETRY_REQUESTS);
   }
-});
+}
 
-module.exports = TaskViewActions;
+module.exports = Marty.register(TaskViewActions);

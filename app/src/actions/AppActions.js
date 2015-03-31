@@ -1,7 +1,10 @@
 var AppConstants = require('../constants/AppConstants');
 var Marty = require('marty');
+var _ = require('lodash');
 
-class AppActions extends Marty.createActionCreators {
+class AppActions extends Marty.ActionCreators {
+  id: 'AppActionCreators'
+  displayName: 'AppActionCreators'
 
   error(errMsg, id) {
     this.dispatch(AppConstants.ERROR, errMsg, id);

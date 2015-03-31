@@ -9,6 +9,7 @@ var CHANGE_EVENT = 'change';
 class AppStore extends Marty.Store {
   constructor(options) {
     super(options);
+    this.id = 'AppStore';
     this.state.errors = new Immutable.List();
     this.handlers = {
       setError: AppConstants.ERROR,
@@ -20,12 +21,11 @@ class AppStore extends Marty.Store {
   }
 
   getErrors() {
-    let count = this.state.errors.count();
+    this.constructor({});
     return this.fetch({
       id: 'errors',
       locally() {
-        return count;
-        
+        return this.state.errors.count();
       }
     });
   }
