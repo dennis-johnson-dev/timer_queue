@@ -9,7 +9,7 @@ class ProjectList extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      edit: this.props.edit,
+      edit: false,
       projects: this.props.projects
     };
   }
@@ -22,18 +22,21 @@ class ProjectList extends React.Component {
 
   render() {
     var me = this;
+    const deleteHandler = this._onDelete.bind(this);
+    const editHandler = this._onEdit.bind(this);
+    const editModeHandler = this._onEditMode.bind(this);
   	return (
       <div className="project">
         <h3>
           Projects
-          <a className="project-tools" href="#" onClick={ this._onEditMode }><i className="glyphicon glyphicon-cog"></i></a>
+          <a className="project-tools" href="#" onClick={ editModeHandler }><i className="glyphicon glyphicon-cog"></i></a>
         </h3>
         <div className="list-group project-container">
           {
             this.state.projects.map(function(project) {
               var editBtns = <div className="editBtns">
-                               <button onClick={ me._onDelete } value={ project.id }>Delete</button>
-                               <button onClick={ me._onEdit } value={ project.id }>Edit</button>
+                               <button onClick={ deleteHandler } value={ project.id }>Delete</button>
+                               <button onClick={ editHandler } value={ project.id }>Edit</button>
                              </div>
               var btnContent = me.state.edit ? editBtns : '';
               return (

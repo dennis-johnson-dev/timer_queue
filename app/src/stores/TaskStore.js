@@ -4,16 +4,17 @@ var _ = require('lodash');
 var Marty = require('marty');
 var Immutable = require('immutable');
 var OptimisticStore = require('./OptimisticStore');
+var TaskQueries = require('../queries/TaskQueries');
 
 var CHANGE_EVENT = 'change';
 
 class TaskStore extends Marty.Store {
-  constructor() {
-    super({});
+  constructor(options) {
+    super(options);
     this.id = 'TaskStore';
     this.state = {
-      projects: new Immutable.List(),
-      projectChange: new Immutable.List(),
+      projects: [],
+      projectChange: [],
       updates: []
     };
     this.handlers = {
@@ -23,34 +24,39 @@ class TaskStore extends Marty.Store {
       updateProject: TaskConstants.UPDATE_PROJECT,
       error: AppConstants.RESOLVE
     };
+    this.hasLoaded = false;
   }
   setProjects(projects) {
-    this.state.projects = new Immutable.List(projects);
-    this.applyUpdates();
+    this.state.projects = projects;
+    this.hasLoaded = true;
+    this.applyUpdates(true);
     this.hasChanged();
   }
   getProject(id) {
     return this.fetch({
       id: 'project-' + id,
       locally: function() {
-        const index = this.state.projectChange.findIndex(function(project) {
+        const index = _.find(this.state.projectChange, function(project) {
           return project.id === id;
         });
 
-        return _.cloneDeep(this.state.projectChange.get(index));
+        return _.cloneDeep(this.state.projectChange[index]);
       },
       dependsOn: this.getUpdates()
     });
   }
   getProjects() {
-    this.constructor({});
     return this.fetch({
       id: 'projects' + _.uniqueId(),
       locally: function() {
-        return this.state.projectChange.toJS();
+        if (!this.hasLoaded) {
+          return;
+        } else {
+          return this.state.projectChange;
+        }
       },
       remotely: function() {
-        return AppAPI.getProjects();
+        return TaskQueries.for(this).getProjects();
       },
       dependsOn: this.getUpdates()
     });
@@ -65,9 +71,10 @@ class TaskStore extends Marty.Store {
       }
     });
   }
-  applyUpdates(force=false) {
+  applyUpdates(force) {
+    const forceVal = force || false;
     var hasUpdates = this.state.updates.length > 0;
-    if (force || hasUpdates || !Immutable.is(this.state.projectChange, this.state.projects)) {
+    if (forceVal || hasUpdates || this.state.projectChange !== this.state.projects) {
       this.state.projectChange = this.state.projects;
       
       if (this.state.updates.length === 0) {
@@ -75,7 +82,7 @@ class TaskStore extends Marty.Store {
       }
 
       this.state.updates.forEach((update) => {
-        const index = this.state.projectChange.findIndex((project) => {
+        const index = _.findIndex(this.state.projectChange, (project) => {
           if (update.id) {
             return project.id === update.id;
           } else {
@@ -83,8 +90,8 @@ class TaskStore extends Marty.Store {
           }
         });
 
-        if (_.isString(update) && index > -1) {
-          this.state.projectChange = this.state.projectChange.delete(index);
+        if (_.isString(update)) {
+          this.state.projectChange = this.state.projectChange.splice(index, 0);
           return;
         }
 
@@ -96,10 +103,6 @@ class TaskStore extends Marty.Store {
           }
         }
       }, this);
-
-      this.state.projectChange = this.state.projectChange.filter((project) => {
-        return !_.isUndefined(project);
-      });
     }
   }
   error(action) {
@@ -112,28 +115,24 @@ class TaskStore extends Marty.Store {
     this.hasChanged();
   }
   deleteProject(id) {
-    const index = this.state.projects.findIndex((project) => { 
+    const index = _.find(this.state.projects, (project) => { 
       return project.id === id;
     });
 
     if (index > -1) {
-      this.state.projects = this.state.projects.delete(index);
+      this.state.projects = this.state.projects.splice(index, 1);
     }
-
-    this.state.projects = this.state.projects.filter((project) => {
-      return !_.isUndefined(project);
-    });
 
     this.applyUpdates();
     this.hasChanged();
   }
   updateProject(project) {
-    const index = this.state.projects.findIndex((projectChange) => {
+    const index = _.find(this.state.projects, (projectChange) => {
       return projectChange.id === project.id;
     });
 
     if (index > -1 ) {
-      this.state.projects = this.state.projects.set(index, project);
+      this.state.projects[index] =  project;
     }
 
     this.applyUpdates();

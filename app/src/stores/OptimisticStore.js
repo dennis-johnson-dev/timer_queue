@@ -23,7 +23,7 @@ class OptimisticStore extends Marty.Store {
       flushRequests: TaskConstants.FLUSH_REQUESTS
     };
     this.state = {
-      requests: new Immutable.List(),
+      requests: [],
       updates: []
     };
   }
@@ -31,7 +31,7 @@ class OptimisticStore extends Marty.Store {
     return this.fetch({
       id: 'requests',
       locally() {
-        return this.state.requests.toArray();
+        return this.state.requests;
       }
     });
   }
@@ -44,20 +44,18 @@ class OptimisticStore extends Marty.Store {
     });
   }
   addRequest(payload, uid, apiOptions) {
+    console.log('adding request', payload);
     var request = Object.assign(apiOptions, { uid });
-    this.state.requests = this.state.requests.push(request);
+    this.state.requests.push(request);
     this.state.updates.push(payload);
   }
   removeRequest(project, actionId) {
-    const index = this.state.requests.findIndex(function(request) {
+    const index = _.remove(this.state.requests, function(request) {
       return request.uid === actionId;
     });
-    if (index > -1) {
-      this.state.requests = this.state.requests.delete(index);
-    }
   }
   flushRequests() {
-    this.state.requests = new Immutable.List();
+    this.state.requests = [];
     this.state.updates = [];
   }
 }

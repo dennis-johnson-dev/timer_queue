@@ -10,7 +10,7 @@ class AppStore extends Marty.Store {
   constructor(options) {
     super(options);
     this.id = 'AppStore';
-    this.state.errors = new Immutable.List();
+    this.state.errors = [];
     this.handlers = {
       setError: AppConstants.ERROR,
       removeError: [ AppConstants.REMOVE, AppConstants.RESOLVE ],
@@ -21,11 +21,10 @@ class AppStore extends Marty.Store {
   }
 
   getErrors() {
-    this.constructor({});
     return this.fetch({
       id: 'errors',
       locally() {
-        return this.state.errors.count();
+        return this.state.errors.length;
       }
     });
   }
@@ -49,7 +48,7 @@ class AppStore extends Marty.Store {
   }
 
   removeErrors(errors) {
-    this.state.errors = new Immutable.List();
+    this.state.errors = [];
     this.hasChanged();
   }
 }

@@ -13,11 +13,11 @@ class AppAPI extends Marty.HttpStateSource {
       method: 'GET'
     };
 
-    this.request(options);
+    return this.request(options);
   }
 
   createProject(project, actionId, options) {
-    this.flush().then(function() {
+    return this.flush().then(function() {
       TaskServerActions.createProject(project, actionId);
     }, function(err) {
       AppActions.error('Unable to creat project', actionId, options);
@@ -25,7 +25,7 @@ class AppAPI extends Marty.HttpStateSource {
   }
 
   deleteProject(id, actionId, options) {
-    this.flush().then(function() {
+    return this.flush().then(function() {
       TaskServerActions.deleteProject(id, actionId);
     },
     function() {
@@ -34,7 +34,7 @@ class AppAPI extends Marty.HttpStateSource {
   }
 
   updateProject(project, actionId, options) {
-    this.flush().then(function() {
+    return this.flush().then(function() {
       TaskServerActions.updateProject(project, actionId);
     }, 
     function () {
@@ -43,7 +43,9 @@ class AppAPI extends Marty.HttpStateSource {
   }
 
   flush() {
-    var requests = OptimisticStore.for(this).getRequests().result;
+    console.log('getting requests');
+    var requests = OptimisticStore.getRequests().result;
+    console.log(requests);
     var requestQueue = [];
     let fetcher = this.request;
 

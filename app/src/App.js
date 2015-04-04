@@ -18,7 +18,7 @@ var routes = require('./Routes');
 enableFastclick();
 Marty.rehydrate();
 Router.run(function(Handler, state) {
-  rootInstance = React.render(<Handler {...state.params} />, document.getElementById('site'));
+  rootInstance = React.render(<Handler />, document.getElementById('site'));
 });
 
 if (module.hot) {
