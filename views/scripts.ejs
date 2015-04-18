@@ -1,0 +1,19 @@
+<script src="vendor/browser-polyfill.js"></script>
+<%
+  var DEV = process.env.DEV;
+  if (DEV) {
+    <script src="bower_components/react/react-with-addons.js"></script>
+  } else {
+    <script type="text/javascript" src="bower_components/react/react-with-addons.min.js"></script>
+  }
+
+  if (DEV) {
+    <script src="http://localhost:3001/js/App.js"></script>
+  } else {
+    <script type="text/javascript" src="/js/App.js"></script>
+  }
+
+  if (DEV) { 
+    <script src="http://localhost:3001/webpack-dev-server.js"></script>
+  }
+%>

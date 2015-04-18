@@ -9,6 +9,11 @@ class TaskQueries extends Marty.Queries {
       return this.dispatch(TaskConstants.RECEIVE_PROJECTS, res.body);
     });
   }
+  getProject(id) {
+    return AppAPI.for(this).getProject(id).then(res => {
+      return this.dispatch(TaskConstants.RECEIVE_PROJECT, res.body);
+    });
+  }
 }
 
 module.exports = Marty.register(TaskQueries);

@@ -10,6 +10,10 @@ var ENTER_KEY_CODE = 13;
 
 var CountDown = React.createClass({
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   displayName: 'CountDown',
 
   getInitialState: function() {
@@ -105,8 +109,9 @@ var CountDown = React.createClass({
     }
   },
   reset: function() {
-    this.stop(); 
-    this.props.reset();
+    const id = this.context.router.getCurrentParams().id;
+    this.stop();
+    this.props.reset(id);
   }
 
 });

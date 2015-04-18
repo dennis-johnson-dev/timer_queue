@@ -9,7 +9,14 @@ var TaskViewActions = require('../actions/TaskViewActions');
 var Immutable = require('immutable');
 
 class Site extends React.Component {
-  displayName: 'Site'
+  constructor(options) {
+    super(options);
+    this.id = this.displayName = 'Site';
+  }
+
+  contextTypes: {
+    router: React.PropTypes.func
+  }
 
   render() {
     var notification = null;
@@ -23,7 +30,7 @@ class Site extends React.Component {
           <li><Link to="home">Home</Link></li>
         </ul>
         { notification }
-        <RouteHandler />
+        <RouteHandler {...this.props} />
       </div>
     );
   }

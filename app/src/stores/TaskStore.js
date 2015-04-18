@@ -19,12 +19,27 @@ class TaskStore extends Marty.Store {
     };
     this.handlers = {
       setProjects: TaskConstants.RECEIVE_PROJECTS,
+      setProject: TaskConstants.RECEIVE_PROJECT,
       createProject: TaskConstants.CREATE_PROJECT,
       deleteProject: TaskConstants.DELETE_PROJECT,
       updateProject: TaskConstants.UPDATE_PROJECT,
       error: AppConstants.RESOLVE
     };
     this.hasLoaded = false;
+  }
+  setProject(newProject) {
+    const index = _.findIndex(this.state.projectChange, (project) => {
+      return project.id === newProject.id;
+    });
+
+    if (index === -1) {
+      this.state.projects.push(newProject);
+    } else {
+      this.state.projects[index] = newProject;
+    }
+
+    this.applyUpdates(true);
+    this.hasChanged();
   }
   setProjects(projects) {
     this.state.projects = projects;
@@ -36,11 +51,16 @@ class TaskStore extends Marty.Store {
     return this.fetch({
       id: 'project-' + id,
       locally: function() {
-        const index = _.find(this.state.projectChange, function(project) {
+        const index = _.findIndex(this.state.projectChange, function(project) {
           return project.id === id;
         });
 
-        return _.cloneDeep(this.state.projectChange[index]);
+        if (index > -1) {
+          return _.cloneDeep(this.state.projectChange[index]);
+        }
+      },
+      remotely: function() {
+        return TaskQueries.for(this).getProject(id);
       },
       dependsOn: this.getUpdates()
     });
@@ -67,15 +87,15 @@ class TaskStore extends Marty.Store {
       locally: function() {
         this.state.updates = OptimisticStore.for(this).getUpdates().result;
         this.applyUpdates();
-        return true;
+        return Promise.resolve();
       }
     });
   }
   applyUpdates(force) {
     const forceVal = force || false;
     var hasUpdates = this.state.updates.length > 0;
-    if (forceVal || hasUpdates || this.state.projectChange !== this.state.projects) {
-      this.state.projectChange = this.state.projects;
+    if (forceVal || hasUpdates || !_.isEqual(this.state.projectChange, this.state.projects)) {
+      this.state.projectChange = _.cloneDeep(this.state.projects);
       
       if (this.state.updates.length === 0) {
         return;
@@ -91,15 +111,15 @@ class TaskStore extends Marty.Store {
         });
 
         if (_.isString(update)) {
-          this.state.projectChange = this.state.projectChange.splice(index, 0);
+          this.state.projectChange.splice(index, 1);
           return;
         }
 
         if (index > -1) {
-          this.state.projectChange = this.state.projectChange.set(index, update);
+          this.state.projectChange[index] = update;
         } else {
           if (!_.isString(update)) {
-            this.state.projectChange = this.state.projectChange.push(update);
+            this.state.projectChange.push(update);
           }
         }
       }, this);
@@ -110,24 +130,24 @@ class TaskStore extends Marty.Store {
     this.hasChanged();
   }
   createProject(project) {
-    this.state.projects = this.state.projects.push(project);
+    this.state.projects.push(project);
     this.applyUpdates();
     this.hasChanged();
   }
   deleteProject(id) {
-    const index = _.find(this.state.projects, (project) => { 
+    const index = _.findIndex(this.state.projects, (project) => { 
       return project.id === id;
     });
 
     if (index > -1) {
-      this.state.projects = this.state.projects.splice(index, 1);
+      this.state.projects.splice(index, 1);
     }
 
     this.applyUpdates();
     this.hasChanged();
   }
   updateProject(project) {
-    const index = _.find(this.state.projects, (projectChange) => {
+    const index = _.findIndex(this.state.projects, (projectChange) => {
       return projectChange.id === project.id;
     });
 

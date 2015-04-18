@@ -8,40 +8,42 @@ var Immutable = require('immutable');
 
 var ENTER_KEY_CODE = 13;
 
-var ProjectState = Marty.createStateMixin({
-  listenTo: [ TaskStore ],
-  getState: function () {
-    return {
-      play: true,
-      project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.context.router.getCurrentParams().id).result))
+class CountDownContainer extends React.Component {
+  constructor(options) {
+    super(options);
+    this.id = this.displayName = 'CountDownContainer';
+    this.state = {
+      play: false,
+      project: this.props.project
     };
   }
-});
 
-var CountDownContainer = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
-  displayName: 'CountDownContainer',
-
-  mixins: [ ProjectState ],
-
-  render: function() {
-
+  render() {
     return (
-      <CountDown tasks={ this.state.project.get('tasks') } title={ this.state.project.get('title') } reset={ this.reset } /> 
+      <CountDown tasks={ this.state.project.tasks } title={ this.state.project.title } reset={ this.reset.bind(this) } /> 
     );
-  },
+  }
 
-  reset: function() {
+  reset(id) {
     this.setState(
       { 
-        project: Immutable.Map(_.cloneDeep(TaskStore.getProject(this.context.router.getCurrentParams().id).result))
+        project: TaskStore.getProject(id).result
       }
     );
   }
   
-});
+}
 
-module.exports = CountDownContainer;
+CountDownContainer.contextTypes = {
+  router: React.PropTypes.func
+};
+
+module.exports = Marty.createContainer(CountDownContainer, {
+  listenTo: [ TaskStore ],
+  fetch: {
+    project() {
+      const id = this.props.id;
+      return TaskStore.for(this).getProject(id).result;
+    } 
+  }
+});

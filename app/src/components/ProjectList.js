@@ -1,5 +1,6 @@
 var React = require('react');
 var TaskStore = require('../stores/TaskStore');
+var OptimisticStore = require('../stores/OptimisticStore');
 var TaskViewActions = require('../actions/TaskViewActions');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -12,10 +13,6 @@ class ProjectList extends React.Component {
       edit: false,
       projects: this.props.projects
     };
-  }
-
-  contextTypes: {
-    router: React.PropTypes.func
   }
 
   displayName: 'ProjectList'
@@ -33,7 +30,7 @@ class ProjectList extends React.Component {
         </h3>
         <div className="list-group project-container">
           {
-            this.state.projects.map(function(project) {
+            this.props.projects.map(function(project) {
               var editBtns = <div className="editBtns">
                                <button onClick={ deleteHandler } value={ project.id }>Delete</button>
                                <button onClick={ editHandler } value={ project.id }>Edit</button>
@@ -70,8 +67,12 @@ class ProjectList extends React.Component {
 
 }
 
+ProjectList.contextTypes = {
+  router: React.PropTypes.func
+};
+
 module.exports = Marty.createContainer(ProjectList, {
-  listenTo: [ TaskStore ],
+  listenTo: [ TaskStore, OptimisticStore ],
   fetch: {
     projects() {
       return TaskStore.for(this).getProjects();

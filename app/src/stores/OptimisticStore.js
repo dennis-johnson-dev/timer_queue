@@ -44,14 +44,22 @@ class OptimisticStore extends Marty.Store {
     });
   }
   addRequest(payload, uid, apiOptions) {
-    console.log('adding request', payload);
     var request = Object.assign(apiOptions, { uid });
     this.state.requests.push(request);
     this.state.updates.push(payload);
+    this.hasChanged();
   }
   removeRequest(project, actionId) {
-    const index = _.remove(this.state.requests, function(request) {
+    _.remove(this.state.requests, function(request) {
       return request.uid === actionId;
+    });
+
+    _.remove(this.state.updates, function(update) {
+      if (_.has(update, 'id')) {
+        return update.id === project.id;
+      } else {
+        return update === project;
+      }
     });
   }
   flushRequests() {

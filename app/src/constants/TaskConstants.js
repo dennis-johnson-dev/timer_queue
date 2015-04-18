@@ -8,6 +8,7 @@ var TaskConstants = Marty.createConstants([
   'DELETE_PROJECT',
   'UPDATE_PROJECT',
   'RECEIVE_PROJECTS',
+  'RECEIVE_PROJECT',
   'FLUSH_REQUESTS',
   'RETRY_REQUESTS',
   'REMOVE_ERRORS'
