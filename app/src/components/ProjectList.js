@@ -9,13 +9,12 @@ var Marty = require('marty');
 class ProjectList extends React.Component {
   constructor(props, context) {
     super(props, context);
+    this.displayName = 'ProjectList';
     this.state = {
       edit: false,
       projects: this.props.projects
     };
   }
-
-  displayName: 'ProjectList'
 
   render() {
     var me = this;

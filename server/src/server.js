@@ -8,10 +8,14 @@ const path = require('path');
 const compression = require('compression');
 require('babel/register');
 const React = require('react');
+const Router = require('react-router');
+const routes = require('../../app/src/Routes');
+const Marty = require('marty');
+let Html = require('../../app/src/components/Html');
 
 
 setInterval(() =>
-  http.get('http://timerqueue.herokuapp.com');
+  http.get('http://timerqueue.herokuapp.com')
 , 30000);
 
 // models
@@ -37,16 +41,6 @@ app.use(compression());
 
 app.set('views', path.join(__dirname + '../../../views'));
 app.set('view engine', 'ejs');
-
-// app routes
-
-// app.get('/', (req, res) => {
-//   res.render('index');
-// });
-
-app.use(require('marty-express')({
-  routes: require('../../app/src/Routes')
-}));
 
 // /api routes
 
@@ -76,7 +70,6 @@ router.route('/projects')
   })
 
   .get((req, res) => {
-    console.log('getting projects')
     Project.find((err, projects) => {
       if (err) {
         res.status(500).send(new Error('Unable to get projects'));
@@ -139,6 +132,42 @@ router.route('/projects/:id')
   });
 
 app.use('/api', router);
+
+// app routes
+
+// app.get('/', (req, res) => {
+//   res.render('index');
+// });
+
+// app.use(require('marty-express')({
+//   routes: require('../../app/src/Routes')
+// }));
+
+app.use((req, res, next) => {
+  Router.run(routes, req.url, function(Handler, state) {
+    const context = Marty.createContext();
+    context.req = req;
+    context.res = res;
+
+    const renderOptions = {
+      type: Handler,
+      context: context,
+      props: state.params
+    };
+
+    const markup = Marty.renderToString(renderOptions).then(function(result) {
+      let html;
+      try {
+        html = React.renderToStaticMarkup(<Html markup={ result.html } />);
+      } catch (e) {
+      }
+      res.send('<!DOCTYPE>' + html);
+    });
+  });
+});
+// ({
+//   routes: require('../../app/src/Routes')
+// }));
 
 // db connection
 

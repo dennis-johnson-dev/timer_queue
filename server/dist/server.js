@@ -10,6 +10,10 @@ var path = require('path');
 var compression = require('compression');
 require('babel/register');
 var React = require('react');
+var Router = require('react-router');
+var routes = require('../../app/src/Routes');
+var Marty = require('marty');
+var Html = require('../../app/src/components/Html');
 
 setInterval(function () {
   return http.get('http://timerqueue.herokuapp.com');
@@ -39,16 +43,6 @@ app.use(compression());
 app.set('views', path.join(__dirname + '../../../views'));
 app.set('view engine', 'ejs');
 
-// app routes
-
-// app.get('/', (req, res) => {
-//   res.render('index');
-// });
-
-app.use(require('marty-express')({
-  routes: require('../../app/src/Routes')
-}));
-
 // /api routes
 
 router.route('/projects').post(function (req, res) {
@@ -74,7 +68,6 @@ router.route('/projects').post(function (req, res) {
     res.json({ message: 'Project created!' });
   });
 }).get(function (req, res) {
-  console.log('getting projects');
   Project.find(function (err, projects) {
     if (err) {
       res.status(500).send(new Error('Unable to get projects'));
@@ -132,6 +125,41 @@ router.route('/projects/:id').get(function (req, res) {
 });
 
 app.use('/api', router);
+
+// app routes
+
+// app.get('/', (req, res) => {
+//   res.render('index');
+// });
+
+// app.use(require('marty-express')({
+//   routes: require('../../app/src/Routes')
+// }));
+
+app.use(function (req, res, next) {
+  Router.run(routes, req.url, function (Handler, state) {
+    var context = Marty.createContext();
+    context.req = req;
+    context.res = res;
+
+    var renderOptions = {
+      type: Handler,
+      context: context,
+      props: state.params
+    };
+
+    var markup = Marty.renderToString(renderOptions).then(function (result) {
+      var html = undefined;
+      try {
+        html = React.renderToStaticMarkup(React.createElement(Html, { markup: result.html }));
+      } catch (e) {}
+      res.send('<!DOCTYPE>' + html);
+    });
+  });
+});
+// ({
+//   routes: require('../../app/src/Routes')
+// }));
 
 // db connection
 

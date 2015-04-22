@@ -4,8 +4,6 @@ var _ = require('lodash');
 var Marty = require('marty');
 var Immutable = require('immutable');
 
-var CHANGE_EVENT = 'change';
-
 class AppStore extends Marty.Store {
   constructor(options) {
     super(options);
@@ -22,7 +20,7 @@ class AppStore extends Marty.Store {
 
   getErrors() {
     return this.fetch({
-      id: 'errors',
+      id: `errors-${_.uniqueId()}`,
       locally() {
         return this.state.errors.length;
       }
@@ -30,7 +28,7 @@ class AppStore extends Marty.Store {
   }
 
   setError(action) {
-    this.state.errors = this.state.errors.push({
+    this.state.errors.push({
       id: action.uid,
       msg: action.payload,
       actionId: action.actionId
@@ -39,11 +37,11 @@ class AppStore extends Marty.Store {
   }
 
   removeError(action) {
-    let index = this.state.errors.findIndex((error) => {
+    const index = _.findIndex(this.state.errors, (error) => {
       return error.id === action.errorId;
     });
 
-    this.state.errors = this.state.errors.delete(index);
+    this.state.errors.splice(index, 1);
     this.hasChanged();
   }
 

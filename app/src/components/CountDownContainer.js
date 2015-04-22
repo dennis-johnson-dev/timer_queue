@@ -27,7 +27,7 @@ class CountDownContainer extends React.Component {
   reset(id) {
     this.setState(
       { 
-        project: TaskStore.getProject(id).result
+        project: TaskStore.for(this).getProject(id).result
       }
     );
   }

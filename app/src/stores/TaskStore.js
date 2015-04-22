@@ -6,15 +6,14 @@ var Immutable = require('immutable');
 var OptimisticStore = require('./OptimisticStore');
 var TaskQueries = require('../queries/TaskQueries');
 
-var CHANGE_EVENT = 'change';
-
 class TaskStore extends Marty.Store {
   constructor(options) {
     super(options);
     this.id = 'TaskStore';
+    let projectChange;
     this.state = {
       projects: [],
-      projectChange: [],
+      projectChange: projectChange,
       updates: []
     };
     this.handlers = {
@@ -25,7 +24,6 @@ class TaskStore extends Marty.Store {
       updateProject: TaskConstants.UPDATE_PROJECT,
       error: AppConstants.RESOLVE
     };
-    this.hasLoaded = false;
   }
   setProject(newProject) {
     const index = _.findIndex(this.state.projectChange, (project) => {
@@ -43,7 +41,6 @@ class TaskStore extends Marty.Store {
   }
   setProjects(projects) {
     this.state.projects = projects;
-    this.hasLoaded = true;
     this.applyUpdates(true);
     this.hasChanged();
   }
@@ -69,9 +66,7 @@ class TaskStore extends Marty.Store {
     return this.fetch({
       id: 'projects' + _.uniqueId(),
       locally: function() {
-        if (!this.hasLoaded) {
-          return;
-        } else {
+        if (this.state.projectChange) {
           return this.state.projectChange;
         }
       },
@@ -93,8 +88,10 @@ class TaskStore extends Marty.Store {
   }
   applyUpdates(force) {
     const forceVal = force || false;
-    var hasUpdates = this.state.updates.length > 0;
-    if (forceVal || hasUpdates || !_.isEqual(this.state.projectChange, this.state.projects)) {
+    const hasUpdates = this.state.updates.length > 0;
+    const hasChanged = !_.isEqual(this.state.projectChange, this.state.projects);
+    const hasProjects = this.state.projectChange && this.state.projectChange.length > 0;
+    if (forceVal || hasUpdates || (hasChanged && hasProjects)) {
       this.state.projectChange = _.cloneDeep(this.state.projects);
       
       if (this.state.updates.length === 0) {

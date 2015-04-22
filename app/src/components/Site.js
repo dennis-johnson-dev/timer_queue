@@ -22,7 +22,7 @@ class Site extends React.Component {
     var notification = null;
     var errors = this.props.errors || null;
     if (errors) {
-      notification = <p>An error has occurred <a href="" onClick={ this.retry }>Click to retry</a></p>;
+      notification = <p>An error has occurred <button onClick={ this.retry }>Click to retry</button></p>;
     }
     return (
       <div className="content">
