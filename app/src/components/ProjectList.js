@@ -38,7 +38,7 @@ class ProjectList extends React.Component {
               return (
                 <Link to="play" className="list-group-item" key={ project.id } params={{ id: project.id }}>
                   <div className="project-title">{ project.title }</div>
-                  <div className="project-maintenance">{ btnContent}</div>    
+                  <div className="project-maintenance">{ btnContent}</div>
                 </Link>
               );
             })
@@ -75,6 +75,6 @@ module.exports = Marty.createContainer(ProjectList, {
   fetch: {
     projects() {
       return TaskStore.for(this).getProjects();
-    } 
+    }
   }
 });

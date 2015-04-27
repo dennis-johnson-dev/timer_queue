@@ -8,7 +8,7 @@ class Html extends React.Component {
 
   render() {
     return (
-      <html lang="en">  
+      <html lang="en">
         <head>
           <title>Timer Queue</title>
             <link rel="stylesheet" href="/vendor/bootstrap.min.css" />

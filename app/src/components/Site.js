@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
@@ -21,7 +22,7 @@ class Site extends React.Component {
   render() {
     var notification = null;
     var errors = this.props.errors || null;
-    if (errors) {
+    if (!_.isEmpty(errors)) {
       notification = <p>An error has occurred <button onClick={ this.retry }>Click to retry</button></p>;
     }
     return (
@@ -65,6 +66,6 @@ module.exports = Marty.createContainer(Site, {
   fetch: {
     errors() {
       return AppStore.for(this).getErrors();
-    } 
+    }
   }
 });

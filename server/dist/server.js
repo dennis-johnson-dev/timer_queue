@@ -41,7 +41,7 @@ app.use(favicon(path.join(__dirname + '../../../public/favicon.ico')));
 app.use(compression());
 
 app.set('views', path.join(__dirname + '../../../views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'jade');
 
 // /api routes
 
@@ -128,38 +128,48 @@ app.use('/api', router);
 
 // app routes
 
-// app.get('/', (req, res) => {
-//   res.render('index');
-// });
+app.get('/', function (req, res) {
+  res.render('index');
+});
 
-// app.use(require('marty-express')({
-//   routes: require('../../app/src/Routes')
-// }));
+/*app.use(require('marty-express')({
+  routes: require('../../app/src/Routes')
+}));*/
 
-app.use(function (req, res, next) {
-  Router.run(routes, req.url, function (Handler, state) {
-    var context = Marty.createContext();
+/*app.use((req, res, next) => {
+  let router = Router.create({
+    location: req.url,
+    routes: routes
+  });
+
+  router.run(function(Handler, state) {
+    let context = Marty.createContext();
     context.req = req;
     context.res = res;
 
-    var renderOptions = {
+    const renderOptions = {
       type: Handler,
       context: context,
-      props: state.params
+      props: state.params,
+      timeout: 10000
     };
 
-    var markup = Marty.renderToString(renderOptions).then(function (result) {
-      var html = undefined;
+    Marty.renderToString(renderOptions).then(function(result) {
+      let html;
+      console.log(result.diagnostics);
+
       try {
-        html = React.renderToStaticMarkup(React.createElement(Html, { markup: result.html }));
-      } catch (e) {}
+        html = React.renderToStaticMarkup(<Html markup={ result.html } />);
+      } catch (e) {
+       console.log(e);
+      }
+      console.log('sent from server')
       res.send('<!DOCTYPE>' + html);
+    }, function(err) {
+      console.log(err);
     });
   });
-});
-// ({
-//   routes: require('../../app/src/Routes')
-// }));
+});*/
 
 // db connection
 

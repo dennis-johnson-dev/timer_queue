@@ -41,7 +41,7 @@
     "gulp": "^3.8.11",
     "gulp-babel": "^5.0.0",
     "immutable": "^3.6.2",
-    "isomorphic-fetch": "^2.0.0",
+    "isomorphic-fetch": "^2.0.2",
     "jade": "^1.9.0",
     "load-grunt-tasks": "^0.6.0",
     "lodash": "^2.4.1",
@@ -53,6 +53,7 @@
     "react-router": "^0.13.1",
     "react-tools": "^0.13.1",
     "serve-favicon": "^2.1.6",
+    "superagent": "^1.2.0",
     "webpack": "^1.4.13"
   },
   "jest": {

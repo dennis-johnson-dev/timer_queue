@@ -10,10 +10,9 @@ class TaskStore extends Marty.Store {
   constructor(options) {
     super(options);
     this.id = 'TaskStore';
-    let projectChange;
     this.state = {
       projects: [],
-      projectChange: projectChange,
+      projectChange: [],
       updates: []
     };
     this.handlers = {
@@ -24,6 +23,7 @@ class TaskStore extends Marty.Store {
       updateProject: TaskConstants.UPDATE_PROJECT,
       error: AppConstants.RESOLVE
     };
+    this.hasUpdated = false;
   }
   setProject(newProject) {
     const index = _.findIndex(this.state.projectChange, (project) => {
@@ -40,7 +40,9 @@ class TaskStore extends Marty.Store {
     this.hasChanged();
   }
   setProjects(projects) {
+    console.log('setting')
     this.state.projects = projects;
+    this.hasUpdated = true;
     this.applyUpdates(true);
     this.hasChanged();
   }
@@ -64,13 +66,17 @@ class TaskStore extends Marty.Store {
   }
   getProjects() {
     return this.fetch({
-      id: 'projects' + _.uniqueId(),
+      id: 'projects',
       locally: function() {
-        if (this.state.projectChange) {
+        console.log('locally')
+        if (this.hasUpdated) {
+          console.log('has data')
           return this.state.projectChange;
         }
+        console.log('doesn\'t have data')
       },
       remotely: function() {
+        console.log('remotely')
         return TaskQueries.for(this).getProjects();
       },
       dependsOn: this.getUpdates()
@@ -78,7 +84,7 @@ class TaskStore extends Marty.Store {
   }
   getUpdates() {
     return this.fetch({
-      id: 'updates-' + _.uniqueId(),
+      id: 'updates',
       locally: function() {
         this.state.updates = OptimisticStore.for(this).getUpdates().result;
         this.applyUpdates();
@@ -93,7 +99,7 @@ class TaskStore extends Marty.Store {
     const hasProjects = this.state.projectChange && this.state.projectChange.length > 0;
     if (forceVal || hasUpdates || (hasChanged && hasProjects)) {
       this.state.projectChange = _.cloneDeep(this.state.projects);
-      
+
       if (this.state.updates.length === 0) {
         return;
       }
@@ -132,7 +138,7 @@ class TaskStore extends Marty.Store {
     this.hasChanged();
   }
   deleteProject(id) {
-    const index = _.findIndex(this.state.projects, (project) => { 
+    const index = _.findIndex(this.state.projects, (project) => {
       return project.id === id;
     });
 

@@ -20,9 +20,13 @@ class AppStore extends Marty.Store {
 
   getErrors() {
     return this.fetch({
-      id: `errors-${_.uniqueId()}`,
+      id: 'errors',
       locally() {
-        return this.state.errors.length;
+        if (this.state.errors.length > 0) {
+          return this.state.errors.length;
+        } else {
+          return Promise.resolve(0);
+        }
       }
     });
   }
