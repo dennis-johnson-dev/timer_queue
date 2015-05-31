@@ -31,7 +31,7 @@ var Site = React.createClass({
     var notification = null;
     var errors = this.state.errors || null;
     if (errors) {
-      notification = <p>An error has occurred <a href="" onClick={ this.retry }>Click to retry</a></p>;
+      notification = <p>An error has occurred - { this.state.errors.get(0).msg }<a href="" onClick={ this.retry }>Click to retry</a></p>;
     }
     return (
       <div className="content">
