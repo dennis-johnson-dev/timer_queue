@@ -21,7 +21,7 @@ var AppStore = Marty.createStore({
     };
   },
   getErrors: function() {
-    return this.state.errors.count();
+    return this.state.errors;
   },
   setError: function(action) {
     this.state.errors = this.state.errors.push({

@@ -29,7 +29,7 @@ var Site = React.createClass({
 
   render: function() {
     var notification = null;
-    var errors = this.state.errors || null;
+    var errors = this.state.errors.count() || null;
     if (errors) {
       notification = <p>An error has occurred - { this.state.errors.get(0).msg }<a href="" onClick={ this.retry }>Click to retry</a></p>;
     }
