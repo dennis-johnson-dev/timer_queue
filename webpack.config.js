@@ -2,24 +2,24 @@ var webpack = require('webpack');
 
 module.exports =  {
   entry: {
-    App: ['webpack/hot/dev-server', './app/src/App.js']
+    App: ['webpack/hot/dev-server', './app/src/index.js']
   },
   output: {
     path: 'public/js',
-    filename: '[name].js', 
+    filename: '[name].js',
     publicPath: 'http://localhost:3001/js'
   },
   module: {
     loaders: [
-      { 
-        test: /\.js$/, 
+      {
+        test: /\.js$/,
         exclude: /node_modules\/(?!marty)/,
-        loader: 'react-hot!babel-loader?experimental&optional=runtime'
+        loader: 'react-hot!babel-loader?cacheDirectory&stage=1&optional[]=runtime&loose=es6.classes'
       }
     ]
   },
   externals: {
-    'react': 'React', 
+    'react': 'React',
     'react/addons': 'React'
   },
   resolve: {
@@ -29,4 +29,3 @@ module.exports =  {
   plugins: [],
   devtool: '#inline-source-map'
 };
-

@@ -1,11 +1,12 @@
-var React = require('react');
-var _ = require('lodash');
-var TaskViewActions = require('../actions/TaskViewActions');
-var TaskList = require('./TaskList');
-var formatTime = require('../lib/formatTime');
-var md5 = require('MD5');
+const React = require('react');
+const Marty = require('marty');
+const _ = require('lodash');
+const TaskList = require('./TaskList');
+const formatTime = require('../lib/formatTime');
+const md5 = require('MD5');
+const Immutable = require('immutable');
 
-var CreateProject = React.createClass({
+const CreateProject = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
@@ -13,36 +14,36 @@ var CreateProject = React.createClass({
   displayName: 'CreateProject',
 
   getTaskModel: function() {
-    var id = md5(Date.now() + 2);
-    return {
+    const id = md5(Date.now() + 2);
+    return Immutable.Map({
       id: id,
       title: '',
       time: 0,
       desc: ''
-    };
+    });
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var project = {
+    const project = {
       id: md5(Object.keys(this.state.tasks).toString() + Date.now()),
       title: this.refs.projectTitle.getDOMNode().value,
-      tasks: this.state.tasks
+      tasks: this.state.tasks.toJS()
     };
 
-    TaskViewActions.createProject(project);
+    this.app.TaskViewActions.createProject(project);
     this.context.router.transitionTo('home');
   },
 
   getInitialState: function() {
-    var defaultTask = this.getTaskModel();
+    const defaultTask = this.getTaskModel();
     return {
-      tasks: [defaultTask]
+      tasks: Immutable.List([defaultTask])
     };
   },
 
   render: function() {
-    var me = this;
+    const me = this;
     return (
       <div className="createProject container">
         <h3>New Project</h3>
@@ -53,7 +54,7 @@ var CreateProject = React.createClass({
               <div className="col-sm-10">
                 <input type="text" className="form-control" name="projectTitle" placeholder="Project Title" ref="projectTitle" />
               </div>
-            </div> 
+            </div>
           </div>
           <div className="form-group">
             <TaskList tasks={ this.state.tasks } onTaskChange={ this.handleTaskChange }/>
@@ -67,17 +68,18 @@ var CreateProject = React.createClass({
     );
   },
 
-  handleTaskChange: function(task, index) {
-    var tasks = this.state.tasks;
-    tasks[index] = task;
+  handleTaskChange(updatedTask, index) {
+    const tasks = this.state.tasks.update(index, (task) => {
+      return updatedTask;
+    });
     this.setState({ tasks: tasks });
   },
 
   onAddTask: function(e) {
     e.preventDefault();
 
-    var taskModel = this.getTaskModel();
-    var tasks = this.state.tasks;
+    const taskModel = this.getTaskModel();
+    const tasks = this.state.tasks;
 
     tasks.push(taskModel);
     this.setState({ tasks: tasks });
@@ -85,4 +87,4 @@ var CreateProject = React.createClass({
 
 });
 
-module.exports = CreateProject;
+module.exports = Marty.createContainer(CreateProject);

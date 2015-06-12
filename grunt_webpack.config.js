@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 
-var uglify = new webpack.optimize.UglifyJsPlugin({ 
+var uglify = new webpack.optimize.UglifyJsPlugin({
   compress: {
     warnings: false
   },
@@ -10,14 +10,14 @@ var uglify = new webpack.optimize.UglifyJsPlugin({
 module.exports = function(profile) {
   var config = {
     entry: {
-      App: ['./app/src/App.js']
+      App: ['./app/src/index.js']
     },
     module: {
       loaders: [
-        { 
-          test: /\.js$/, 
-          exclude: /node_modules\/(?!marty)/, 
-          loader: 'babel-loader?experimental&optional=runtime'
+        {
+          test: /\.js$/,
+          exclude: /node_modules\/(?!marty)/,
+          loader: 'babel-loader?experimental&optional[]=runtime'
         }
       ]
     },
@@ -27,7 +27,7 @@ module.exports = function(profile) {
       publicPath: 'js'
     },
     externals: {
-      'react': 'React', 
+      'react': 'React',
       'react/addons': 'React'
     },
     resolve: {

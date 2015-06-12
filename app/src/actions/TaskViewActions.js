@@ -1,67 +1,52 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var TaskConstants = require('../constants/TaskConstants');
-var AppAPI = require('../api/AppAPI');
-var Marty = require('marty');
-var _ = require('lodash');
+const TaskConstants = require('../constants/TaskConstants');
+const AppAPI = require('../api/AppAPI');
+const Marty = require('marty');
+const _ = require('lodash');
 
-var TaskViewActions = Marty.createActionCreators({
-  id: 'TaskViewActionCreators',
+class TaskViewActions extends Marty.ActionCreators {
+  constructor(options) {
+    super(options);
+  }
 
-  createProject: function(project) {
-    var action = {
-      payload: project,
-      uid: _.uniqueId()
-    };
-
-    var apiOptions = {
+  createProject(project) {
+    const apiOptions = {
       url: '/api/projects',
       method: 'POST',
       body: project
     };
 
-    this.dispatch(TaskConstants.VIEW_CREATE_PROJECT, action.payload, action.uid, apiOptions);
+    const action = this.dispatch(TaskConstants.CREATE_PROJECT, project);
 
-    AppAPI.createProject(project, action.uid, apiOptions);
-  },
+    this.app.AppAPI.request(apiOptions).then(() => {
+      this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, action.id);
+    }, (err) => {
+      this.dispatch(TaskConstants.REVERT_UPDATE, project.id, action.id);
+    });
+  }
 
-  deleteProject: function(id) {
-    var action = {
-      payload: id,
-      uid: _.uniqueId()
-    };
-
-    var apiOptions = {
+  deleteProject(id) {
+    const apiOptions = {
       url: '/api/projects/' + id,
       method: 'DELETE',
       body: ""
     };
 
-    this.dispatch(TaskConstants.VIEW_DELETE_PROJECT, action.payload, action.uid, apiOptions);
-    
-    AppAPI.deleteProject(id, action.uid, apiOptions);
-  },
+    this.app.AppAPI.request(apiOptions).then(() => {
+      this.dispatch(TaskConstants.DELETE_PROJECT, id);
+    });
+  }
 
-  updateProject: function(project) {
-    var action = {
-      payload: project,
-      uid: _.uniqueId()
-    };
-
-    var apiOptions = {
+  updateProject(project) {
+    const apiOptions = {
       url: '/api/projects/' + project.id,
       method: 'PUT',
       body: project
     };
 
-    this.dispatch(TaskConstants.VIEW_UPDATE_PROJECT, action.payload, action.uid, apiOptions);
-    
-    AppAPI.updateProject(project, action.uid, apiOptions);
-  },
-
-  retry: function() {
-    AppAPI.flush();
-    this.dispatch(TaskConstants.RETRY_REQUESTS);
+    this.app.AppAPI.request(apiOptions).then(() => {
+      this.dispatch(TaskConstants.UPDATE_PROJECT, project);
+    });
   }
-});
+}
 
 module.exports = TaskViewActions;

@@ -1,34 +1,28 @@
-var React = require('react');
-var _ = require('lodash');
-var TaskViewActions = require('../actions/TaskViewActions');
-var TaskStore = require('../stores/TaskStore');
-var TaskList = require('./TaskList');
-var md5 = require('MD5');
-var Marty = require('marty');
+const React = require('react');
+const _ = require('lodash');
+const TaskStore = require('../stores/TaskStore');
+const TaskList = require('./TaskList');
+const md5 = require('MD5');
+const Marty = require('marty');
 
-var ProjectState = Marty.createStateMixin({
-  listenTo: [ TaskStore ],
-  getState: function () {
-    var project = TaskStore.getProject(this.context.router.getCurrentParams().id).result;
-    var tasks = project.tasks;
-    return {
-      project: project,
-      tasks: tasks
-    };
-  }
-});
-
-var EditProject = React.createClass({
+const EditProject = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
 
   displayName: 'EditProject',
 
-  mixins: [ ProjectState ],
+  getInitialState() {
+    const project = this.props.project;
+    const tasks = project.get('tasks');
+    return {
+      project,
+      tasks
+    };
+  },
 
-  getTaskModel: function() {
-    var id = md5(Date.now() + 2);
+  getTaskModel() {
+    const id = md5(Date.now() + 2);
     return {
       id: id,
       title: '',
@@ -37,21 +31,24 @@ var EditProject = React.createClass({
     };
   },
 
-  handleSubmit: function(e) {
+  handleSubmit(e) {
     e.preventDefault();
-    var project = {
-      id: this.state.project.id,
-      title: this.state.project.title,
-      tasks: this.state.tasks
+    const project = {
+      id: this.state.project.get('id'),
+      title: this.state.project.get('title'),
+      tasks: this.state.tasks.toJS()
     };
 
-    TaskViewActions.updateProject(project);
+    this.app.TaskViewActions.updateProject(project);
     this.context.router.transitionTo('home');
   },
 
-  render: function() {
-    var me = this;
-    
+  render() {
+    if (!this.props.project) {
+      return null;
+    }
+    const me = this;
+
     return (
       <div className="createProject container">
         <h3>Edit Project</h3>
@@ -60,9 +57,9 @@ var EditProject = React.createClass({
             <div className="form-group text-left">
               <label className="col-sm-2 control-label">Project Title: </label>
               <div className="col-sm-10">
-                <input type="text" onChange={ me.onTitleChange } className="form-control" name="projectTitle" placeholder="Project Title" ref="projectTitle" defaultValue={ this.state.project.title } />
-              </div> 
-            </div> 
+                <input type="text" onChange={ me.onTitleChange } className="form-control" name="projectTitle" placeholder="Project Title" ref="projectTitle" defaultValue={ this.state.project.get('title') } />
+              </div>
+            </div>
           </div>
           <div className="form-group">
             <TaskList tasks={ this.state.tasks } onTaskChange={ this.handleTaskChange }/>
@@ -76,25 +73,25 @@ var EditProject = React.createClass({
     );
   },
 
-  handleTaskChange: function(task, index) {
-    var tasks = this.state.tasks;
+  handleTaskChange(task, index) {
+    const tasks = this.state.tasks;
     tasks[index] = task;
     this.setState({ tasks: tasks });
   },
 
-  onAddTask: function(e) {
+  onAddTask(e) {
     e.preventDefault();
 
-    var taskModel = this.getTaskModel();
-    var tasks = this.state.tasks;
+    const taskModel = this.getTaskModel();
+    const tasks = this.state.tasks;
 
     tasks.push(taskModel);
     this.setState({ tasks: tasks });
   },
 
-  onTitleChange: function(e) {
+  onTitleChange(e) {
     e.preventDefault();
-    var project = this.state.project;
+    const project = this.state.project;
     project.title = e.target.value;
     this.setState({
       project: project
@@ -103,4 +100,15 @@ var EditProject = React.createClass({
 
 });
 
-module.exports = EditProject;
+module.exports = Marty.createContainer(EditProject, {
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+  listenTo: 'TaskStore',
+  fetch: {
+    project() {
+      const id = this.context.router.getCurrentParams().id;
+      return this.context.app.TaskStore.getProject(id);
+    }
+  }
+});

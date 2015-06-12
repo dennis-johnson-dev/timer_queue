@@ -1,16 +1,12 @@
-var Marty = require('marty');
+const Marty = require('marty');
 
-var TaskConstants = Marty.createConstants([
-  'VIEW_CREATE_PROJECT',
-  'VIEW_DELETE_PROJECT',
-  'VIEW_UPDATE_PROJECT',
+const TaskConstants = Marty.createConstants([
+  'RECEIVE_PROJECTS',
   'CREATE_PROJECT',
+  'CLEANUP_RECORD',
   'DELETE_PROJECT',
   'UPDATE_PROJECT',
-  'RECEIVE_PROJECTS',
-  'FLUSH_REQUESTS',
-  'RETRY_REQUESTS',
-  'REMOVE_ERRORS'
+  'REVERT_UPDATE'
 ]);
 
 module.exports = TaskConstants;

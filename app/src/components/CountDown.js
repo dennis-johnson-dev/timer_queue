@@ -1,93 +1,100 @@
-var React = require('react/addons');
-var _ = require('lodash');
-var TaskStore = require('../stores/TaskStore');
-var formatTime = require('../lib/formatTime');
-var Marty = require('marty');
-var Immutable = require('immutable');
-var classnames = require('classnames');
+const React = require('react/addons');
+const _ = require('lodash');
+const TaskStore = require('../stores/TaskStore');
+const formatTime = require('../lib/formatTime');
+const Marty = require('marty');
+const Immutable = require('immutable');
+const classnames = require('classnames');
 
-var ENTER_KEY_CODE = 13;
+const ENTER_KEY_CODE = 13;
 
-var CountDown = React.createClass({
+const CountDown = React.createClass({
 
   displayName: 'CountDown',
 
-  getInitialState: function() {
+  getInitialState() {
+    const project = this.props.project;
+    const tasks = project.get('tasks');
     return {
       play: true,
-      tasks: Immutable.List(this.props.tasks)
+      project,
+      tasks
     };
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    this.setState({
-      tasks: Immutable.List(nextProps.tasks)
-    });
-  },
-
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     clearInterval(this.current);
   },
-  start: function() {
+
+  start() {
     if (!this.current) {
       this.current = setInterval(this.decrement, 1000);
       this.setState({ play: false });
     }
   },
-  stop: function() {
+
+  stop() {
     clearInterval(this.current);
     this.current = null;
     this.setState({ play: true });
   },
-  decrement: function() {
-    let task = this.state.tasks.get(0);
-    if (this.state.tasks.count() > 0 && task.time > 1) {
 
-      this.setState({ 
-        tasks: this.state.tasks.update(0, 
-                                       (task) => {
-                                         task.time -=1;
-                                         return task;
-                                       }
-                                      ) 
+  decrement() {
+    let task = this.state.tasks.get(0);
+    if (this.state.tasks.count() > 0 && task.get('time') > 1) {
+
+      const newTasks = this.state.tasks.update(0, (task) => {
+        let time = task.get('time');
+        return task.set('time', time -= 1);
+      });
+
+      this.setState({
+        tasks: newTasks
       });
 
     } else if (this.state.tasks.count() === 0) {
       this.stop();
     } else {
-      this.setState({ tasks: this.state.tasks.shift() });
+      this.state.tasks.setState({
+        tasks: this.state.tasks.shift()
+      });
     }
   },
-  render: function() {
-    var play = this.state.play;
-    var classes = classnames({
+
+  render() {
+    if (!this.props.project) {
+      return null;
+    }
+    const tasks = this.state.tasks;
+    const play = this.state.play;
+    const classes = classnames({
       'glyphicon': true,
       'glyphicon-play': play,
       'glyphicon-pause': !play
     });
 
-    var firstTask = this.state.tasks.get(0) ? this.state.tasks.get(0) : { time: 0, desc: '' };
+    const firstTask = tasks.get(0) ? tasks.get(0) : { time: 0, desc: '' };
 
     return (
       <div className="play">
-      <h3>{ this.props.title }</h3>
+      <h3>{ this.props.project.get('title') }</h3>
       <button className="btn btn-primary" onClick={ this.play }><i className={ classes }></i></button>
       <button className="btn btn-info" onClick={ this.reset }>Reset</button>
       <p className="time-remaining">Time Remaining: <br />
-      <span className="curr-total-time">{ formatTime(firstTask.time) }</span>
+      <span className="curr-total-time">{ formatTime(firstTask.get('time')) }</span>
       </p>
-      <p className="curr-task-description">{ firstTask.desc }</p>
+      <p className="curr-task-description">{ firstTask.get('desc') }</p>
       <ul className="tasks">
       {
-        this.state.tasks.toArray().map(function(task) {
+        tasks.map((task) => {
           if (task === firstTask) {
             return;
           }
           return (
-            <li className='task' key={ task.id }>
+            <li className='task' key={ task.get('id') }>
               <div>
-                <div className="task-time">{ formatTime(task.time) }</div>
-                <div className="task-desc">{ task.desc }</div>
+                <div className="task-time">{ formatTime(task.get('time')) }</div>
+                <div className="task-desc">{ task.get('desc') }</div>
               </div>
             </li>
           );
@@ -97,16 +104,18 @@ var CountDown = React.createClass({
       </div>
     );
   },
-  play: function() {
+
+  play() {
     if (!this.current) {
       this.start();
     } else {
       this.stop();
     }
   },
-  reset: function() {
-    this.stop(); 
-    this.props.reset();
+
+  reset() {
+    this.stop();
+    this.state.tasks = this.props.project.get('tasks');
   }
 
 });

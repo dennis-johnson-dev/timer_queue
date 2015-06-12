@@ -1,32 +1,25 @@
-var React = require('react');
-var TaskStore = require('../stores/TaskStore');
-var OptimisticStore = require('../stores/OptimisticStore');
-var TaskViewActions = require('../actions/TaskViewActions');
-var Router = require('react-router');
-var Link = Router.Link;
-var Marty = require('marty');
+const React = require('react');
+const Router = require('react-router');
+const Link = Router.Link;
 
-var ProjectState = Marty.createStateMixin({
-  listenTo: [ TaskStore ],
-  getState: function () {
-    return {
-      edit: false,
-      projects: TaskStore.getProjects().result
-    };
-  }
-});
-
-var ProjectList = React.createClass({
+const ProjectList = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
 
   displayName: 'ProjectList',
 
-  mixins: [ ProjectState ],
+  getInitialState() {
+    return {
+      edit: false
+    };
+  },
 
-  render: function() {
-    var me = this;
+  render() {
+    const me = this;
+    if (!this.props.projects) {
+      return null;
+    }
   	return (
       <div className="project">
         <h3>
@@ -35,16 +28,16 @@ var ProjectList = React.createClass({
         </h3>
         <div className="list-group project-container">
           {
-            this.state.projects.map(function(project) {
-              var editBtns = <div className="editBtns">
-                               <button onClick={ me._onDelete } value={ project.id }>Delete</button>
-                               <button onClick={ me._onEdit } value={ project.id }>Edit</button>
+            this.props.projects.map(function(project) {
+              const editBtns = <div className="editBtns">
+                               <button onClick={ me._onDelete } value={ project.get('id') }>Delete</button>
+                               <button onClick={ me._onEdit } value={ project.get('id') }>Edit</button>
                              </div>
-              var btnContent = me.state.edit ? editBtns : '';
+              const btnContent = me.state.edit ? editBtns : '';
               return (
-                <Link to="play" className="list-group-item" key={ project.id } params={{ id: project.id }}>
-                  <div className="project-title">{ project.title }</div>
-                  <div className="project-maintenance">{ btnContent}</div>    
+                <Link to="play" className="list-group-item" key={ project.get('id') } params={{ id: project.get('id') }}>
+                  <div className="project-title">{ project.get('title') }</div>
+                  <div className="project-maintenance">{ btnContent}</div>
                 </Link>
               );
             })
@@ -55,17 +48,17 @@ var ProjectList = React.createClass({
     );
   },
 
-  _onDelete: function(e) {
+  _onDelete(e) {
     e.preventDefault();
-    TaskViewActions.deleteProject(e.target.value);
+    this.app.TaskViewActions.deleteProject(e.target.value);
   },
 
-  _onEdit: function(e) {
+  _onEdit(e) {
     e.preventDefault();
     this.context.router.transitionTo('edit', { id: e.target.value });
   },
 
-  _onEditMode: function(e) {
+  _onEditMode(e) {
     e.preventDefault();
     this.setState({ edit: !this.state.edit });
   }

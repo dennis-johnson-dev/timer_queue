@@ -1,139 +1,148 @@
-var AppConstants = require('../constants/AppConstants');
-var TaskConstants = require('../constants/TaskConstants');
-var _ = require('lodash');
-var Marty = require('marty');
-var Immutable = require('immutable');
-var OptimisticStore = require('./OptimisticStore');
+const _ = require('lodash');
+const AppConstants = require('../constants/AppConstants');
+const TaskConstants = require('../constants/TaskConstants');
+const Marty = require('marty');
+const Immutable = require('immutable');
+const TaskQueries = require('../queries/TaskQueries');
 
-var CHANGE_EVENT = 'change';
 
-var TaskStore = Marty.createStore({
-  id: 'Task Store',
+function createOptimisticStore(spec) {
+  return (
+    class OptimisticStore extends Marty.Store {
+      constructor(options) {
+        super(options);
+
+        this.handlers = {
+          setProjects: TaskConstants.RECEIVE_PROJECTS,
+          createProject: TaskConstants.CREATE_PROJECT,
+          cleanup: TaskConstants.CLEANUP_RECORD,
+          deleteProject: TaskConstants.DELETE_PROJECT,
+          updateProject: TaskConstants.UPDATE_PROJECT,
+          revertUpdate: TaskConstants.REVERT_UPDATE
+        };
+
+        this.history = Immutable.List();
+        this.history = this.history.push(this.getInitialState());
+        this.actionQueue = Immutable.List();
+      }
+
+      handleAction(action) {
+        // needs to only apply to records, not all actions
+        this.actionQueue = this.actionQueue.push(action);
+        for (let argument of action.arguments) {
+          if (_.isArray(argument)) {
+            for (let arg of argument) {
+              arg = Object.assign(arg, { isDirty: true });
+            }
+          } else {
+            argument = Object.assign(argument, { isDirty: true });
+          }
+        }
+        super.handleAction(action);
+      }
+
+      getInitialState() {
+        return {
+          projects: new Immutable.List()
+        };
+      }
+
+      cleanup(id, actionId) {
+        const index = this.state.projects.findIndex((proj) => {
+          return proj.get('id') === id;
+        });
+
+        this.state.projects = this.state.projects.update(index, (proj) => {
+          return proj.set('isDirty', false);
+        });
+
+        // remove action from actionQueue
+        // push onto history filtered state (no dirties)
+        this.history = this.history.push(this.state.projects);
+        this.hasChanged();
+      }
+
+      revertUpdate(id, actionId) {
+        // remove from actionQueue
+        // use previous state from history (pop)
+        // apply updates from actionQueue
+        this.hasChanged();
+      }
+
+      setProjects(projects) {
+        this.state.projects = Immutable.fromJS(projects);
+        this.hasChanged();
+      }
+
+      getProject(id) {
+        return this.fetch({
+          id: 'project-' + id,
+          locally: function() {
+            const index = this.state.projects.findIndex(function(project) {
+              return project.id === id;
+            });
+
+            return this.state.projects.get(index);
+          },
+          dependsOn: this.getProjects()
+        });
+      }
+
+      getProjects() {
+        return this.fetch({
+          id: 'projects',
+          locally: function() {
+            if (this.hasAlreadyFetched('projects')) {
+              return this.state.projects;
+            }
+          },
+          remotely: function() {
+            return this.app.TaskQueries.getProjects();
+          }
+        });
+      }
+
+      createProject(project) {
+        this.state.projects = this.state.projects.push(Immutable.fromJS(project));
+        this.hasChanged();
+      }
+
+      deleteProject(id) {
+        const index = this.state.projects.findIndex((project) => {
+          return project.get('id') === id;
+        });
+
+        if (index > -1) {
+          this.state.projects = this.state.projects.delete(index);
+        }
+
+        this.state.projects = this.state.projects.filter((project) => {
+          return !_.isUndefined(project);
+        });
+
+        this.hasChanged();
+      }
+
+      updateProject(project) {
+        const index = this.state.projects.findIndex((proj) => {
+          return proj.get('id') === project.id;
+        });
+
+        if (index > -1 ) {
+          this.state.projects = this.state.projects.set(index, Immutable.fromJS(project));
+        }
+
+        this.hasChanged();
+      }
+    }
+  );
+}
+
+module.exports = createOptimisticStore({
   handlers: {
     setProjects: TaskConstants.RECEIVE_PROJECTS,
     createProject: TaskConstants.CREATE_PROJECT,
     deleteProject: TaskConstants.DELETE_PROJECT,
-    updateProject: TaskConstants.UPDATE_PROJECT,
-    error: AppConstants.RESOLVE
-  },
-  getInitialState: function() {
-    return {
-      projects: new Immutable.List(),
-      projectChange: new Immutable.List(),
-      updates: []
-    };
-  },
-  setProjects: function(projects) {
-    this.state.projects = new Immutable.List(projects);
-    this.applyUpdates();
-    this.hasChanged();
-  },
-  getProject: function(id) {
-    return this.fetch({
-      id: 'project-' + id,
-      locally: function() {
-        const index = this.state.projectChange.findIndex(function(project) {
-          return project.id === id;
-        });
-
-        return _.cloneDeep(this.state.projectChange.get(index));
-      },
-      dependsOn: this.getUpdates()
-    });
-  },
-  getProjects: function() {
-    return this.fetch({
-      id: 'projects' + _.uniqueId(),
-      locally: function() {
-        return this.state.projectChange.toJS();
-      },
-      dependsOn: this.getUpdates()
-    });
-  },
-  getUpdates: function() {
-    return this.fetch({
-      id: 'updates-' + _.uniqueId(),
-      locally: function() {
-        this.state.updates = OptimisticStore.getUpdates();
-        this.applyUpdates();
-        return true;
-      }
-    });
-  },
-  applyUpdates: function(force=false) {
-    var hasUpdates = this.state.updates.length > 0;
-    if (force || hasUpdates || !Immutable.is(this.state.projectChange, this.state.projects)) {
-      this.state.projectChange = this.state.projects;
-      
-      if (this.state.updates.length === 0) {
-        return;
-      }
-
-      this.state.updates.forEach((update) => {
-        const index = this.state.projectChange.findIndex((project) => {
-          if (update.id) {
-            return project.id === update.id;
-          } else {
-            return project.id === update;
-          }
-        });
-
-        if (_.isString(update) && index > -1) {
-          this.state.projectChange = this.state.projectChange.delete(index);
-          return;
-        }
-
-        if (index > -1) {
-          this.state.projectChange = this.state.projectChange.set(index, update);
-        } else {
-          if (!_.isString(update)) {
-            this.state.projectChange = this.state.projectChange.push(update);
-          }
-        }
-      }, this);
-
-      this.state.projectChange = this.state.projectChange.filter((project) => {
-        return !_.isUndefined(project);
-      });
-    }
-  },
-  error: function(action) {
-    this.applyUpdates(true);
-    this.hasChanged();
-  },
-  createProject: function(project) {
-    this.state.projects = this.state.projects.push(project);
-    this.applyUpdates();
-    this.hasChanged();
-  },
-  deleteProject: function(id) {
-    const index = this.state.projects.findIndex((project) => { 
-      return project.id === id;
-    });
-
-    if (index > -1) {
-      this.state.projects = this.state.projects.delete(index);
-    }
-
-    this.state.projects = this.state.projects.filter((project) => {
-      return !_.isUndefined(project);
-    });
-
-    this.applyUpdates();
-    this.hasChanged();
-  },
-  updateProject: function(project) {
-    const index = this.state.projects.findIndex((projectChange) => {
-      return projectChange.id === project.id;
-    });
-
-    if (index > -1 ) {
-      this.state.projects = this.state.projects.set(index, project);
-    }
-
-    this.applyUpdates();
-    this.hasChanged();
+    updateProject: TaskConstants.UPDATE_PROJECT
   }
 });
-
-module.exports = TaskStore;
