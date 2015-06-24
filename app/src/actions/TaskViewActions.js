@@ -15,12 +15,12 @@ class TaskViewActions extends Marty.ActionCreators {
       body: project
     };
 
-    const action = this.dispatch(TaskConstants.CREATE_PROJECT, project);
+    const action = this.dispatch(TaskConstants.CREATE_PROJECT_OPTIMISTIC, project);
 
-    this.app.AppAPI.request(apiOptions).then(() => {
-      this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, action.id);
+    this.app.AppAPI.requester(apiOptions, action).then((res) => {
+      this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
     }, (err) => {
-      this.dispatch(TaskConstants.REVERT_UPDATE, project.id, action.id);
+      this.dispatch(TaskConstants.REVERT_UPDATE, project.id, res.action);
     });
   }
 
@@ -31,8 +31,12 @@ class TaskViewActions extends Marty.ActionCreators {
       body: ""
     };
 
+    const action = this.dispatch(TaskConstants.DELETE_PROJECT_OPTIMISTIC, id);
+
     this.app.AppAPI.request(apiOptions).then(() => {
-      this.dispatch(TaskConstants.DELETE_PROJECT, id);
+      this.dispatch(TaskConstants.CLEANUP_RECORD, null, action);
+    }, (err) => {
+      this.dispatch(TaskConstants.REVERT_UPDATE, null, action);
     });
   }
 
@@ -44,7 +48,7 @@ class TaskViewActions extends Marty.ActionCreators {
     };
 
     this.app.AppAPI.request(apiOptions).then(() => {
-      this.dispatch(TaskConstants.UPDATE_PROJECT, project);
+      this.dispatch(TaskConstants.UPDATE_PROJECT_OPTIMISTIC, project);
     });
   }
 }

@@ -8,8 +8,8 @@ class TaskQueries extends Marty.Queries {
       method: 'GET'
     };
 
-    return this.app.AppAPI.requester(options).then((res) => {
-      this.dispatch(TaskConstants.RECEIVE_PROJECTS, res);
+    return this.app.AppAPI.requester(options).then((response) => {
+      this.dispatch(TaskConstants.RECEIVE_PROJECTS, response.body);
     }).catch((e) => {
       console.log(e);
     });

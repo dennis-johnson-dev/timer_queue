@@ -4,14 +4,17 @@ require('marty').HttpStateSource.removeHook('parseJSON');
 const OptimisticStore = require('../stores/OptimisticStore');
 const Helper = require('./Helper');
 
-class AppAPI extends Marty.HttpStateSource {
-  requester(options) {
+export default class AppAPI extends Marty.HttpStateSource {
+  requester(options, action) {
     return this.request(options).then((res) => {
       if (res.ok) {
-        return res.json();
+        return res.json().then((body) => {
+          return {
+            body,
+            action
+          };
+        });
       }
     });
   }
 }
-
-module.exports = AppAPI;
