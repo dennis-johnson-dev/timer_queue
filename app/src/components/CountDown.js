@@ -17,18 +17,32 @@ const CountDown = React.createClass({
     const tasks = project.get('tasks');
     return {
       play: true,
+      complete: false,
       project,
       tasks
     };
   },
 
   componentWillUnmount() {
-    clearInterval(this.current);
+    if (this.current) {
+      clearInterval(this.current);
+    }
+  },
+
+  _getInterval({func, time}) {
+    return setInterval(func, time);
   },
 
   start() {
+    const intervalOptions = {
+      func: this.decrement,
+      time: 1000
+    };
     if (!this.current) {
-      this.current = setInterval(this.decrement, 1000);
+      if (this.state.complete) {
+        this.reset();
+      }
+      this.current = this._getInterval(intervalOptions);
       this.setState({ play: false });
     }
   },
@@ -41,6 +55,7 @@ const CountDown = React.createClass({
 
   decrement() {
     let task = this.state.tasks.get(0);
+
     if (this.state.tasks.count() > 0 && task.get('time') > 1) {
 
       const newTasks = this.state.tasks.update(0, (task) => {
@@ -52,12 +67,17 @@ const CountDown = React.createClass({
         tasks: newTasks
       });
 
-    } else if (this.state.tasks.count() === 0) {
-      this.stop();
     } else {
-      this.state.tasks.setState({
+
+      this.setState({
         tasks: this.state.tasks.shift()
       });
+      if (this.state.tasks.count() === 0) {
+        this.stop();
+        this.setState({
+          complete: true
+        });
+      }
     }
   },
 
@@ -73,7 +93,7 @@ const CountDown = React.createClass({
       'glyphicon-pause': !play
     });
 
-    const firstTask = tasks.get(0) ? tasks.get(0) : { time: 0, desc: '' };
+    const firstTask = tasks.get(0) ? tasks.get(0) : Immutable.Map({ time: 0, desc: '' });
 
     return (
       <div className="play">

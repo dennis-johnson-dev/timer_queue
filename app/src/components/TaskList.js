@@ -41,9 +41,8 @@ var TaskList = React.createClass({
   },
 
   getDisplayTime: function(time) {
-    var hours = null;
-    var minutes = null;
-    var seconds;
+    let hours, minutes = null;
+    let seconds;
 
     while (time/3600 > 1) {
       time -= 3600;
@@ -67,14 +66,14 @@ var TaskList = React.createClass({
   },
 
   onChange: function(e) {
-    var index = e.target.dataset.id;
-    var tasks = this.props.tasks;
-    var task = tasks[index];
-    var seconds = this._getTimeValue(index, 'seconds');
-    var minutes = this._getTimeValue(index, 'minutes');
-    var hours = this._getTimeValue(index, 'hours');
-    task.time = seconds + minutes + hours;
-    task.desc = this.refs[index + 'desc'].getDOMNode().value;
+    const index = e.target.dataset.id;
+    const tasks = this.props.tasks;
+    let task = tasks.get(index);
+    const seconds = this._getTimeValue(index, 'seconds');
+    const minutes = this._getTimeValue(index, 'minutes');
+    const hours = this._getTimeValue(index, 'hours');
+    task = task.set('time', seconds + minutes + hours);
+    task = task.set('desc', this.refs[index + 'desc'].getDOMNode().value);
     this.props.onTaskChange(task, index);
   },
 

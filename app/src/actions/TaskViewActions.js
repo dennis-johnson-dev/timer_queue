@@ -1,3 +1,4 @@
+const AppConstants = require('../constants/AppConstants');
 const TaskConstants = require('../constants/TaskConstants');
 const AppAPI = require('../api/AppAPI');
 const Marty = require('marty');
@@ -9,46 +10,74 @@ class TaskViewActions extends Marty.ActionCreators {
   }
 
   createProject(project) {
+    const action = this.dispatch(TaskConstants.CREATE_PROJECT_OPTIMISTIC, project);
     const apiOptions = {
-      url: '/api/projects',
+      action,
+      body: project,
+      id: action.id,
       method: 'POST',
-      body: project
+      url: '/api/projects'
     };
 
-    const action = this.dispatch(TaskConstants.CREATE_PROJECT_OPTIMISTIC, project);
-
-    this.app.AppAPI.requester(apiOptions, action).then((res) => {
+    this.app.AppAPI.requester(apiOptions).then((res) => {
       this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
     }, (err) => {
-      this.dispatch(TaskConstants.REVERT_UPDATE, project.id, res.action);
+      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed creating project' });
     });
   }
 
   deleteProject(id) {
+    const action = this.dispatch(TaskConstants.DELETE_PROJECT_OPTIMISTIC, id);
     const apiOptions = {
-      url: '/api/projects/' + id,
+      action,
+      id: action.id,
+      body: "",
       method: 'DELETE',
-      body: ""
+      url: '/api/projects/' + id
     };
 
-    const action = this.dispatch(TaskConstants.DELETE_PROJECT_OPTIMISTIC, id);
-
-    this.app.AppAPI.request(apiOptions).then(() => {
-      this.dispatch(TaskConstants.CLEANUP_RECORD, null, action);
+    this.app.AppAPI.requester(apiOptions, action).then(() => {
+      this.dispatch(TaskConstants.CLEANUP_RECORD, action);
     }, (err) => {
-      this.dispatch(TaskConstants.REVERT_UPDATE, null, action);
+      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed deleting project' });
     });
   }
 
   updateProject(project) {
+    const action = this.dispatch(TaskConstants.UPDATE_PROJECT_OPTIMISTIC, project);
     const apiOptions = {
-      url: '/api/projects/' + project.id,
+      action,
+      id: action.id,
+      body: project,
       method: 'PUT',
-      body: project
+      url: '/api/projects/' + project.id
     };
 
-    this.app.AppAPI.request(apiOptions).then(() => {
-      this.dispatch(TaskConstants.UPDATE_PROJECT_OPTIMISTIC, project);
+    this.app.AppAPI.requester(apiOptions, action).then((res) => {
+      this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
+    }, (err) => {
+      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed updating project' });
+    });
+  }
+
+  setError(error) {
+    error.id = _.uniqueId();
+    this.dispatch(AppConstants.ERROR, error);
+  }
+
+  resolveError(id) {
+    this.dispatch(AppConstants.RESOLVE_ERROR, { id });
+  }
+
+  revertUpdate(id) {
+    this.app.AppAPI.removeRequest(id);
+    this.dispatch(TaskConstants.REVERT_UPDATE, { id })
+  }
+
+  retryRequests() {
+    this.app.AppAPI.flushRequests().then((results) => {
+      this.dispatch(AppConstants.RESOLVE_ERRORS, [results]);
+    }, (err) => {
     });
   }
 }

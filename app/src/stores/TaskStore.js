@@ -10,7 +10,7 @@ class OptimisticStore extends Marty.Store {
     super(options);
 
     this.handlers = {
-      setProjects: TaskConstants.RECEIVE_PROJECTS,
+      _setProjects: TaskConstants.RECEIVE_PROJECTS,
       cleanup: TaskConstants.CLEANUP_RECORD,
       revertUpdate: TaskConstants.REVERT_UPDATE,
       createProject: TaskConstants.CREATE_PROJECT_OPTIMISTIC,
@@ -52,13 +52,13 @@ class OptimisticStore extends Marty.Store {
     };
   }
 
-  cleanup(id, action) {
+  cleanup(action) {
     // maybe pass in many ids to cleanup depends on api response
-    if (id) {
-      const index = this.state.projects.findIndex((proj) => {
-        return proj.get('id') === id;
-      });
+    const index = this.state.projects.findIndex((proj) => {
+      return proj.get('id') === action.id;
+    });
 
+    if (index > -1) {
       this.state.projects = this.state.projects.update(index, (proj) => {
         return proj.set('isDirty', false);
       });
@@ -74,10 +74,10 @@ class OptimisticStore extends Marty.Store {
     this.hasChanged();
   }
 
-  revertUpdate(id, action) {
+  revertUpdate({ id }) {
     // remove from actionQueue
     const index = this.actionQueue.findIndex((actionEntry) => {
-      return actionEntry.id === action.id;
+      return actionEntry.id === id;
     });
     this.actionQueue = this.actionQueue.delete(index);
     // use previous 'clean' state from history (pop)
@@ -94,7 +94,7 @@ class OptimisticStore extends Marty.Store {
     this.hasChanged();
   }
 
-  setProjects(projects) {
+  _setProjects(projects) {
     this.state.projects = new Immutable.fromJS(projects);
     this.hasChanged();
   }

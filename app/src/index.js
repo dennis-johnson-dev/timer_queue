@@ -4,7 +4,7 @@ const React = require('react');
 const Application = require('./Application');
 const app = new Application();
 
-const Site = require('./components/Site');
+const SiteContainer = require('./components/SiteContainer');
 const CountDownContainer = require('./components/CountDownContainer');
 const ProjectContainer = require('./components/ProjectContainer');
 const CreateProject = require('./components/CreateProject');
@@ -19,7 +19,7 @@ const Route = Router.Route;
 const Link = Router.Link;
 
 const routes = [
-  <Route name="home" path="/" handler={ Site }>
+  <Route name="home" path="/" handler={ SiteContainer }>
     <DefaultRoute handler={ ProjectContainer }/>
     <Route name="play" path="play/:id" handler={ CountDownContainer } />
     <Route name="edit" path="edit/:id" handler={ EditProject } />

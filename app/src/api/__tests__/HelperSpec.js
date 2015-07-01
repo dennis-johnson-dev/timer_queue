@@ -1,32 +1,40 @@
 jest.autoMockOff();
 
-var Helper = require('../Helper');
-var es6Promise = require('es6-promise').Promise;
+const Helper = require('../Helper');
+const es6Promise = require('es6-promise').Promise;
 
 describe('#Helper', () => {
-  var options = [
-    {}
-  ];
+  const action = {};
+  const id = 123;
+  const requests = [{
+    action,
+    id
+  }];
+
 
   pit('is true', () => {
-    var fetcher = jest.genMockFn().mockReturnValue(es6Promise.resolve('hi'));
-    
-    return Helper.wrapper(options, fetcher).then(function(results) {
-      var expectedResults = ['hi'];
+    const response = {
+      ok: true,
+      json: () => Promise.resolve('hi')
+    };
+    const fetcher = jest.genMockFn().mockReturnValue(es6Promise.resolve(response));
+    return Helper.wrapper(requests, fetcher).then((results) => {
+      const expectedResults = [{
+        action,
+        body: 'hi',
+        id
+      }];
       expect(results).toEqual(expectedResults);
     });
   });
 
   pit('has error and does not continue making requests', () => {
-    var fetcher = jest.genMockFn().mockReturnValue(es6Promise.reject('yo'));
+    const fetcher = jest.genMockFn().mockReturnValue(es6Promise.reject('yo'));
 
-    return Helper.wrapper(options, fetcher).then(function(results) {
+    return Helper.wrapper(requests, fetcher).then((results) => {
       expect(false).toBe(true);
     }, function(results) {
-      expect(results).toEqual({ 
-        err: 'yo',
-        results: []
-      });
+      expect(results).toEqual([]);
     });
   });
 });

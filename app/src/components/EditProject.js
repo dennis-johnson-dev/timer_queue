@@ -4,6 +4,7 @@ const TaskStore = require('../stores/TaskStore');
 const TaskList = require('./TaskList');
 const md5 = require('MD5');
 const Marty = require('marty');
+import Immutable from 'immutable';
 
 const EditProject = React.createClass({
   contextTypes: {
@@ -23,12 +24,12 @@ const EditProject = React.createClass({
 
   getTaskModel() {
     const id = md5(Date.now() + 2);
-    return {
+    return Immutable.Map({
       id: id,
       title: '',
       time: 0,
       desc: ''
-    };
+    });
   },
 
   handleSubmit(e) {
@@ -74,8 +75,7 @@ const EditProject = React.createClass({
   },
 
   handleTaskChange(task, index) {
-    const tasks = this.state.tasks;
-    tasks[index] = task;
+    const tasks = this.state.tasks.set(index, task);
     this.setState({ tasks: tasks });
   },
 
@@ -83,16 +83,14 @@ const EditProject = React.createClass({
     e.preventDefault();
 
     const taskModel = this.getTaskModel();
-    const tasks = this.state.tasks;
-
-    tasks.push(taskModel);
+    const tasks = this.state.tasks.push(taskModel);
     this.setState({ tasks: tasks });
   },
 
   onTitleChange(e) {
     e.preventDefault();
-    const project = this.state.project;
-    project.title = e.target.value;
+    let project = this.state.project;
+    project = project.set('title', e.target.value);
     this.setState({
       project: project
     });

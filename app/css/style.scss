@@ -57,11 +57,11 @@ label {
 }
 
 .right{
-  text-align: right;  
+  text-align: right;
 }
 
 .left{
-  text-align: left; 
+  text-align: left;
 }
 
 .content ul {
@@ -188,7 +188,7 @@ label {
 }
 
 .list-group.project-container {
-  margin-bottom: 0.5em;  
+  margin-bottom: 0.5em;
 }
 
 .duration {
@@ -207,4 +207,35 @@ label {
 
 .form-control {
   height: 32px;
+}
+
+.notifications {
+  color: rgba(255, 255, 255, 1);
+  font-size: 1.8rem;
+  width: 100%;
+}
+
+.notification-item {
+  background-color: rgba(224, 77, 0, 0.65);
+  float: left;
+  padding-left: 5px;
+  width: 100%;
+}
+
+.notification-item-close {
+  float: right;
+  margin-right: 4px;
+}
+
+.notification-item-close .glyphicon {
+  color: rgba(0, 0, 0, .4);
+}
+
+.notification-item-close:hover .glyphicon {
+  color: rgba(0, 0, 0, .7);
+}
+
+.notification-tools {
+  position: relative;
+  right: 1rem;
 }
