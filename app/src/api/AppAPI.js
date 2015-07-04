@@ -58,9 +58,9 @@ export default class AppAPI extends Marty.HttpStateSource {
     return Promise.reject({ msg: '', id });
   }
 
-  removeRequest(id) {
+  removeRequest(action) {
     const index = this.requestQueue.findIndex((request) => {
-      return request.id === id;
+      return request.id === action.id;
     });
 
     if (index > -1) {

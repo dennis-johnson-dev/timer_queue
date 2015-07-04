@@ -15,6 +15,10 @@ module.exports =  {
         test: /\.js$/,
         exclude: /node_modules\/(?!marty)/,
         loader: 'react-hot!babel-loader?cacheDirectory&stage=1&optional[]=runtime&loose=es6.classes'
+      },
+      {
+        test: /\.scss$/,
+        loader: "style!css!sass?sourceMap"
       }
     ]
   },
@@ -23,7 +27,7 @@ module.exports =  {
     'react/addons': 'React'
   },
   resolve: {
-    moduleDirectories: ['node_modules', 'app/src'],
+    moduleDirectories: ['node_modules', 'app'],
     extensions: ['', '.js']
   },
   plugins: [],

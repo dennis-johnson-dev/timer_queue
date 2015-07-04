@@ -17,7 +17,11 @@ module.exports = function(profile) {
         {
           test: /\.js$/,
           exclude: /node_modules\/(?!marty)/,
-          loader: 'babel-loader?experimental&optional[]=runtime'
+          loader: 'react-hot!babel-loader?cacheDirectory&stage=1&optional[]=runtime&loose=es6.classes'
+        },
+        {
+          test: /\.scss$/,
+          loader: "style!css!sass?sourceMap"
         }
       ]
     },

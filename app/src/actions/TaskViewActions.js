@@ -22,7 +22,7 @@ class TaskViewActions extends Marty.ActionCreators {
     this.app.AppAPI.requester(apiOptions).then((res) => {
       this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
     }, (err) => {
-      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed creating project' });
+      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
     });
   }
 
@@ -39,7 +39,7 @@ class TaskViewActions extends Marty.ActionCreators {
     this.app.AppAPI.requester(apiOptions, action).then(() => {
       this.dispatch(TaskConstants.CLEANUP_RECORD, action);
     }, (err) => {
-      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed deleting project' });
+      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
     });
   }
 
@@ -56,7 +56,7 @@ class TaskViewActions extends Marty.ActionCreators {
     this.app.AppAPI.requester(apiOptions, action).then((res) => {
       this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
     }, (err) => {
-      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed updating project' });
+      this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
     });
   }
 
@@ -69,9 +69,9 @@ class TaskViewActions extends Marty.ActionCreators {
     this.dispatch(AppConstants.RESOLVE_ERROR, { id });
   }
 
-  revertUpdate(id) {
-    this.app.AppAPI.removeRequest(id);
-    this.dispatch(TaskConstants.REVERT_UPDATE, { id })
+  revertUpdate(action) {
+    this.app.AppAPI.removeRequest(action);
+    this.dispatch(TaskConstants.REVERT_UPDATE, action)
   }
 
   retryRequests() {

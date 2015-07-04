@@ -1,3 +1,4 @@
+require('../css/style.scss');
 const { ApplicationContainer } = require('marty');
 const React = require('react');
 

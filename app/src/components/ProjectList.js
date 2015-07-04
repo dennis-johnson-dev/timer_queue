@@ -21,7 +21,7 @@ const ProjectList = React.createClass({
       return null;
     }
   	return (
-      <div className="project">
+      <div className="projects">
         <h3>
           Projects
           <a className="project-tools" href="#" onClick={ this._onEditMode }><i className="glyphicon glyphicon-cog"></i></a>

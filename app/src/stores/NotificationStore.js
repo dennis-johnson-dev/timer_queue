@@ -20,11 +20,11 @@ export default class NotificationStore extends Marty.Store {
     };
   }
 
-  getNotifications(typeKey) {
+  getNotification(typeKey) {
     return this.fetch({
       id: 'notifications',
       locally: function() {
-        return this.state.notifications.get(typeKey) && this.state.notifications.get(typeKey).slice(0, 3) || false;
+        return this.state.notifications.get(typeKey) && this.state.notifications.get(typeKey).last() || false;
       }
     });
   }

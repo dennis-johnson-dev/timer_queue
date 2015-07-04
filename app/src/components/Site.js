@@ -4,7 +4,7 @@ const RouteHandler = Router.RouteHandler;
 const Link = Router.Link;
 const fastclick = require('fastclick');
 import Immutable from 'immutable';
-import NotificationItems from './NotificationItems';
+import NotificationItem from './NotificationItem';
 
 const Site = React.createClass({
   displayName: 'Site',
@@ -15,8 +15,8 @@ const Site = React.createClass({
 
   render() {
     let notifications;
-    if (this.props.notifications) {
-      notifications = <NotificationItems notifications={ this.props.notifications } />;
+    if (this.props.notification) {
+      notifications = <NotificationItem notification={ this.props.notification } />;
     }
     return (
       <div className="content">

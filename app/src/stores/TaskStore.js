@@ -13,6 +13,7 @@ class OptimisticStore extends Marty.Store {
       _setProjects: TaskConstants.RECEIVE_PROJECTS,
       cleanup: TaskConstants.CLEANUP_RECORD,
       revertUpdate: TaskConstants.REVERT_UPDATE,
+      revertUpdates: TaskConstants.REVERT_UPDATES,
       createProject: TaskConstants.CREATE_PROJECT_OPTIMISTIC,
       deleteProject: TaskConstants.DELETE_PROJECT_OPTIMISTIC,
       updateProject: TaskConstants.UPDATE_PROJECT_OPTIMISTIC
@@ -74,10 +75,10 @@ class OptimisticStore extends Marty.Store {
     this.hasChanged();
   }
 
-  revertUpdate({ id }) {
+  revertUpdate(action) {
     // remove from actionQueue
     const index = this.actionQueue.findIndex((actionEntry) => {
-      return actionEntry.id === id;
+      return actionEntry.id === action.id;
     });
     this.actionQueue = this.actionQueue.delete(index);
     // use previous 'clean' state from history (pop)
@@ -91,6 +92,12 @@ class OptimisticStore extends Marty.Store {
     this.actionQueue.forEach((actionEntry) => {
       super.handleAction(actionEntry);
     });
+    this.hasChanged();
+  }
+
+  revertUpdates() {
+    this.history = this.history.first();
+    this.actionQueue = new Immutable.List();
     this.hasChanged();
   }
 
