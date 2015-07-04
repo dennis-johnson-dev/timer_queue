@@ -104,7 +104,7 @@ class OptimisticStore extends Marty.Store {
       id: 'project-' + id,
       locally: function() {
         const index = this.state.projects.findIndex((project) => {
-          return project.id === id;
+          return project.get('id') === id;
         });
 
         return this.state.projects.get(index);
