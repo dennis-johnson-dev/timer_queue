@@ -48,7 +48,7 @@ export default class AppAPI extends Marty.HttpStateSource {
         this.requestQueue = this.requestQueue.delete(index);
       }
     });
-    return results[results.length - 1];
+    return results;
   }
 
   _handleFailedRequest(results) {

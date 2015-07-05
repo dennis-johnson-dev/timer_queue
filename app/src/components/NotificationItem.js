@@ -11,7 +11,6 @@ const NotificationItem = React.createClass({
             { notification.msg }
           </div>
           <div className="notification-tools">
-            <a href="#" className="notification-tool" onClick={ this._onHideError }>Dimiss</a>
             <a href="#" className="notification-tool" onClick={ this._undoChanges }>Undo changes</a>
             <a href="#" className="notification-tool" onClick={ this._retry }>Retry</a>
           </div>

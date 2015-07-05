@@ -5,9 +5,9 @@ const TaskConstants = Marty.createConstants([
   'RECEIVE_PROJECTS',
   'REVERT_UPDATE',
   'REVERT_UPDATES',
-  'CREATE_PROJECT_OPTIMISTIC',
-  'DELETE_PROJECT_OPTIMISTIC',
-  'UPDATE_PROJECT_OPTIMISTIC'
+  'CREATE_PROJECT',
+  'DELETE_PROJECT',
+  'UPDATE_PROJECT'
 ]);
 
 module.exports = TaskConstants;

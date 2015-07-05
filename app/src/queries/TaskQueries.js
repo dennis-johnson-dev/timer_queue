@@ -11,7 +11,8 @@ class TaskQueries extends Marty.Queries {
     };
 
     return this.app.AppAPI.requester(options).then((res) => {
-      this.dispatch(TaskConstants.RECEIVE_PROJECTS, res.body);
+      const response = res[0];
+      this.dispatch(TaskConstants.RECEIVE_PROJECTS, response.body);
     }).catch((e) => {
       console.log(e)
     });

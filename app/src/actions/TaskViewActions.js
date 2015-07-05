@@ -10,7 +10,7 @@ class TaskViewActions extends Marty.ActionCreators {
   }
 
   createProject(project) {
-    const action = this.dispatch(TaskConstants.CREATE_PROJECT_OPTIMISTIC, project);
+    const action = this.dispatch(TaskConstants.CREATE_PROJECT, project, { optimistic: true });
     const apiOptions = {
       action,
       body: project,
@@ -23,11 +23,13 @@ class TaskViewActions extends Marty.ActionCreators {
       this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
     }, (err) => {
       this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
+    }).catch((err) => {
+      throw new err;
     });
   }
 
   deleteProject(id) {
-    const action = this.dispatch(TaskConstants.DELETE_PROJECT_OPTIMISTIC, id);
+    const action = this.dispatch(TaskConstants.DELETE_PROJECT, { id }, { optimistic: true });
     const apiOptions = {
       action,
       id: action.id,
@@ -40,11 +42,13 @@ class TaskViewActions extends Marty.ActionCreators {
       this.dispatch(TaskConstants.CLEANUP_RECORD, action);
     }, (err) => {
       this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
+    }).catch((err) => {
+      throw new err;
     });
   }
 
   updateProject(project) {
-    const action = this.dispatch(TaskConstants.UPDATE_PROJECT_OPTIMISTIC, project);
+    const action = this.dispatch(TaskConstants.UPDATE_PROJECT, project, { optimistic: true });
     const apiOptions = {
       action,
       id: action.id,
@@ -57,6 +61,8 @@ class TaskViewActions extends Marty.ActionCreators {
       this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
     }, (err) => {
       this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
+    }).catch((err) => {
+      throw new err;
     });
   }
 
@@ -76,7 +82,7 @@ class TaskViewActions extends Marty.ActionCreators {
 
   retryRequests() {
     this.app.AppAPI.flushRequests().then((results) => {
-      this.dispatch(AppConstants.RESOLVE_ERRORS, [results]);
+      this.dispatch(AppConstants.RESOLVE_ERRORS, results);
     }, (err) => {
     });
   }
