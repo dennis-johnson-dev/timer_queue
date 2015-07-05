@@ -20,7 +20,7 @@ class TaskViewActions extends Marty.ActionCreators {
     };
 
     this.app.AppAPI.requester(apiOptions).then((res) => {
-      this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
+      this.dispatch(TaskConstants.CLEANUP_RECORD, { id: project.id }, res.action);
     }, (err) => {
       this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
     }).catch((err) => {
@@ -58,7 +58,7 @@ class TaskViewActions extends Marty.ActionCreators {
     };
 
     this.app.AppAPI.requester(apiOptions, action).then((res) => {
-      this.dispatch(TaskConstants.CLEANUP_RECORD, project.id, res.action);
+      this.dispatch(TaskConstants.CLEANUP_RECORD, { id: project.id }, res.action);
     }, (err) => {
       this.dispatch(AppConstants.ERROR, { id: err.id, msg: 'Failed connecting with the server...' });
     }).catch((err) => {

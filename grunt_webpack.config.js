@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var uglify = new webpack.optimize.UglifyJsPlugin({
   compress: {
@@ -21,7 +22,7 @@ module.exports = function(profile) {
         },
         {
           test: /\.scss$/,
-          loader: "style!css!sass?sourceMap"
+          loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap")
         }
       ]
     },
@@ -38,6 +39,7 @@ module.exports = function(profile) {
       extensions: ['', '.js']
     },
     plugins: [
+      new ExtractTextPlugin("styles.css")
     ]
   };
 

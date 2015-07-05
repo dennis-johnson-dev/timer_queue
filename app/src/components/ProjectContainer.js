@@ -7,5 +7,8 @@ module.exports = Marty.createContainer(ProjectList, {
     projects() {
       return this.app.TaskStore.getProjects();
     }
+  },
+  pending(results) {
+    return this.done(results);
   }
 });

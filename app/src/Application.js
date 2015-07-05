@@ -1,6 +1,6 @@
 import Marty from 'marty';
 
-class Application extends Marty.Application {
+export default class Application extends Marty.Application {
   constructor(options) {
     super(options);
     this.register(require('./stores'));
@@ -9,5 +9,3 @@ class Application extends Marty.Application {
     this.register(require('./api'));
   }
 }
-
-export default Application;

@@ -16,10 +16,25 @@ const ProjectList = React.createClass({
   },
 
   render() {
-    const me = this;
     if (!this.props.projects) {
       return null;
     }
+    const projects = this.props.projects.count()
+      ? this.props.projects.map((project) => {
+        const editBtns =
+          <div className="editBtns">
+           <button onClick={ this._onDelete } value={ project.get('id') }>Delete</button>
+           <button onClick={ this._onEdit } value={ project.get('id') }>Edit</button>
+         </div>
+        const btnContent = this.state.edit ? editBtns : '';
+        return (
+          <Link to="play" className="list-group-item" key={ project.get('id') } params={{ id: project.get('id') }}>
+            <div className="project-title">{ project.get('title') }</div>
+            <div className="project-maintenance">{ btnContent}</div>
+          </Link>
+        );
+      }).toJS()
+      : null;
   	return (
       <div className="projects">
         <h3>
@@ -27,21 +42,7 @@ const ProjectList = React.createClass({
           <a className="project-tools" href="#" onClick={ this._onEditMode }><i className="glyphicon glyphicon-cog"></i></a>
         </h3>
         <div className="list-group project-container">
-          {
-            this.props.projects.map(function(project) {
-              const editBtns = <div className="editBtns">
-                               <button onClick={ me._onDelete } value={ project.get('id') }>Delete</button>
-                               <button onClick={ me._onEdit } value={ project.get('id') }>Edit</button>
-                             </div>
-              const btnContent = me.state.edit ? editBtns : '';
-              return (
-                <Link to="play" className="list-group-item" key={ project.get('id') } params={{ id: project.get('id') }}>
-                  <div className="project-title">{ project.get('title') }</div>
-                  <div className="project-maintenance">{ btnContent}</div>
-                </Link>
-              );
-            })
-          }
+          { projects }
         </div>
         <Link className="project-tools" to="create"><i className="glyphicon glyphicon-plus"></i></Link>
       </div>

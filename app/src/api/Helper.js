@@ -16,6 +16,8 @@ function requestData(request, fetcher) {
     }
   }, (err) => {
     it.throw(err);
+  }).catch((err) => {
+    it.throw(err);
   });
 }
 
@@ -26,6 +28,7 @@ function *main(requests, fetcher, resolve, reject) {
       let result = yield requestData(request, fetcher);
       results.push(result);
     } catch (e) {
+      console.log(request.url, e)
       reject(results);
     }
   }
