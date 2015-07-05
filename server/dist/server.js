@@ -1,0 +1,202 @@
+'use strict';
+
+var _ = require('lodash');
+var bodyParser = require('body-parser');
+var express = require('express');
+var favicon = require('serve-favicon');
+var http = require('http');
+var mongoose = require('mongoose');
+var path = require('path');
+var compression = require('compression');
+require('babel/register');
+var React = require('react');
+var Router = require('react-router');
+var routes = require('../../app/src/Routes');
+var Marty = require('marty');
+var Table = require('cli-table');
+// var Html = require('../../app/src/components/Html');
+
+setInterval(function () {
+  return http.get('http://timerqueue.herokuapp.com');
+}, 30000);
+
+// models
+var Project = require('../models/Project');
+var Task = require('../models/Task');
+
+var app = express();
+var port = process.env.PORT || 3000;
+var router = express.Router();
+
+var log = function log(req, res, next) {
+  console.log(res.statusCode, req.url, req.method);
+  next();
+};
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express['static'](path.join(__dirname + '../../../public'), { maxAge: 8640000 }));
+app.use(log);
+app.use(favicon(path.join(__dirname + '../../../public/favicon.ico')));
+
+app.use(compression());
+
+app.set('views', path.join(__dirname + '../../../views'));
+app.set('view engine', 'ejs');
+
+app.use(require('marty-express')({
+  application: require('../../app/src/Application'),
+  routes: require('../../app/src/Routes'),
+  rendered: function rendered(result) {
+    console.log('Rendered ' + result.req.url);
+
+    var table = new Table({
+      colWidths: [30, 30, 30, 30, 40],
+      head: ['Store Id', 'Fetch Id', 'Status', 'Time', 'Result']
+    });
+
+    _.each(result.diagnostics, function (diagnostic) {
+      table.push([diagnostic.storeId || '', diagnostic.fetchId, diagnostic.status, diagnostic.time, JSON.stringify(diagnostic.result || diagnostic.error, null, 2)]);
+    });
+
+    console.log(table.toString());
+  }
+}));
+
+// /api routes
+
+router.route('/projects').post(function (req, res) {
+  var project = new Project();
+  var taskModel = undefined;
+  project.title = req.body.title;
+  project.id = req.body.id;
+  project.tasks = _.map(req.body.tasks, function (task) {
+    taskModel = new Task();
+    taskModel.id = task.id;
+    taskModel.time = task.time;
+    taskModel.title = task.title;
+    taskModel.desc = task.desc;
+    return taskModel;
+  });
+
+  project.save(function (err) {
+    if (err) {
+      res.status(500).send(new Error('Unable to create project'));
+      return;
+    }
+
+    res.json({ message: 'Project created!' });
+  });
+}).get(function (req, res) {
+  console.log('getting projects on the server');
+  Project.find(function (err, projects) {
+    if (err) {
+      res.status(500).send(new Error('Unable to get projects'));
+      return;
+    }
+
+    res.setHeader('Cache-Control', 'public, max-age=3155');
+    res.json(projects).end();
+  });
+});
+
+router.route('/projects/:id').get(function (req, res) {
+  Project.findOne({ id: req.params.id }, function (err, project) {
+    if (_.isNull(project)) {
+      res.status(404).send(new Error('Unable to get project'));
+      return;
+    }
+
+    res.json(project);
+  });
+}).put(function (req, res) {
+  Project.findOne({ id: req.params.id }, function (err, project) {
+    if (err) {
+      res.send(err);
+    }
+
+    project.title = req.body.title;
+    project.tasks = _.map(req.body.tasks, function (task) {
+      var taskModel = new Task();
+      taskModel.id = task.id;
+      taskModel.time = task.time;
+      taskModel.title = task.title;
+      taskModel.desc = task.desc;
+      return taskModel;
+    });
+
+    project.save(function (err) {
+      if (err) {
+        res.status(500).send(new Error('Unable to update project'));
+        return;
+      }
+
+      res.json({ message: 'Project updated' });
+    });
+  });
+})['delete'](function (req, res) {
+  Project.remove({ id: req.params.id }, function (err) {
+    if (err) {
+      res.status(500).send(new Error('Unable to delete project'));
+      return;
+    }
+
+    res.json({ message: 'Project deleted!' });
+  });
+});
+
+app.use('/api', router);
+
+// app routes
+
+/*app.get('/', (req, res) => {
+ res.render('index');
+});*/
+
+/*app.use((req, res, next) => {
+  let router = Router.create({
+    location: req.url,
+    routes: routes
+  });
+
+  router.run(function(Handler, state) {
+    let context = Marty.createContext();
+    context.req = req;
+    context.res = res;
+
+    const renderOptions = {
+      type: Handler,
+      context: context,
+      props: state.params,
+      timeout: 10000
+    };
+
+    Marty.renderToString(renderOptions).then(function(result) {
+      let html;
+      console.log(result.diagnostics);
+
+      try {
+        html = React.renderToStaticMarkup(<Html markup={ result.html } />);
+      } catch (e) {
+       console.log(e);
+      }
+      console.log('sent from server')
+      res.send('<!DOCTYPE>' + html);
+    }, function(err) {
+      console.log(err);
+    });
+  });
+});*/
+
+// db connection
+
+var mongoUri = process.env.MONGOLAB_URI;
+mongoose.connect(mongoUri, function (err, res) {
+  if (err) {
+    console.log('Error connect to: ' + mongoUri + '. ' + err);
+  } else {
+    console.log('Succeeded and connected to: ' + mongoUri);
+    app.listen(port);
+    console.log('listening on 3000...');
+  }
+});
