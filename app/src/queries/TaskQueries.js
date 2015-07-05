@@ -14,7 +14,7 @@ class TaskQueries extends Marty.Queries {
       const response = res[0];
       this.dispatch(TaskConstants.RECEIVE_PROJECTS, response.body);
     }).catch((e) => {
-      console.log(e)
+      console.log(e, 'hi')
     });
   }
 }

@@ -14,7 +14,7 @@ var Router = require('react-router');
 var routes = require('../../app/src/Routes');
 var Marty = require('marty');
 var Table = require('cli-table');
-// var Html = require('../../app/src/components/Html');
+// let Html = require('../../app/src/components/Html');
 
 setInterval(function () {
   return http.get('http://timerqueue.herokuapp.com');
@@ -49,17 +49,23 @@ app.use(require('marty-express')({
   routes: require('../../app/src/Routes'),
   rendered: function rendered(result) {
     console.log('Rendered ' + result.req.url);
-
-    var table = new Table({
-      colWidths: [30, 30, 30, 30, 40],
-      head: ['Store Id', 'Fetch Id', 'Status', 'Time', 'Result']
-    });
-
-    _.each(result.diagnostics, function (diagnostic) {
-      table.push([diagnostic.storeId || '', diagnostic.fetchId, diagnostic.status, diagnostic.time, JSON.stringify(diagnostic.result || diagnostic.error, null, 2)]);
-    });
-
-    console.log(table.toString());
+    //
+    // var table = new Table({
+    //   colWidths: [30, 30, 30, 30, 40],
+    //   head: ['Store Id', 'Fetch Id', 'Status', 'Time', 'Result']
+    // });
+    //
+    // _.each(result.diagnostics, function (diagnostic) {
+    //   table.push([
+    //     diagnostic.storeId || '',
+    //     diagnostic.fetchId,
+    //     diagnostic.status,
+    //     diagnostic.time,
+    //     JSON.stringify(diagnostic.result || diagnostic.error, null, 2)
+    //   ]);
+    // });
+    //
+    // console.log(table.toString());
   }
 }));
 

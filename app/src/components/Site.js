@@ -2,7 +2,7 @@ const React = require('react');
 const Router = require('react-router');
 const RouteHandler = Router.RouteHandler;
 const Link = Router.Link;
-const fastclick = require('fastclick');
+// const fastclick = require('fastclick');
 import Immutable from 'immutable';
 import NotificationItem from './NotificationItem';
 
@@ -10,7 +10,7 @@ const Site = React.createClass({
   displayName: 'Site',
 
   componentDidMount() {
-    fastclick.attach(document.body);
+    // fastclick.attach(document.body);
   },
 
   render() {
