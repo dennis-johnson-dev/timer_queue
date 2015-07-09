@@ -1,10 +1,12 @@
 import React from 'react';
 import { Route, DefaultRoute } from 'react-router';
-const SiteContainer = require('./components/SiteContainer');
-const CountDownContainer = require('./components/CountDownContainer');
-const ProjectContainer = require('./components/ProjectContainer');
-const CreateProject = require('./components/CreateProject');
-const EditProject = require('./components/EditProject');
+import SiteContainer from './components/SiteContainer';
+import CountDownContainer from './components/CountDownContainer';
+import ProjectContainer from './components/ProjectContainer';
+import CreateProject from './components/CreateProject';
+import EditProject from './components/EditProject';
+import Junk from './components/Junk';
+import Html from './components/Html';
 
 module.exports = [
   <Route name="home" path="/" handler={ SiteContainer }>

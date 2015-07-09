@@ -8,7 +8,7 @@ const NotificationItem = React.createClass({
       <div className="notifications">
         <div key={ notification.id } data-id={ notification.id } className="notification-item">
           <div className="notification-message">
-            { notification.msg }
+            { notification.get('msg') }
           </div>
           <div className="notification-tools">
             <a href="#" className="notification-tool" onClick={ this._undoChanges }>Undo changes</a>

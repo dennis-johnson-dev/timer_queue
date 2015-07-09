@@ -1,212 +1,87 @@
-const _ = require('lodash');
-const bodyParser = require('body-parser');
-const express = require('express');
-const favicon = require('serve-favicon');
-const http = require('http');
-const mongoose = require('mongoose');
-const path = require('path');
-const compression = require('compression');
 require('babel/register');
-const React = require('react');
-const Router = require('react-router');
-const routes = require('../../app/src/Routes');
-const Marty = require('marty');
-var Table = require('cli-table');
-// let Html = require('../../app/src/components/Html');
+import _ from 'lodash';
+import BodyParser from 'body-parser';
+import Compression from 'compression';
+import Express from 'express';
+import Favicon from 'serve-favicon';
+import Http from 'http';
+import Marty from 'marty';
+import Mongoose from 'mongoose';
+import React from 'react';
+import ReactRouter from 'react-router';
+import Path from 'path';
 
+import api from './api';
+const Application = require('../../app/src/Application');
+const Html = require('../../app/src/components/Html');
+const routes = require('../../app/src/Routes');
 
 setInterval(() =>
-  http.get('http://timerqueue.herokuapp.com')
+  Http.get('http://timerqueue.herokuapp.com')
 , 30000);
 
-// models
-const Project = require('../models/Project');
-const Task = require('../models/Task');
-
-const app = express();
+const app = Express();
 const port = process.env.PORT || 3000;
-const router = express.Router();
 
 let log = (req, res, next) => {
   console.log(res.statusCode, req.url, req.method);
   next();
 };
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname + '../../../public'), { maxAge: 8640000  } ));
+app.use(BodyParser.urlencoded({ extended: true }));
+app.use(BodyParser.json());
+app.use(Express.static(Path.join(__dirname + '../../../public'), { maxAge: 8640000  } ));
 app.use(log);
-app.use(favicon(path.join(__dirname + '../../../public/favicon.ico')));
+app.use(Favicon(Path.join(__dirname + '../../../public/favicon.ico')));
 
-app.use(compression());
+app.use(Compression());
 
-app.set('views', path.join(__dirname + '../../../views'));
-app.set('view engine', 'ejs');
-
-app.use(require('marty-express')({
-  application: require('../../app/src/Application'),
-  routes: require('../../app/src/Routes'),
-  rendered: function(result) {
-    console.log('Rendered ' + result.req.url);
-    //
-    // var table = new Table({
-    //   colWidths: [30, 30, 30, 30, 40],
-    //   head: ['Store Id', 'Fetch Id', 'Status', 'Time', 'Result']
-    // });
-    //
-    // _.each(result.diagnostics, function (diagnostic) {
-    //   table.push([
-    //     diagnostic.storeId || '',
-    //     diagnostic.fetchId,
-    //     diagnostic.status,
-    //     diagnostic.time,
-    //     JSON.stringify(diagnostic.result || diagnostic.error, null, 2)
-    //   ]);
-    // });
-    //
-    // console.log(table.toString());
-  }
-}));
+app.set('views', Path.join(__dirname + '../../../views'));
+app.set('view engine', 'jade');
 
 // /api routes
 
-router.route('/projects')
-  .post((req,res) => {
-    let project = new Project();
-    let taskModel;
-    project.title = req.body.title;
-    project.id = req.body.id;
-    project.tasks = _.map(req.body.tasks, (task) => {
-      taskModel = new Task();
-      taskModel.id = task.id;
-      taskModel.time = task.time;
-      taskModel.title = task.title;
-      taskModel.desc = task.desc;
-      return taskModel;
-    });
-
-    project.save((err) => {
-      if (err) {
-        res.status(500).send(new Error('Unable to create project'));
-        return
-      }
-
-      res.json({ message: 'Project created!' });
-    });
-  })
-
-  .get((req, res) => {
-    console.log('getting projects on the server')
-    Project.find((err, projects) => {
-      if (err) {
-        res.status(500).send(new Error('Unable to get projects'));
-        return;
-      }
-
-      res.setHeader('Cache-Control', 'public, max-age=3155');
-      res.json(projects).end();
-    });
-  });
-
-router.route('/projects/:id')
-  .get((req, res) => {
-    Project.findOne({ id: req.params.id }, (err, project) => {
-      if (_.isNull(project)) {
-        res.status(404).send(new Error('Unable to get project'));
-        return;
-      }
-
-      res.json(project);
-    });
-  })
-
-  .put((req, res) => {
-    Project.findOne({ id: req.params.id }, (err, project) => {
-      if (err) {
-        res.send(err);
-      }
-
-      project.title = req.body.title;
-      project.tasks = _.map(req.body.tasks, (task) => {
-        let taskModel = new Task()
-        taskModel.id = task.id
-        taskModel.time = task.time
-        taskModel.title = task.title
-        taskModel.desc = task.desc
-        return taskModel
-      });
-
-      project.save((err) => {
-        if (err) {
-          res.status(500).send(new Error('Unable to update project'));
-          return;
-        }
-
-        res.json({ message: 'Project updated' });
-      });
-    })
-  })
-
-  .delete((req, res) => {
-    Project.remove({ id: req.params.id }, function(err) {
-      if (err) {
-        res.status(500).send(new Error('Unable to delete project'));
-        return;
-      }
-
-      res.json({ message: 'Project deleted!' });
-    });
-  });
-
-app.use('/api', router);
+app.use('/api', api);
 
 // app routes
 
-/*app.get('/', (req, res) => {
- res.render('index');
-});*/
+// app.get('/', (req, res) => {
+//  res.render('index');
+// });
 
+/*
+ * USE below for server side rendering
+ *
+ */
+function _trimState(state) {
+  return state.slice((state.indexOf('>') + 1), (state.indexOf('<', 2)));
+}
 
-
-/*app.use((req, res, next) => {
-  let router = Router.create({
+app.use((req, res, next) => {
+  const app = new Application();
+  let router = ReactRouter.create({
     location: req.url,
-    routes: routes
+    routes
   });
 
-  router.run(function(Handler, state) {
-    let context = Marty.createContext();
-    context.req = req;
-    context.res = res;
-
-    const renderOptions = {
-      type: Handler,
-      context: context,
-      props: state.params,
-      timeout: 10000
-    };
-
-    Marty.renderToString(renderOptions).then(function(result) {
-      let html;
-      console.log(result.diagnostics);
-
-      try {
-        html = React.renderToStaticMarkup(<Html markup={ result.html } />);
-      } catch (e) {
-       console.log(e);
-      }
-      console.log('sent from server')
-      res.send('<!DOCTYPE>' + html);
-    }, function(err) {
-      console.log(err);
+  router.run((Handler, state) => {
+    app.renderToStaticMarkup(<Handler {...state.params} />).then((response) => {
+      const htmlState = _trimState(response.htmlState);
+      const html = React.renderToStaticMarkup(<Html markup={ response.htmlBody } storeState={ htmlState }/>);
+      // console.log('rendering on the server', response.diagnostics)
+      res.send(`<!DOCTYPE>${html}`);
+    }).catch((e) => {
+      console.log(e);
     });
+  }, (err) => {
+    console.log(err);
   });
-});*/
+});
 
 // db connection
 
 const mongoUri = process.env.MONGOLAB_URI;
-mongoose.connect(mongoUri, (err, res) => {
+Mongoose.connect(mongoUri, (err, res) => {
   if (err) {
     console.log('Error connect to: ' + mongoUri + '. ' + err);
   } else {

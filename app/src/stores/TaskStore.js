@@ -5,7 +5,9 @@ const Marty = require('marty');
 const Immutable = require('immutable');
 const TaskQueries = require('../queries/TaskQueries');
 
-class OptimisticStore extends Marty.Store {
+let val;
+
+class TaskStore extends Marty.Store {
   constructor(options) {
     super(options);
 
@@ -23,6 +25,113 @@ class OptimisticStore extends Marty.Store {
     const initialState = this.getInitialState();
     this.history = this.history.push(initialState);
     this.actionQueue = new Immutable.List();
+    this.state = this.getInitialState();
+  }
+
+  rehydrate(newState) {
+    this.state.projects = new Immutable.fromJS(newState.projects);
+  }
+
+  getInitialState() {
+    return {
+      projects: new Immutable.List()
+    };
+  }
+
+  _setProjects(projects) {
+    this.state.projects = new Immutable.fromJS(projects);
+    this.hasChanged();
+  }
+
+  getProject(id) {
+    return this.fetch({
+      id: 'project-' + id,
+      locally: function() {
+        const index = this.state.projects.findIndex((project) => {
+          return project.get('id') === id;
+        });
+
+        return this.state.projects.get(index);
+      },
+      dependsOn: this.getProjects()
+    });
+  }
+
+  getProjects() {
+    return this.fetch({
+      id: 'projects',
+      locally: function() {
+        if (this.hasAlreadyFetched('projects') || this.state.projects.count() > 0) {
+          return val || this.state.projects;
+        }
+      },
+      remotely: function() {
+        return this.app.TaskQueries.getProjects();
+      }
+    });
+  }
+
+  _createProject(project) {
+    const newProject = Immutable.fromJS(project);
+    this.state.projects = this.state.projects.push(newProject);
+    // val = this.state.projects;
+    this.hasChanged();
+  }
+
+  _deleteProject(action) {
+    const index = this.state.projects.findIndex((project) => {
+      return project.get('id') === action.id;
+    });
+
+    if (index > -1) {
+      this.state.projects = this.state.projects.delete(index);
+    }
+
+    // is this needed?
+    this.state.projects = this.state.projects.filter((project) => {
+      return !_.isUndefined(project);
+    });
+
+    this.hasChanged();
+  }
+
+  _updateProject(project) {
+    const index = this.state.projects.findIndex((proj) => {
+      return proj.get('id') === project.id;
+    });
+
+    if (index > -1 ) {
+      this.state = this.state.projects.set(index, Immutable.fromJS(project));
+      // val = this.state.projects;
+    }
+
+    this.hasChanged();
+  }
+
+  _markAsDirty(arg) {
+    return Object.assign(arg, { isDirty: true });
+  }
+
+  cleanup(action) {
+    // maybe pass in many ids to cleanup depends on api response
+    const index = this.state.projects.findIndex((proj) => {
+      return proj.get('id') === action.id;
+    });
+
+    if (index > -1) {
+      this.state.projects = this.state.projects.update(index, (proj) => {
+        return proj.set('isDirty', false);
+      });
+    }
+
+    this.actionQueue = this.actionQueue.shift();
+
+    const cleanProjectRecords = this.state.projects.filter((proj) => {
+      return !proj.get('isDirty');
+    });
+
+    this.history = this.history.push(cleanProjectRecords);
+    this.hasChanged();
   }
 
   handleAction(action) {
@@ -42,36 +151,6 @@ class OptimisticStore extends Marty.Store {
       this.actionQueue = this.actionQueue.push(action);
     }
     super.handleAction(action);
-  }
-
-  getInitialState() {
-    return new Immutable.Map({
-      projects: new Immutable.List()
-    });
-  }
-
-  cleanup(action) {
-    // maybe pass in many ids to cleanup depends on api response
-    const index = this.state.get('projects').findIndex((proj) => {
-      return proj.get('id') === action.id;
-    });
-
-    if (index > -1) {
-      this.state = this.state.set('projects',
-        this.state.get('projects').update(index, (proj) => {
-          return proj.set('isDirty', false);
-        })
-      );
-    }
-
-    this.actionQueue = this.actionQueue.shift();
-
-    const cleanProjectRecords = this.state.get('projects').filter((proj) => {
-      return !proj.get('isDirty');
-    });
-
-    this.history = this.history.push(cleanProjectRecords);
-    this.hasChanged();
   }
 
   revertUpdate(action) {
@@ -95,88 +174,11 @@ class OptimisticStore extends Marty.Store {
   }
 
   revertUpdates() {
+    // need to implement
     this.history = this.history.first();
     this.actionQueue = new Immutable.List();
     this.hasChanged();
   }
-
-  _setProjects(projects) {
-    this.state = this.state.set('projects', new Immutable.fromJS(projects));
-    this.hasChanged();
-  }
-
-  getProject(id) {
-    return this.fetch({
-      id: 'project-' + id,
-      locally: function() {
-        const index = this.state.get('projects').findIndex((project) => {
-          return project.get('id') === id;
-        });
-
-        return this.state.get('projects').get(index);
-      },
-      dependsOn: this.getProjects()
-    });
-  }
-
-  getProjects() {
-    return this.fetch({
-      id: 'projects',
-      locally: function() {
-        if (this.hasAlreadyFetched('projects')) {
-          return this.state.get('projects');
-        }
-      },
-      remotely: function() {
-        return this.app.TaskQueries.getProjects();
-      }
-    });
-  }
-
-  _createProject(project) {
-    this.state = this.state.set('projects',
-      this.state.get('projects').push(Immutable.fromJS(project))
-    );
-    this.hasChanged();
-  }
-
-  _deleteProject(action) {
-    const index = this.state.get('projects').findIndex((project) => {
-      return project.get('id') === action.id;
-    });
-
-    if (index > -1) {
-      this.state = this.state.set('projects',
-        this.state.get('projects').delete(index)
-      );
-    }
-
-    this.state = this.state.set('projects',
-      this.state.get('projects').filter((project) => {
-        return !_.isUndefined(project);
-      })
-    );
-
-    this.hasChanged();
-  }
-
-  _updateProject(project) {
-    const index = this.state.get('projects').findIndex((proj) => {
-      return proj.get('id') === project.id;
-    });
-
-    if (index > -1 ) {
-      this.state = this.state.set('projects',
-        this.state.get('projects').set(index, Immutable.fromJS(project))
-      );
-    }
-
-    this.hasChanged();
-  }
-
-  _markAsDirty(arg) {
-    return Object.assign(arg, { isDirty: true });
-  }
 }
 
-module.exports = OptimisticStore;
+module.exports = TaskStore;

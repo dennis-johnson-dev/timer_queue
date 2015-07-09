@@ -93,6 +93,7 @@ const CountDown = React.createClass({
       'glyphicon-pause': !play
     });
 
+    // move Map call outside of render
     const firstTask = tasks.get(0) ? tasks.get(0) : Immutable.Map({ time: 0, desc: '' });
 
     return (

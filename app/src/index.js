@@ -1,26 +1,26 @@
 require('../css/style.scss');
 const { ApplicationContainer } = require('marty');
 const React = require('react');
+const enableFastClick = require('./lib/enableFastClick');
 
 const Application = require('./Application');
 const app = new Application();
 
 let rootInstance = null;
 
-const Router = require('react-router');
-// const router = require('../../app/src/Router')
-const DefaultRoute = Router.DefaultRoute;
-const Routes = Router.Routes;
-const Route = Router.Route;
-const Link = Router.Link;
-const routes = require('./Routes');
+import Router, { DefaultRoute, Route } from 'react-router';
+// import Router from './Router';
+import routes from './Routes';
 
-Router.run(routes, function(Handler, state) {
+enableFastClick();
+Router.run(routes, (Handler, state) => {
+  // console.log('rendering on client')
+  app.rehydrate();
   rootInstance = React.render((
-      <ApplicationContainer app={ app }>
-        <Handler { ...state.params } />
-      </ApplicationContainer>
-    ), document.getElementById('site'));
+    <ApplicationContainer app={ app }>
+      <Handler { ...state.params } />
+    </ApplicationContainer>
+  ), document.getElementById('site'));
 });
 
 if (module.hot) {
