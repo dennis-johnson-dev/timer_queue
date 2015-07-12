@@ -17,9 +17,8 @@ class Html extends React.Component {
         <div id="site" dangerouslySetInnerHTML={{__html: this.props.markup}} />
           <script src="vendor/browser-polyfill.js"></script>
           <script src="bower_components/react/react-with-addons.js"></script>
-          <script src="http://localhost:3001/webpack-dev-server.js"></script>
           <script dangerouslySetInnerHTML={{__html: this.props.storeState }} />
-          <script src="http://localhost:3001/js/App.js"></script>
+          <script src="/js/App.js"></script>
         </body>
       </html>
     );
