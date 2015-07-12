@@ -11,7 +11,10 @@ export default class NotificationStore extends Marty.Store {
       _setNotification: AppConstants.ERROR,
       _removeNotification: [ AppConstants.RESOLVE_ERROR, TaskConstants.REVERT_UPDATE ],
       _removeNotifications: AppConstants.RESOLVE_ERRORS
-  };
+    };
+    this.state = {
+      notifications: Immutable.Map()
+    };
   }
 
   getInitialState() {
@@ -20,11 +23,14 @@ export default class NotificationStore extends Marty.Store {
     };
   }
 
-  getNotification(typeKey) {
+  rehydrate(newState) {
+  }
+
+  getNotifications() {
     return this.fetch({
       id: 'notifications',
       locally: function() {
-        return this.state.notifications.get(typeKey) && this.state.notifications.get(typeKey).last() || false;
+        return this.state.notifications;
       }
     });
   }
