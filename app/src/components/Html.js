@@ -1,5 +1,4 @@
 const React = require('react');
-const Junk = require('./Junk');
 
 class Html extends React.Component {
   constructor(options) {
@@ -15,7 +14,7 @@ class Html extends React.Component {
             <link rel="stylesheet" href="/js/styles.css" />
         </head>
         <body>
-        <div id="site" dangerouslySetInnerHTML={{__html: this.props.markup}}/>
+        <div id="site" dangerouslySetInnerHTML={{__html: this.props.markup}} />
           <script src="vendor/browser-polyfill.js"></script>
           <script src="bower_components/react/react-with-addons.js"></script>
           <script src="http://localhost:3001/webpack-dev-server.js"></script>

@@ -13,9 +13,8 @@ import Router, { DefaultRoute, Route } from 'react-router';
 import routes from './Routes';
 
 enableFastClick();
+app.rehydrate();
 Router.run(routes, (Handler, state) => {
-  // console.log('rendering on client')
-  app.rehydrate();
   rootInstance = React.render((
     <ApplicationContainer app={ app }>
       <Handler { ...state.params } />

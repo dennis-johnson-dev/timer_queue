@@ -26,12 +26,11 @@ export default class NotificationStore extends Marty.Store {
   rehydrate(newState) {
   }
 
-  getNotification() {
+  getNotifications() {
     return this.fetch({
       id: 'notifications',
       locally: function() {
         return this.state.notifications;
-        // return this.state.notifications.get(typeKey) && this.state.notifications.get(typeKey).last() || false;
       }
     });
   }

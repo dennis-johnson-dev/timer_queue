@@ -1,11 +1,8 @@
 const _ = require('lodash');
-const AppConstants = require('../constants/AppConstants');
 const TaskConstants = require('../constants/TaskConstants');
 const Marty = require('marty');
 const Immutable = require('immutable');
 const TaskQueries = require('../queries/TaskQueries');
-
-let val;
 
 class TaskStore extends Marty.Store {
   constructor(options) {
@@ -23,24 +20,20 @@ class TaskStore extends Marty.Store {
 
     this.history = new Immutable.List();
     const initialState = this.getInitialState();
-    this.history = this.history.push(initialState);
     this.actionQueue = new Immutable.List();
-    this.state = this.getInitialState();
-  }
-
-  rehydrate(newState) {
-    this.state.projects = new Immutable.fromJS(newState.projects);
+    this.state = initialState;
   }
 
   getInitialState() {
     return {
-      projects: new Immutable.List()
+      projects: Immutable.List()
     };
   }
 
-  _setProjects(projects) {
-    this.state.projects = new Immutable.fromJS(projects);
-    this.hasChanged();
+  rehydrate(newState) {
+    const newProjects = Immutable.fromJS(newState.projects);
+    this.state.projects = newProjects;
+    this.history = this.history.push(newProjects);
   }
 
   getProject(id) {
@@ -62,7 +55,7 @@ class TaskStore extends Marty.Store {
       id: 'projects',
       locally: function() {
         if (this.hasAlreadyFetched('projects') || this.state.projects.count() > 0) {
-          return val || this.state.projects;
+          return this.state.projects;
         }
       },
       remotely: function() {
@@ -71,10 +64,14 @@ class TaskStore extends Marty.Store {
     });
   }
 
+  _setProjects(projects) {
+    this.state.projects = new Immutable.fromJS(projects);
+    this.hasChanged();
+  }
+
   _createProject(project) {
     const newProject = Immutable.fromJS(project);
     this.state.projects = this.state.projects.push(newProject);
-    // val = this.state.projects;
     this.hasChanged();
   }
 
@@ -101,7 +98,7 @@ class TaskStore extends Marty.Store {
     });
 
     if (index > -1 ) {
-      this.state = this.state.projects.set(index, Immutable.fromJS(project));
+      this.state.projects = this.state.projects.set(index, Immutable.fromJS(project));
       // val = this.state.projects;
     }
 
@@ -110,6 +107,28 @@ class TaskStore extends Marty.Store {
 
   _markAsDirty(arg) {
     return Object.assign(arg, { isDirty: true });
+  }
+
+  handleAction(action) {
+    // needs to only apply to records, not all actions
+    if (action.arguments[1] && action.arguments[1].optimistic) {
+      // use ES6 symbols to store isDirty
+      if (_.isArray(action.arguments[0])) {
+        for (let arg of action.arguments[0]) {
+          arg = this._markAsDirty(arg);
+        }
+      } else {
+        action.arguments[0] = this._markAsDirty(action.arguments[0]);
+      }
+    }
+
+    if (!_.contains(action.type, 'ERROR') &&
+      !_.contains(action.type, 'REVERT_UPDATE') &&
+      (!_.contains(action.type, 'CLEANUP'))
+    ) {
+      this.actionQueue = this.actionQueue.push(action);
+    }
+    super.handleAction(action);
   }
 
   cleanup(action) {
@@ -130,27 +149,9 @@ class TaskStore extends Marty.Store {
       return !proj.get('isDirty');
     });
 
+    console.log('cleaning up')
     this.history = this.history.push(cleanProjectRecords);
     this.hasChanged();
-  }
-
-  handleAction(action) {
-    // needs to only apply to records, not all actions
-    if (action.arguments[1] && action.arguments[1].optimistic) {
-      // use ES6 symbols to store isDirty
-      if (_.isArray(action.arguments[0])) {
-        for (let arg of action.arguments[0]) {
-          arg = this._markAsDirty(arg);
-        }
-      } else {
-        action.arguments[0] = this._markAsDirty(action.arguments[0]);
-      }
-    }
-
-    if (!_.contains(action.type, 'REVERT_UPDATE') && (!_.contains(action.type, 'CLEANUP'))) {
-      this.actionQueue = this.actionQueue.push(action);
-    }
-    super.handleAction(action);
   }
 
   revertUpdate(action) {
@@ -161,7 +162,7 @@ class TaskStore extends Marty.Store {
     this.actionQueue = this.actionQueue.delete(index);
     // use previous 'clean' state from history (pop)
     const prevState = Object.create(this.history.last());
-    this.replaceState(prevState);
+    this.state.projects = prevState;
     if (this.history.count() > 1) {
       // are we at the initial state
       this.history = this.history.pop();
@@ -174,7 +175,7 @@ class TaskStore extends Marty.Store {
   }
 
   revertUpdates() {
-    // need to implement
+    // need to implement reverting more than one update
     this.history = this.history.first();
     this.actionQueue = new Immutable.List();
     this.hasChanged();

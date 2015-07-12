@@ -5,7 +5,6 @@ import CountDownContainer from './components/CountDownContainer';
 import ProjectContainer from './components/ProjectContainer';
 import CreateProject from './components/CreateProject';
 import EditProject from './components/EditProject';
-import Junk from './components/Junk';
 import Html from './components/Html';
 
 module.exports = [

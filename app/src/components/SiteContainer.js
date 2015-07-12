@@ -6,7 +6,7 @@ module.exports = Marty.createContainer(Site, {
   listenTo: 'NotificationStore',
   fetch: {
     notification() {
-      return this.app.NotificationStore.getNotification();
+      return this.app.NotificationStore.getNotifications();
     }
   },
   pending(results) {
@@ -20,7 +20,6 @@ module.exports = Marty.createContainer(Site, {
       notification = error.last();
     }
 
-    return <Site ref="innerComponent" />;
-    // return <Site {...notification} ref="innerComponent" />;
+    return <Site notification={ notification } ref="innerComponent" />;
   }
 });

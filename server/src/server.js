@@ -66,8 +66,8 @@ app.use((req, res, next) => {
 
   router.run((Handler, state) => {
     app.renderToStaticMarkup(<Handler {...state.params} />).then((response) => {
-      const htmlState = _trimState(response.htmlState);
-      const html = React.renderToStaticMarkup(<Html markup={ response.htmlBody } storeState={ htmlState }/>);
+      const trimmedHtmlState = _trimState(response.htmlState);
+      const html = React.renderToStaticMarkup(<Html markup={ response.htmlBody } storeState={ trimmedHtmlState }/>);
       // console.log('rendering on the server', response.diagnostics)
       res.send(`<!DOCTYPE>${html}`);
     }).catch((e) => {
