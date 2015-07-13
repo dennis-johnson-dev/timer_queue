@@ -12,6 +12,8 @@ class Html extends React.Component {
           <title>Timer Queue</title>
             <link rel="stylesheet" href="/vendor/bootstrap.min.css" />
             <link rel="stylesheet" href="/js/styles.css" />
+            <meta name='viewport' content='width=device-width, initial-scale=1' />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         </head>
         <body>
         <div id="site" dangerouslySetInnerHTML={{__html: this.props.markup}} />
