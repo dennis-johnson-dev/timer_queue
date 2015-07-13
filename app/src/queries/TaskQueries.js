@@ -7,7 +7,7 @@ class TaskQueries extends Marty.Queries {
     const options = {
       id: _.uniqueId(),
       method: 'GET',
-      url: 'http://localhost:3000/api/projects'
+      url: 'http://timerqueue.herokuapp.com/api/projects'
     };
 
     return this.app.AppAPI.requester(options).then((res) => {
