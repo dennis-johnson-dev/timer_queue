@@ -8,7 +8,7 @@
     "npm": "2.1.x"
   },
   "scripts": {
-    "start": "nodemon server/dist/server.js",
+    "start": "./node_modules/nodemon/bin/nodemon.js server/dist/server.js",
     "casper": "node_modules/casperjs/bin/casperjs ./spec/casperTest.js",
     "debug": "node --harmony --debug-brk node_modules/jest-cli/bin/jest.js --runInBand",
     "postinstall": "grunt build && bower install",
