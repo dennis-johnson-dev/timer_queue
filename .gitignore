@@ -8,4 +8,4 @@ server/gen
 stats.json
 *.swp
 bower_components
-server/dist
+server
