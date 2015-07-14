@@ -57,6 +57,10 @@ function _trimState(state) {
   return state.slice((state.indexOf('>') + 1), (state.indexOf('<', 2)));
 }
 
+function _renderApp() {
+
+}
+
 app.use((req, res, next) => {
   const app = new Application();
   let router = ReactRouter.create({
@@ -71,6 +75,7 @@ app.use((req, res, next) => {
       // console.log('rendering on the server', response.diagnostics)
       res.send(`<!DOCTYPE>${html}`);
     }).catch((e) => {
+      res.render('index');
       console.log(e);
     });
   }, (err) => {
