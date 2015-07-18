@@ -14,12 +14,12 @@ module.exports =  {
     loaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules\/(?!marty)/,
+        exclude: /node_modules/,
         loader: 'react-hot!babel-loader?cacheDirectory&stage=1&optional[]=runtime&loose=es6.classes'
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap")
+        loader: 'style-loader!css-loader!sass-loader?sourceMap'
       }
     ]
   },

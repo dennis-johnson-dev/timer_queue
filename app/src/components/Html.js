@@ -6,6 +6,14 @@ class Html extends React.Component {
   }
 
   render() {
+    let srcUrl;
+    let devScripts;
+    if (process.env.DEV) {
+      srcUrl = "http://localhost:3001/js/App.js";
+      devScripts = <script src="http://localhost:3001/webpack-dev-server.js"></script>;
+    } else {
+      srcUrl = "/js/App.js";
+    }
     return (
       <html lang="en">
         <head>
@@ -13,14 +21,15 @@ class Html extends React.Component {
             <link rel="stylesheet" href="/vendor/bootstrap.min.css" />
             <link rel="stylesheet" href="/js/styles.css" />
             <meta name='viewport' content='width=device-width, initial-scale=1' />
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta httpEquiv="Content-Type" content="text/html; charset=UTF-8" />
         </head>
         <body>
         <div id="site" dangerouslySetInnerHTML={{__html: this.props.markup}} />
           <script src="vendor/browser-polyfill.js"></script>
           <script src="bower_components/react/react-with-addons.js"></script>
+          { devScripts }
           <script dangerouslySetInnerHTML={{__html: this.props.storeState }} />
-          <script src="/js/App.js"></script>
+          <script src={ srcUrl }></script>
         </body>
       </html>
     );

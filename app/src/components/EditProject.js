@@ -50,10 +50,16 @@ const EditProject = React.createClass({
     }
     const me = this;
 
+    let action;
+    if (process.env && process.env.DEV) {
+      action = "http://localhost:3000";
+    } else {
+      action = "http://timerqueue.herokuapp.com";
+    }
     return (
       <div className="createProject container">
         <h3>Edit Project</h3>
-        <form action="http://localhost:3000/" className="projectForm form-horizontal" onSubmit={ this.handleSubmit }>
+        <form action={ action } className="projectForm form-horizontal" onSubmit={ this.handleSubmit }>
           <div className="createProjectHeader form-group">
             <div className="form-group text-left">
               <label className="col-sm-2 control-label">Project Title: </label>
