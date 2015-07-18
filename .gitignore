@@ -4,8 +4,7 @@ public/js
 public/css
 app/gen
 spec/gen
-server/gen
+server/dist
 stats.json
 *.swp
 bower_components
-server
