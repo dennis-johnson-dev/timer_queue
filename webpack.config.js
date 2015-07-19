@@ -23,16 +23,15 @@ module.exports =  {
       }
     ]
   },
-  externals: {
-    'react': 'React',
-    'react/addons': 'React'
-  },
   resolve: {
     moduleDirectories: ['node_modules', 'app'],
     extensions: ['', '.js']
   },
   plugins: [
-    new ExtractTextPlugin("styles.css")
+    new ExtractTextPlugin("styles.css"),
+    new webpack.DefinePlugin({
+      process: JSON.stringify({ env: true })
+    })
   ],
   devtool: '#inline-source-map'
 };

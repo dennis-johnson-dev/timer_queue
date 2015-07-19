@@ -1,6 +1,7 @@
 require('../css/style.scss');
 const { ApplicationContainer } = require('marty');
 const React = require('react');
+window.React = React;
 const enableFastClick = require('./lib/enableFastClick');
 
 const Application = require('./Application');

@@ -149,7 +149,6 @@ class TaskStore extends Marty.Store {
       return !proj.get('isDirty');
     });
 
-    console.log('cleaning up')
     this.history = this.history.push(cleanProjectRecords);
     this.hasChanged();
   }
