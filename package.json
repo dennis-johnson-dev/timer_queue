@@ -95,8 +95,18 @@
     "es6-promise": "^2.0.1",
     "exports-loader": "^0.6.2",
     "imports-loader": "^0.6.3",
+    "jasmine-core": "^2.3.4",
     "jest-cli": "^0.4.0",
+    "karma": "^0.12.35",
+    "karma-chrome-launcher": "^0.1.12",
+    "karma-cli": "0.0.4",
+    "karma-html-reporter": "^0.2.6",
+    "karma-jasmine": "^0.3.5",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-sourcemap-loader": "^0.3.5",
+    "karma-webpack": "^1.5.1",
     "node-sass": "^3.2.0",
+    "phantomjs": "^1.9.17",
     "react-hot-loader": "^1.1.5",
     "webpack-dev-server": "^1.6.5"
   }
