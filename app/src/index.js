@@ -1,20 +1,21 @@
 require('../css/style.scss');
-const { ApplicationContainer } = require('marty');
-const React = require('react');
-window.React = React;
-const enableFastClick = require('./lib/enableFastClick');
+import Application from './Application';
+import { ApplicationContainer } from 'marty';
+import enableFastClick from './lib/enableFastClick';
 
-const Application = require('./Application');
+import React from 'react';
+import Router, { DefaultRoute, Route } from 'react-router';
+import routes from './Routes';
+
+window.React = React;
+
 const app = new Application();
+app.rehydrate();
+
+enableFastClick();
 
 let rootInstance = null;
 
-import Router, { DefaultRoute, Route } from 'react-router';
-// import Router from './Router';
-import routes from './Routes';
-
-enableFastClick();
-app.rehydrate();
 Router.run(routes, (Handler, state) => {
   rootInstance = React.render((
     <ApplicationContainer app={ app }>
