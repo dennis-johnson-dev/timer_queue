@@ -8,7 +8,7 @@ import Immutable from 'immutable';
 
 const EditProject = React.createClass({
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.object
   },
 
   displayName: 'EditProject',
@@ -41,7 +41,7 @@ const EditProject = React.createClass({
     };
 
     this.app.TaskViewActions.updateProject(project);
-    this.context.router.transitionTo('home');
+    this.context.router.transitionTo('/');
   },
 
   render() {
@@ -106,12 +106,12 @@ const EditProject = React.createClass({
 
 module.exports = Marty.createContainer(EditProject, {
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.object
   },
   listenTo: 'TaskStore',
   fetch: {
     project() {
-      const id = this.context.router.getCurrentParams().id;
+      const id = this.context.router.state.params.id;
       return this.context.app.TaskStore.getProject(id);
     }
   }

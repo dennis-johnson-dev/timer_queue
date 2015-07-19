@@ -8,10 +8,12 @@ class Html extends React.Component {
   render() {
     let srcUrl;
     let devScripts;
+    let reactScript;
     if (process.env.DEV) {
       srcUrl = "http://localhost:3001/js/App.js";
       devScripts = <script src="http://localhost:3001/webpack-dev-server.js"></script>;
     } else {
+      reactScript = <script src="bower_components/react/react-with-addons.min.js"></script>
       srcUrl = "/js/App.js";
     }
     return (
@@ -26,7 +28,7 @@ class Html extends React.Component {
         <body>
         <div id="site" dangerouslySetInnerHTML={{__html: this.props.markup}} />
           <script src="vendor/browser-polyfill.js"></script>
-          <script src="bower_components/react/react-with-addons.js"></script>
+          { reactScript }
           { devScripts }
           <script dangerouslySetInnerHTML={{__html: this.props.storeState }} />
           <script src={ srcUrl }></script>

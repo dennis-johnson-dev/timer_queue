@@ -1,6 +1,5 @@
 const React = require('react');
 const Router = require('react-router');
-const RouteHandler = Router.RouteHandler;
 const Link = Router.Link;
 import Immutable from 'immutable';
 import NotificationItem from './NotificationItem';
@@ -16,10 +15,10 @@ const Site = React.createClass({
     return (
       <div className="content">
         <ul className="nav">
-          <li><Link to="home">Home</Link></li>
+          <li><Link to="/">Home</Link></li>
         </ul>
         { notification }
-        <RouteHandler />
+        { this.props.children }
       </div>
     );
   }

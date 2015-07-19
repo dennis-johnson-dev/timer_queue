@@ -45,38 +45,38 @@ app.use('/api', api);
 
 // app routes
 
-// app.get('/', (req, res) => {
-//  res.render('index');
-// });
+app.get('/', (req, res) => {
+ res.render('index');
+});
 
 /*
  * USE below for server side rendering
  *
  */
-function _trimState(state) {
-  return state.slice((state.indexOf('>') + 1), (state.indexOf('<', 2)));
-}
-
-app.use((req, res, next) => {
-  const app = new Application();
-  let router = ReactRouter.create({
-    location: req.url,
-    routes
-  });
-
-  router.run((Handler, state) => {
-    app.renderToStaticMarkup(<Handler {...state.params} />).then((response) => {
-      const trimmedHtmlState = _trimState(response.htmlState);
-      const html = React.renderToStaticMarkup(<Html markup={ response.htmlBody } storeState={ trimmedHtmlState }/>);
-      // console.log('rendering on the server', response.diagnostics)
-      res.send(`<!DOCTYPE>${html}`);
-    }).catch((e) => {
-      console.log(e);
-    });
-  }, (err) => {
-    console.log(err);
-  });
-});
+// function _trimState(state) {
+//   return state.slice((state.indexOf('>') + 1), (state.indexOf('<', 2)));
+// }
+//
+// app.use((req, res, next) => {
+//   const app = new Application();
+//   let router = ReactRouter.create({
+//     location: req.url,
+//     routes
+//   });
+//
+//   router.run((Handler, state) => {
+//     app.renderToStaticMarkup(<Handler {...state.params} />).then((response) => {
+//       const trimmedHtmlState = _trimState(response.htmlState);
+//       const html = React.renderToStaticMarkup(<Html markup={ response.htmlBody } storeState={ trimmedHtmlState }/>);
+//       // console.log('rendering on the server', response.diagnostics)
+//       res.send(`<!DOCTYPE>${html}`);
+//     }).catch((e) => {
+//       console.log(e);
+//     });
+//   }, (err) => {
+//     console.log(err);
+//   });
+// });
 
 // db connection
 

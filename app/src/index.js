@@ -1,26 +1,25 @@
 require('../css/style.scss');
-const { ApplicationContainer } = require('marty');
-const React = require('react');
-const enableFastClick = require('./lib/enableFastClick');
+import { ApplicationContainer } from 'marty';
+import React from 'react';
+import enableFastClick from './lib/enableFastClick';
 
-const Application = require('./Application');
-const app = new Application();
-
-let rootInstance = null;
-
-import Router, { DefaultRoute, Route } from 'react-router';
-// import Router from './Router';
+import { Router, Route } from 'react-router';
+import { history } from 'react-router/lib/HashHistory';
 import routes from './Routes';
 
-enableFastClick();
+import Application from './Application';
+
+window.React = React;
+let rootInstance = null;
+const app = new Application();
 app.rehydrate();
-Router.run(routes, (Handler, state) => {
-  rootInstance = React.render((
-    <ApplicationContainer app={ app }>
-      <Handler { ...state.params } />
-    </ApplicationContainer>
-  ), document.getElementById('site'));
-});
+enableFastClick();
+
+rootInstance = React.render((
+  <ApplicationContainer app={ app }>
+    <Router history={ history }>{ routes }</Router>
+  </ApplicationContainer>
+), document.getElementById('site'));
 
 if (module.hot) {
   require('react-hot-loader/Injection').RootInstanceProvider.injectProvider({

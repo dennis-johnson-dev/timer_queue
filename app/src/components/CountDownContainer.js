@@ -10,12 +10,12 @@ const ENTER_KEY_CODE = 13;
 
 module.exports = Marty.createContainer(CountDown, {
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.object
   },
   listenTo: 'TaskStore',
   fetch: {
     project() {
-      const id = this.context.router.getCurrentParams().id;
+      const id = this.context.router.state.params.id;
       return this.context.app.TaskStore.getProject(id);
     }
   }

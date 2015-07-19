@@ -65,7 +65,10 @@ class TaskStore extends Marty.Store {
   }
 
   _setProjects(projects) {
-    this.state.projects = new Immutable.fromJS(projects);
+    const newProjects = new Immutable.fromJS(projects);
+    this.state.projects = newProjects;
+    this.history = this.history.push(newProjects);
+    console.log(this.history)
     this.hasChanged();
   }
 
@@ -149,7 +152,6 @@ class TaskStore extends Marty.Store {
       return !proj.get('isDirty');
     });
 
-    console.log('cleaning up')
     this.history = this.history.push(cleanProjectRecords);
     this.hasChanged();
   }
@@ -171,6 +173,7 @@ class TaskStore extends Marty.Store {
     this.actionQueue.forEach((actionEntry) => {
       super.handleAction(actionEntry);
     });
+
     this.hasChanged();
   }
 

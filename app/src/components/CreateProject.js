@@ -8,7 +8,7 @@ const Immutable = require('immutable');
 
 const CreateProject = React.createClass({
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.object
   },
 
   displayName: 'CreateProject',
@@ -32,7 +32,7 @@ const CreateProject = React.createClass({
     };
 
     this.app.TaskViewActions.createProject(project);
-    this.context.router.transitionTo('home');
+    this.context.router.transitionTo('/');
   },
 
   getInitialState: function() {
