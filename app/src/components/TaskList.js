@@ -34,7 +34,7 @@ var TaskList = React.createClass({
               </div>
             </li>
           );
-        })
+        }).toJS()
        }
        </ul>
     );
