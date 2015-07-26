@@ -61,15 +61,13 @@ function _trimState(state) {
 app.use((req, res, next) => {
   const location = new Location(req.path, req.query);
   const app = new Application();
-  // let router = Router.create({
-  //   location: req.url,
-  //   routes
-  // });
 
   Router.run(routes, location, (error, initialState) => {
-    app.renderToString(<ApplicationContainer app={app}>
-                        <Router {...initialState} />
-                       </ApplicationContainer>).then((response) => {
+    app.renderToString(
+      <ApplicationContainer app={app}>
+        <Router {...initialState} />
+      </ApplicationContainer>
+    ).then((response) => {
       const trimmedHtmlState = _trimState(response.htmlState);
       const html = React.renderToString(<Html markup={ response.htmlBody } storeState={ trimmedHtmlState }/>);
       // console.log('rendering on the server', response.diagnostics)
