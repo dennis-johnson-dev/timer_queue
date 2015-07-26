@@ -1,4 +1,4 @@
 export default {
-  TaskStore: require('./TaskStore'),
-  NotificationStore: require('./NotificationStore')
+  NotificationStore: require('./NotificationStore'),
+  TaskStore: require('./TaskStore')
 };
