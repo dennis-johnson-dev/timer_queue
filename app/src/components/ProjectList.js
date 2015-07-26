@@ -1,13 +1,11 @@
-const React = require('react');
-const Router = require('react-router');
-const Link = Router.Link;
+import React from 'react';
+import Router, { Link, Navigation } from 'react-router';
 
 const ProjectList = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.func
-  },
 
   displayName: 'ProjectList',
+
+  mixins: [ Navigation ],
 
   getInitialState() {
     return {
@@ -27,8 +25,9 @@ const ProjectList = React.createClass({
            <button onClick={ this._onEdit } value={ project.get('id') }>Edit</button>
          </div>
         const btnContent = this.state.edit ? editBtns : '';
+        const toParam = `play/${project.get('id')}`;
         return (
-          <Link to="play" className="list-group-item" key={ project.get('id') } params={{ id: project.get('id') }}>
+          <Link to={ toParam } className="list-group-item" key={ project.get('id') }>
             <div className="project-title">{ project.get('title') }</div>
             <div className="project-maintenance">{ btnContent}</div>
           </Link>
@@ -56,7 +55,8 @@ const ProjectList = React.createClass({
 
   _onEdit(e) {
     e.preventDefault();
-    this.context.router.transitionTo('edit', { id: e.target.value });
+    const destination = `edit/${e.target.value}`;
+    this.transitionTo(destination);
   },
 
   _onEditMode(e) {

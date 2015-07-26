@@ -1,19 +1,18 @@
-const React = require('react');
-const Marty = require('marty');
-const _ = require('lodash');
-const TaskList = require('./TaskList');
-const formatTime = require('../lib/formatTime');
-const md5 = require('MD5');
-const Immutable = require('immutable');
+import React from 'react';
+import { Navigation } from 'react-router';
+import Marty from 'marty';
+import _ from 'lodash';
+import TaskList from './TaskList';
+import formatTime from '../lib/formatTime';
+import md5 from 'MD5';
+import Immutable from 'immutable';
 
 const CreateProject = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
   displayName: 'CreateProject',
 
-  getTaskModel: function() {
+  mixins: [ Navigation ],
+
+  getTaskModel() {
     const id = md5(Date.now() + 2);
     return Immutable.Map({
       id: id,
@@ -23,7 +22,7 @@ const CreateProject = React.createClass({
     });
   },
 
-  handleSubmit: function(e) {
+  handleSubmit(e) {
     e.preventDefault();
     const project = {
       id: md5(Object.keys(this.state.tasks).toString() + Date.now()),
@@ -32,17 +31,17 @@ const CreateProject = React.createClass({
     };
 
     this.app.TaskViewActions.createProject(project);
-    this.context.router.transitionTo('home');
+    this.transitionTo('/');
   },
 
-  getInitialState: function() {
+  getInitialState() {
     const defaultTask = this.getTaskModel();
     return {
       tasks: Immutable.List([defaultTask])
     };
   },
 
-  render: function() {
+  render() {
     const me = this;
     return (
       <div className="createProject container">
@@ -75,7 +74,7 @@ const CreateProject = React.createClass({
     this.setState({ tasks: tasks });
   },
 
-  onAddTask: function(e) {
+  onAddTask(e) {
     e.preventDefault();
 
     const taskModel = this.getTaskModel();

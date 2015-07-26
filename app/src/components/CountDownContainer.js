@@ -9,14 +9,10 @@ const Immutable = require('immutable');
 const ENTER_KEY_CODE = 13;
 
 module.exports = Marty.createContainer(CountDown, {
-  contextTypes: {
-    router: React.PropTypes.func
-  },
   listenTo: 'TaskStore',
   fetch: {
     project() {
-      const id = this.context.router.getCurrentParams().id;
-      return this.context.app.TaskStore.getProject(id);
+      return this.context.app.TaskStore.getProject(this.props.params.id);
     }
   }
 });

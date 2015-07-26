@@ -4,7 +4,8 @@ import { ApplicationContainer } from 'marty';
 import enableFastClick from './lib/enableFastClick';
 
 import React from 'react';
-import Router, { DefaultRoute, Route } from 'react-router';
+import Router from 'react-router';
+import { history } from 'react-router/lib/BrowserHistory';
 import routes from './Routes';
 
 window.React = React;
@@ -16,13 +17,11 @@ enableFastClick();
 
 let rootInstance = null;
 
-Router.run(routes, (Handler, state) => {
-  rootInstance = React.render((
-    <ApplicationContainer app={ app }>
-      <Handler { ...state.params } />
-    </ApplicationContainer>
-  ), document.getElementById('site'));
-});
+rootInstance = React.render((
+  <ApplicationContainer app={ app }>
+    <Router history={ history } children={ routes }/>
+  </ApplicationContainer>
+), document.getElementById('site'));
 
 if (module.hot) {
   require('react-hot-loader/Injection').RootInstanceProvider.injectProvider({

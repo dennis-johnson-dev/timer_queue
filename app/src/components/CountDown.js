@@ -119,7 +119,7 @@ const CountDown = React.createClass({
               </div>
             </li>
           );
-        })
+        }).toJS()
       }
       </ul>
       </div>

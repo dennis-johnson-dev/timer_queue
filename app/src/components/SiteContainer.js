@@ -20,6 +20,6 @@ module.exports = Marty.createContainer(Site, {
       notification = error.last();
     }
 
-    return <Site notification={ notification } ref="innerComponent" />;
+    return <Site notification={ notification } { ...this.props } ref="innerComponent" />;
   }
 });

@@ -33,7 +33,8 @@ const NotificationItem = React.createClass({
     });
   },
 
-  _retry() {
+  _retry(e) {
+    e.preventDefault();
     this.app.TaskViewActions.retryRequests();
   }
 });

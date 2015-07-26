@@ -27,7 +27,7 @@ class Html extends React.Component {
         </head>
         <body>
         <div id="site" dangerouslySetInnerHTML={{__html: this.props.markup}} />
-          <script src="vendor/browser-polyfill.js"></script>
+          <script src="/vendor/browser-polyfill.js"></script>
           { reactScript }
           { devScripts }
           <script dangerouslySetInnerHTML={{__html: this.props.storeState }} />

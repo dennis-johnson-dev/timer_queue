@@ -1,17 +1,16 @@
-const React = require('react');
-const _ = require('lodash');
-const TaskStore = require('../stores/TaskStore');
-const TaskList = require('./TaskList');
-const md5 = require('MD5');
-const Marty = require('marty');
+import React from 'react';
+import { Navigation } from 'react-router';
+import _ from 'lodash';
+import TaskStore from '../stores/TaskStore';
+import TaskList from './TaskList';
+import md5 from 'MD5';
+import Marty from 'marty';
 import Immutable from 'immutable';
 
 const EditProject = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
   displayName: 'EditProject',
+
+  mixins: [ Navigation ],
 
   getInitialState() {
     const project = this.props.project;
@@ -41,7 +40,7 @@ const EditProject = React.createClass({
     };
 
     this.app.TaskViewActions.updateProject(project);
-    this.context.router.transitionTo('home');
+    this.transitionTo('/');
   },
 
   render() {
@@ -105,14 +104,10 @@ const EditProject = React.createClass({
 });
 
 module.exports = Marty.createContainer(EditProject, {
-  contextTypes: {
-    router: React.PropTypes.func
-  },
   listenTo: 'TaskStore',
   fetch: {
     project() {
-      const id = this.context.router.getCurrentParams().id;
-      return this.context.app.TaskStore.getProject(id);
+      return this.context.app.TaskStore.getProject(this.props.params.id);
     }
   }
 });

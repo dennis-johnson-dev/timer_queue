@@ -5,10 +5,11 @@ import Compression from 'compression';
 import Express from 'express';
 import Favicon from 'serve-favicon';
 import Http from 'http';
-import Marty from 'marty';
+import Marty, { ApplicationContainer } from 'marty';
 import Mongoose from 'mongoose';
 import React from 'react';
-import ReactRouter from 'react-router';
+import Router from 'react-router';
+import Location from 'react-router/lib/Location';
 import Path from 'path';
 
 import api from './api';
@@ -58,16 +59,19 @@ function _trimState(state) {
 }
 
 app.use((req, res, next) => {
+  const location = new Location(req.path, req.query);
   const app = new Application();
-  let router = ReactRouter.create({
-    location: req.url,
-    routes
-  });
+  // let router = Router.create({
+  //   location: req.url,
+  //   routes
+  // });
 
-  router.run((Handler, state) => {
-    app.renderToStaticMarkup(<Handler {...state.params} />).then((response) => {
+  Router.run(routes, location, (error, initialState) => {
+    app.renderToString(<ApplicationContainer app={app}>
+                        <Router {...initialState} />
+                       </ApplicationContainer>).then((response) => {
       const trimmedHtmlState = _trimState(response.htmlState);
-      const html = React.renderToStaticMarkup(<Html markup={ response.htmlBody } storeState={ trimmedHtmlState }/>);
+      const html = React.renderToString(<Html markup={ response.htmlBody } storeState={ trimmedHtmlState }/>);
       // console.log('rendering on the server', response.diagnostics)
       res.send(`<!DOCTYPE>${html}`);
     }).catch((e) => {
