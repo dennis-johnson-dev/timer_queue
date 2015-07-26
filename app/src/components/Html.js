@@ -13,7 +13,7 @@ class Html extends React.Component {
       appUrl = "http://localhost:3001/js/App.js";
       devScripts = <script src="http://localhost:3001/webpack-dev-server.js"></script>;
     } else {
-      reactScript = <script src="bower_components/react/react-with-addons.min.js"></script>;
+      reactScript = <script src="/bower_components/react/react-with-addons.min.js"></script>;
       appUrl = "/js/App.js";
     }
     return (
