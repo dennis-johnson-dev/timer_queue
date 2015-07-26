@@ -2,7 +2,8 @@
 //
 // var context = require.context('./specs/', true, /\.js$/);
 // context.keys().forEach(context);
-
+require('../../app/css/style.scss');
+require('../../public/vendor/bootstrap.min.css');
 var Immutable = require('immutable');
 
 /**
