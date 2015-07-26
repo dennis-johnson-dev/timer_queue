@@ -4,7 +4,7 @@ var watch = require('gulp-watch');
 
 gulp.task('default', function () {
   return gulp.src('./server/src/**/*.js')
-  .pipe(babel({ stage: 1, loose: ["es6.classes"] }))
+  .pipe(babel({ stage: 0, loose: ["es6.classes"] }))
   .pipe(gulp.dest('./server/dist/'));
 });
 

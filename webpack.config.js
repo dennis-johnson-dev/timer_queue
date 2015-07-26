@@ -15,7 +15,7 @@ module.exports =  {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'react-hot!babel-loader?cacheDirectory&stage=1&optional[]=runtime&loose=es6.classes'
+        loader: 'react-hot!babel-loader?cacheDirectory&stage=0&optional[]=runtime&loose=es6.classes'
       },
       {
         test: /\.scss$/,
@@ -30,7 +30,7 @@ module.exports =  {
   plugins: [
     new ExtractTextPlugin("styles.css"),
     new webpack.DefinePlugin({
-      process: JSON.stringify({ env: true })
+      process: JSON.stringify({ env: { DEV: true }})
     })
   ],
   devtool: '#inline-source-map'
