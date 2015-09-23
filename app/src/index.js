@@ -5,7 +5,7 @@ import enableFastClick from './lib/enableFastClick';
 
 import React from 'react';
 import Router from 'react-router';
-import { history } from 'react-router/lib/BrowserHistory';
+// import BrowserHistory from 'react-router/lib/BrowserHistory';
 import routes from './Routes';
 
 window.React = React;
@@ -17,11 +17,19 @@ enableFastClick();
 
 let rootInstance = null;
 
-rootInstance = React.render((
-  <ApplicationContainer app={ app }>
-    <Router history={ history } children={ routes }/>
-  </ApplicationContainer>
-), document.getElementById('site'));
+// const history = new BrowserHistory();
+
+// if (typeof history.setup === "function") {
+//     history.setup();
+// }
+
+Router.run(routes, history.location, (err, initialState, transition) => {
+  rootInstance = React.render((
+    <ApplicationContainer app={ app }>
+      <Router history={ history } routes={ routes } />
+    </ApplicationContainer>
+  ), document.getElementById('site'));
+});
 
 if (module.hot) {
   require('react-hot-loader/Injection').RootInstanceProvider.injectProvider({

@@ -8,8 +8,8 @@ import Http from 'http';
 import Marty, { ApplicationContainer } from 'marty';
 import Mongoose from 'mongoose';
 import React from 'react';
-import Router from 'react-router';
-import Location from 'react-router/lib/Location';
+import Router, { RoutingContext, match } from 'react-router';
+import createLocation from 'history/lib/createLocation';
 import Path from 'path';
 
 import api from './api';
@@ -59,13 +59,13 @@ function _trimState(state) {
 }
 
 app.use((req, res, next) => {
-  const location = new Location(req.path, req.query);
+  const location = createLocation(req.url);
   const app = new Application();
 
-  Router.run(routes, location, (error, initialState) => {
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
     app.renderToString(
       <ApplicationContainer app={app}>
-        <Router {...initialState} />
+        <Router {...renderProps} />
       </ApplicationContainer>
     ).then((response) => {
       const trimmedHtmlState = _trimState(response.htmlState);
@@ -75,8 +75,6 @@ app.use((req, res, next) => {
     }).catch((e) => {
       console.log(e);
     });
-  }, (err) => {
-    console.log(err);
   });
 });
 

@@ -25,7 +25,7 @@ const ProjectList = React.createClass({
            <button onClick={ this._onEdit } value={ project.get('id') }>Edit</button>
          </div>
         const btnContent = this.state.edit ? editBtns : '';
-        const toParam = `play/${project.get('id')}`;
+        const toParam = `/play/${project.get('id')}`;
         return (
           <Link to={ toParam } className="list-group-item" key={ project.get('id') }>
             <div className="project-title">{ project.get('title') }</div>
@@ -43,7 +43,7 @@ const ProjectList = React.createClass({
         <div className="list-group project-container">
           { projects }
         </div>
-        <Link className="project-tools" to="create"><i className="glyphicon glyphicon-plus"></i></Link>
+        <Link className="project-tools" to="/create"><i className="glyphicon glyphicon-plus"></i></Link>
       </div>
     );
   },
